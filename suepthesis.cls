@@ -17,15 +17,20 @@
   \ifthenelse{\boolean{xetex}\OR\boolean{luatex}}{}{
     \ClassError{suepthesis}{You Should Use XeLaTeX or LuaLaTeX To Compile.}}
 
+\newcommand\version{0.1.0}
+\newcommand\suepthesis{\textup{\sffamily suepthesis}}
+\newcommand\SUEPThesis{\textup{\sffamily SUEPThesis}}
+
 % 包依赖
-\LoadClass[UTF8]{ctexart}
+\LoadClass[a4paper,UTF8,titlepage,oneside]{ctexbook}
+
 \RequirePackage{graphicx}
 
 % ==============================================================================
 % 页面边距
 % ==============================================================================
 \RequirePackage{geometry}
-\geometry{a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm}
+  \geometry{a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm}
 
 \RequirePackage{titlesec}
 \RequirePackage{fancyhdr}
@@ -127,6 +132,9 @@
     default = {},
     name = sub@title,
   },
+  title* = {
+    name = title@en,
+  },
   student = {
     default = {某同学}
   },
@@ -170,6 +178,9 @@
 
 %% 字体汉化设置
 
+\zihao{-4}
+\linespread{1.25}
+
 % 字号设置
 % \newcommand{\初号}{\zihao {0}}
 % \newcommand{\小初}{\zihao{-0}}
@@ -189,7 +200,7 @@
 % \newcommand{\八号}{\zihao {8}}
 
 % 伪粗体等级
-% \xeCJKsetup{EmboldenFactor=3} 
+\xeCJKsetup{EmboldenFactor=3} 
 % 宋体
 \renewcommand{\songti}{\CJKfontspec[Path=fonts/,FallBack=simsunb.ttf,AutoFakeBold]{simsun.ttc}}
 % 中文默认为宋体,小四在\documentclass处设置
@@ -197,7 +208,7 @@
 % \newcommand{\宋体}{\songti}
 
 % 黑体
-\renewcommand{\heiti}{\CJKfontspec[Path=fonts/]{simhei.ttf}}
+\renewcommand{\heiti}{\CJKfontspec[Path=fonts/,AutoFakeBold]{simhei.ttf}}
 \setCJKsansfont[Path=fonts/]{simhei.ttf}
 % \newcommand{\黑体}{\heiti}
 
@@ -218,39 +229,43 @@
 % \newcommand{\粗体}{\bfseries}
 % \newcommand{\斜体}{\itshape}
 
+
 % ==============================================================================
 % 设置标题
 % ==============================================================================
 
-
 \def\sht@toc@chapter@fmt{\zihao{4}\heiti}
 \def\sht@toc@section@fmt{\zihao{-4}\heiti}
 
-% 设置章节
+% 一级标题格式：第*章  后空一格（全角）黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
 \ctexset{
-  % 需要使用ctexart文类，否则报错键不存在
-  section = {
-        % format用于设置章节标题全局格式，作用域为标题和编号
-		% 字号为小三，字体为黑体，居中
-		% +号表示在原有格式下附加格式命令
-		format+ = \zihao{-3} \heiti \centering,
-		% name用于设置章节编号前后的词语
-		% 前、后词语用英文状态下,分开
-		% 如果没有前或后词语可以不填
-		name = {第 ,章},
-		% number用于设置章节编号数字输出格式
-		% 输出section编号为中文
-		number = \chinese{section},
-		% beforeskip用于设置章节标题前的垂直间距
-		% ex为当前字号下字母x的高度
-		% 基础高度为1.0ex，可以伸展到1.2ex，也可以收缩到0.8ex
-		beforeskip = 1.0ex plus 0.2ex minus .2ex,
-		% afterskip用于设置章节标题后的垂直间距
-		afterskip = 1.0ex plus 0.2ex minus .2ex,
-		% aftername用于控制编号和标题之间的格式
-		% \hspace用于增加水平间距
-		aftername = \hspace{pt}
+  chapter = {
+    format = \heiti\zihao{-3}\linespread{1.5}\centering,
+    name = {第 ,章},
+    aftername = \hspace{\ccwd},
+    beforeskip = {0pt},
+    afterskip = {0.5ex},
   }
+}
+% 二级标题格式： 1.1（半角）  后空一格(全角) 黑体四号字 居左 1.5倍行距 段前0.5行 段后0行
+\ctexset{
+  section = {
+    format = \heiti\zihao{4}\linespread{1.5}\raggedright,
+    aftername = \hspace{\ccwd},
+    beforeskip = {0.5ex},
+    afterskip = {0pt},
+  }
+}
+
+% 三级标题格式： 1.1.1（半角）前空两格、后空一格（全角） 黑体小四号字 居左 1.5倍行距 段前0.5行 段后0行
+\ctexset {
+  subsection = {
+    format = \heiti\zihao{-4}\linespread{1.5},
+    indent = {2\ccwd},
+    aftername = \hspace{\ccwd},
+    beforeskip = {0.5ex},
+    afterskip = {0pt},
+  },
 }
 
 
@@ -262,13 +277,85 @@
 
 % 设置三级标题
 
-\let\subsection\section
-\let\subsubsection\subsection
 
+% ------------------------------------------------------------------------------
+%   Headers and footers
+% ------------------------------------------------------------------------------
+% \def\sht@flat@title{\renewcommand\\{\space} \sht@title}
+% \def\sht@flat@title@upper@en{%
+%   \renewcommand\\{\space}%
+%   \MakeUppercase{\sht@title@en}%
+% }
+
+% \pagestyle{fancy}
+% \fancypagestyle{Plain}{}
+% \fancypagestyle{RomanNumbered}{
+%   \fancyhf{}
+%   \pagenumbering{Roman}
+%   \fancyhead[OC]{\footnotesize\nouppercase\leftmark}
+%   \fancyhead[EC]{\footnotesize\nouppercase\sht@flat@title}
+%   \fancyfoot[C]{\footnotesize\thepage}
+%   \renewcommand{\headrulewidth}{0.8pt}
+%   \renewcommand{\footrulewidth}{0pt}
+% }
+% \fancypagestyle{LRNumbered}{
+%   \fancyhf{}
+%   \fancyhead[OC]{\footnotesize\nouppercase\leftmark}
+%   \fancyhead[EC]{\footnotesize\nouppercase\sht@flat@title}
+%   \fancyfoot[OR]{\footnotesize\thepage}
+%   \fancyfoot[EL]{\footnotesize\thepage}
+%   \renewcommand{\headrulewidth}{0.8pt}
+%   \renewcommand{\footrulewidth}{0pt}
+% }
+% \fancypagestyle{LRNumberedAppendix}{
+%   \fancyhf{}
+%   \fancyhead[OC]{\footnotesize 附\hspace*{1\ccwd}录}
+%   \fancyhead[EC]{\footnotesize\nouppercase\sht@flat@title}
+%   \fancyfoot[OR]{\footnotesize\thepage}
+%   \fancyfoot[EL]{\footnotesize\thepage}
+%   \renewcommand{\headrulewidth}{0.8pt}
+%   \renewcommand{\footrulewidth}{0pt}
+% }
+
+% \fancypagestyle{MNNumberedWithLogo}{
+%   \fancyhf{}
+%   \fancyhead[L]{\sht@head@logo}
+%   \fancyhead[R]{\zihao{-5}\sffamily\sht@flat@title}
+%   \fancyfoot[C]{%
+%     \footnotesize%
+%     第~\thepage~页\hspace*{1\ccwd}共~\pageref*{LastPage}~页%
+%   }
+%   \renewcommand{\headrulewidth}{0.8pt}
+%   \renewcommand{\footrulewidth}{0pt}
+% }
+% \providecommand{\frontmatter}{}
+% \LetLtxMacro{\TmpFrontmatter}{\frontmatter}
+% \renewcommand{\frontmatter}{%
+%   \TmpFrontmatter%
+%   \ifsht@undergraduate%
+%     \pagestyle{RomanNumberedWithLogo}%
+%   \else%
+%     \pagestyle{RomanNumbered}%
+%   \fi%
+% }
+% \providecommand{\mainmatter}{}
+% \LetLtxMacro{\TmpMainmatter}{\mainmatter}
+% \renewcommand{\mainmatter}{%
+%   \TmpMainmatter%
+%   \renewcommand{\chaptermark}[1]{%
+%     \markboth{第~\thechapter~章\hspace{1\ccwd}##1}{}%
+%   }%
+%   \ifsht@undergraduate%
+%     \pagestyle{MNNumberedWithLogo}%
+%   \else%
+%     \pagestyle{LRNumbered}%
+%   \fi%
+% }
 
 % 页眉
 \pagestyle{fancy}
 \chead{\songti\zihao{-5}\suep@title \suep@sub@title}
+\lhead{}
 
 % 页脚
 \cfoot{\zihao{-5}-\ \thepage\ -}
@@ -299,7 +386,6 @@
 \ProvideDocumentCommand{\suep@cover@smallbox}{%
     O{79pt} %
     m}{%
-%   \makebox[#1][c]{\hspace*{-#2} #3 }%
   \makebox[#1][c]{ #2 }%
 }
 
@@ -431,70 +517,32 @@
 % ------------------------------------------------------------------------------
 %   Abstract
 % ------------------------------------------------------------------------------
-\newenvironment{abstract}[1][\sht@null@arg]{%
-  \cleardoublepage%
-  \ifthenelse{\equal{#1}{flattitle}}{%
-    \def\sht@abs@title{\sht@flat@title}%
-  }{%
-    \def\sht@abs@title{\sht@title}%
-  }%
-  \ifsht@undergraduate
-    \let\clearpage\relax%
-    \vspace*{\baselineskip}%
-    \begin{center}%
-      \zihao{3}\bfseries\sffamily\sht@abs@title%
-    \end{center}%
-    \vspace*{\baselineskip}%
-    \ctexset{chapter/format += \zihao{4}, chapter/beforeskip = 0pt}%
-    \ifsht@comfort%
-      \def\sht@abstract@name{摘\hspace{1\ccwd}要}
-    \else%
-      \def\sht@abstract@name{摘要}
-    \fi
-  \else%
-    \def\sht@abstract@name{摘\hspace{1\ccwd}要}
-  \fi
-  \intobmk\chapter*{\sht@abstract@name}%
-}{%
-  \vspace{\baselineskip}%
-  \ifsht@undergraduate%
-    \ifsht@comfort%
-      \par\noindent{\bfseries\sffamily 关键词：} \sht@keywords%
-    \else%
-      \par\noindent{\zihao{-4}\bfseries\sffamily 关键词：} \sht@keywords%
-    \fi%
-  \else%
-    \par\noindent{\bfseries 关键词：} \sht@keywords%
-  \fi%
+
+\newenvironment{abstract}{
+  \vspace*{\baselineskip}
+  \begin{center}
+    {\heiti\zihao{3}\bfseries 摘\hspace{0.5\ccwd}要}
+  \end{center}
+
+  \songti\zihao{-4}
+}{
+  \vspace*{\baselineskip}
+  \par\noindent{\zihao{-4} \heiti \bfseries 关键词：} \suep@keywords
+  \vfill
+  \newpage
 }
-\newenvironment{abstract*}[1][\sht@null@arg]{%
-  \cleardoublepage%
-  \ifthenelse{\equal{#1}{flattitle}}{%
-    \def\sht@abs@title@en{\sht@flat@title@upper@en}%
-  }{%
-    \def\sht@abs@title@en{\sht@title@en}%
-  }%
-  \ifsht@undergraduate
-    \let\clearpage\relax%
-    \vspace*{\baselineskip}%
-    \begin{center}%
-      \zihao{3}\bfseries\sht@abs@title@en%
-    \end{center}%
-    \vspace*{\baselineskip}%
-    \ctexset{chapter/format += \zihao{4}\rmfamily, chapter/beforeskip = 0pt}%
-    \intobmk\chapter*{ABSTRACT}%
-  \else
-    \intobmk\chapter*{Abstract}%
-  \fi
-}{%
-  \vspace{\baselineskip}%
-  \ifsht@undergraduate%
-    \ifsht@comfort%
-      \par\noindent{\bfseries Key words:} \sht@keywords@en%
-    \else%
-      \par\noindent{\zihao{-4}\bfseries Key words:} \sht@keywords@en%
-    \fi%
-  \else%
-    \par\noindent{\bfseries Key Words:} \sht@keywords@en%
-  \fi%
+
+\newenvironment{abstract*}{
+  \vspace*{\baselineskip}
+  \begin{center}
+    {\zihao{-2}\bfseries \suep@title@en} \\
+    {\zihao{-3}\bfseries Abstract}
+  \end{center}
+
+  \zihao{-4}
+}{
+  \vspace*{\baselineskip}
+  \par\noindent{\zihao{4} \bfseries Key Words: \quad} \suep@keywords@en
+  \vfill
+  \newpage
 }
