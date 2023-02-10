@@ -21,29 +21,6 @@
 \newcommand\suepthesis{\textup{\sffamily suepthesis}}
 \newcommand\SUEPThesis{\textup{\sffamily SUEPThesis}}
 
-% 包依赖
-\LoadClass[a4paper,UTF8,titlepage,oneside]{ctexbook}
-
-\RequirePackage{graphicx}
-
-% ==============================================================================
-% 页面边距
-% ==============================================================================
-\RequirePackage{geometry}
-  \geometry{a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm}
-
-\RequirePackage{titlesec}
-\RequirePackage{fancyhdr}
-\RequirePackage[most,minted]{tcolorbox}
-\RequirePackage{minted}
-\RequirePackage{amsmath}
-\RequirePackage{unicode-math}
-\RequirePackage{tabularray,multicol,tasks}
-\RequirePackage{multirow}
-\RequirePackage{listofitems}
-\RequirePackage{expl3}
-\RequirePackage{ulem}
-
 % ==============================================================================
 % Options and Declarations
 % ==============================================================================
@@ -160,44 +137,49 @@
   },
 }
 
+
+
+% 包依赖
+\LoadClass[a4paper,UTF8,zihao=-4,titlepage,oneside]{ctexbook}
+\RequirePackage{graphicx}
+% ==============================================================================
+% 页面边距
+% ==============================================================================
+\RequirePackage{geometry}
+  \geometry{a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm}
+
+\RequirePackage{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage[most,minted]{tcolorbox}
+\RequirePackage{minted}
+\RequirePackage{amsmath}
+\RequirePackage{unicode-math}
+\RequirePackage{tabularray}
+\RequirePackage{multirow}
+\RequirePackage{listofitems}
+\RequirePackage{expl3}
+\RequirePackage{ulem}
+\RequirePackage{titletoc}
+
+
 % 设置图片文件夹路径
 \graphicspath{{figures/}{figure/}{pictures/}%
 {picture/}{pic/}{pics/}{image/}{images/}}
 
 
 % 英文默认为Times New Roman
-\setmainfont[
-    Path=fonts/times/,
-    Extension = .ttf,
-    UprightFont = * ,
-    BoldFont = *bd ,
-    ItalicFont = *i ,
-    BoldItalicFont = *bi
-]{times} 
+\setmainfont{Times New Roman}
+% \setmainfont[
+%     Path=fonts/times/,
+%     Extension = .ttf,
+%     UprightFont = * ,
+%     BoldFont = *bd ,
+%     ItalicFont = *i ,
+%     BoldItalicFont = *bi
+% ]{times} 
 
-
-%% 字体汉化设置
-
-\zihao{-4}
+% 默认行距
 \linespread{1.25}
-
-% 字号设置
-% \newcommand{\初号}{\zihao {0}}
-% \newcommand{\小初}{\zihao{-0}}
-% \newcommand{\一号}{\zihao {1}}
-% \newcommand{\小一}{\zihao{-1}}
-% \newcommand{\二号}{\zihao {2}}
-% \newcommand{\小二}{\zihao{-2}}
-% \newcommand{\三号}{\zihao {3}}
-% \newcommand{\小三}{\zihao{-3}}
-% \newcommand{\四号}{\zihao {4}}
-% \newcommand{\小四}{\zihao{-4}}
-% \newcommand{\五号}{\zihao {5}}
-% \newcommand{\小五}{\zihao{-5}}
-% \newcommand{\六号}{\zihao {6}}
-% \newcommand{\小六}{\zihao{-6}}
-% \newcommand{\七号}{\zihao {7}}
-% \newcommand{\八号}{\zihao {8}}
 
 % 伪粗体等级
 \xeCJKsetup{EmboldenFactor=3} 
@@ -219,23 +201,9 @@
 % 楷体
 \newcommand{\kaiti}{\CJKfontspec[Path=fonts/,AutoFakeBold={2.0}]{simkai.ttf}}
 
-% 其他
-% \newcommand{\隶书}{\lishu}
-% \newcommand{\幼圆}{\youyuan}
-% \newcommand{\雅黑}{\yahei}
-% \newcommand{\苹方}{\pingfang}
-
-% 字体效果汉化设置
-% \newcommand{\粗体}{\bfseries}
-% \newcommand{\斜体}{\itshape}
-
-
 % ==============================================================================
 % 设置标题
 % ==============================================================================
-
-\def\sht@toc@chapter@fmt{\zihao{4}\heiti}
-\def\sht@toc@section@fmt{\zihao{-4}\heiti}
 
 % 一级标题格式：第*章  后空一格（全角）黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
 \ctexset{
@@ -269,89 +237,6 @@
 }
 
 
-% 设置一级标题
-
-
-% 设置二级标题
-
-
-% 设置三级标题
-
-
-% ------------------------------------------------------------------------------
-%   Headers and footers
-% ------------------------------------------------------------------------------
-% \def\sht@flat@title{\renewcommand\\{\space} \sht@title}
-% \def\sht@flat@title@upper@en{%
-%   \renewcommand\\{\space}%
-%   \MakeUppercase{\sht@title@en}%
-% }
-
-% \pagestyle{fancy}
-% \fancypagestyle{Plain}{}
-% \fancypagestyle{RomanNumbered}{
-%   \fancyhf{}
-%   \pagenumbering{Roman}
-%   \fancyhead[OC]{\footnotesize\nouppercase\leftmark}
-%   \fancyhead[EC]{\footnotesize\nouppercase\sht@flat@title}
-%   \fancyfoot[C]{\footnotesize\thepage}
-%   \renewcommand{\headrulewidth}{0.8pt}
-%   \renewcommand{\footrulewidth}{0pt}
-% }
-% \fancypagestyle{LRNumbered}{
-%   \fancyhf{}
-%   \fancyhead[OC]{\footnotesize\nouppercase\leftmark}
-%   \fancyhead[EC]{\footnotesize\nouppercase\sht@flat@title}
-%   \fancyfoot[OR]{\footnotesize\thepage}
-%   \fancyfoot[EL]{\footnotesize\thepage}
-%   \renewcommand{\headrulewidth}{0.8pt}
-%   \renewcommand{\footrulewidth}{0pt}
-% }
-% \fancypagestyle{LRNumberedAppendix}{
-%   \fancyhf{}
-%   \fancyhead[OC]{\footnotesize 附\hspace*{1\ccwd}录}
-%   \fancyhead[EC]{\footnotesize\nouppercase\sht@flat@title}
-%   \fancyfoot[OR]{\footnotesize\thepage}
-%   \fancyfoot[EL]{\footnotesize\thepage}
-%   \renewcommand{\headrulewidth}{0.8pt}
-%   \renewcommand{\footrulewidth}{0pt}
-% }
-
-% \fancypagestyle{MNNumberedWithLogo}{
-%   \fancyhf{}
-%   \fancyhead[L]{\sht@head@logo}
-%   \fancyhead[R]{\zihao{-5}\sffamily\sht@flat@title}
-%   \fancyfoot[C]{%
-%     \footnotesize%
-%     第~\thepage~页\hspace*{1\ccwd}共~\pageref*{LastPage}~页%
-%   }
-%   \renewcommand{\headrulewidth}{0.8pt}
-%   \renewcommand{\footrulewidth}{0pt}
-% }
-% \providecommand{\frontmatter}{}
-% \LetLtxMacro{\TmpFrontmatter}{\frontmatter}
-% \renewcommand{\frontmatter}{%
-%   \TmpFrontmatter%
-%   \ifsht@undergraduate%
-%     \pagestyle{RomanNumberedWithLogo}%
-%   \else%
-%     \pagestyle{RomanNumbered}%
-%   \fi%
-% }
-% \providecommand{\mainmatter}{}
-% \LetLtxMacro{\TmpMainmatter}{\mainmatter}
-% \renewcommand{\mainmatter}{%
-%   \TmpMainmatter%
-%   \renewcommand{\chaptermark}[1]{%
-%     \markboth{第~\thechapter~章\hspace{1\ccwd}##1}{}%
-%   }%
-%   \ifsht@undergraduate%
-%     \pagestyle{MNNumberedWithLogo}%
-%   \else%
-%     \pagestyle{LRNumbered}%
-%   \fi%
-% }
-
 % 页眉
 \pagestyle{fancy}
 \chead{\songti\zihao{-5}\suep@title \suep@sub@title}
@@ -360,7 +245,29 @@
 % 页脚
 \cfoot{\zihao{-5}-\ \thepage\ -}
 
+% ==============================================================================
+% 目录格式
+% ==============================================================================
 
+\renewcommand{\contentsname}{\heiti \zihao{-3} 目录 }
+
+\titlecontents{chapter}[4em]
+	{\zihao{4}\linespread{1.5} \bfseries}
+	{\contentslabel{4em}}
+	{\hspace*{-4em}}
+	{~\titlerule*[0.6pc]{$\cdot$}~\contentspage}
+
+\titlecontents{section}[1cm]{\fontsize{12pt}%
+  {\baselineskip}\selectfont}{\hspace*{3em}\contentslabel{2em}\ }%
+  {}{\titlerule*[0.5pc]{$\cdot$}\contentspage}%
+
+\titlecontents{subsection}[1cm]{\fontsize{10pt}%
+{\baselineskip}\selectfont}{\hspace*{3em}\contentslabel{2em}\ }%
+{}{\titlerule*[0.5pc]{$\cdot$}\contentspage}%
+
+% ==============================================================================
+% 设置封面
+% ==============================================================================
 \def\ubox@right@shift{0.5\ccwd}
 \def\cover@tab@entry@width{200pt}
 \def\cover@tab@last@entry@width{\cover@tab@entry@width - 2\ccwd - 0.5\ccwd}
@@ -388,7 +295,6 @@
     m}{%
   \makebox[#1][c]{ #2 }%
 }
-
 
 \newcommand{\makecover}{
     \newgeometry{%
@@ -542,7 +448,7 @@
   \zihao{-4}
 }{
   \vspace*{\baselineskip}
-  \par\noindent{\zihao{4} \bfseries Key Words: \quad} \suep@keywords@en
+  \par\noindent{\zihao{4} \bfseries Key Words: } \suep@keywords@en
   \vfill
   \newpage
 }
