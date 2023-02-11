@@ -19,9 +19,6 @@
   supervisor = {某老师},
   % 日期
   date = {\today},
-  % 中文摘要关键字
-  keywords = {上海电力大学；学位论文；\LaTeX{}},
-  keywords* = {Shanghai University of Electric Power, Thesis, \LaTeX{}}
 }
 
 \begin{document}
@@ -29,10 +26,16 @@
 \makecover
 \makepromise
 \makeauthorize
+
 \input{sections/abstract.tex}
 
 \tableofcontents
 
 \input{sections/chapter01.tex}
+
+
+\input{sections/thanks.tex}
+
+\bibliography{sections/reference.bib} 
 
 \end{document}

@@ -10,16 +10,30 @@
 %% 
 
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{math201}
+\ProvidesClass{suepthesis}
 [2023/02/08 v0.1 Shanghai University of Electric Power Graduation Thesis LaTeX Template]
 
-\RequirePackage{ifxetex,ifluatex,ifthen}
-  \ifthenelse{\boolean{xetex}\OR\boolean{luatex}}{}{
-    \ClassError{suepthesis}{You Should Use XeLaTeX or LuaLaTeX To Compile.}}
+\newcommand\suep@error[1]{%
+  \ClassError{suepthesis}{#1}{}%
+}
+\newcommand\suep@warning[1]{%
+  \ClassWarning{suepthesis}{#1}%
+}
+\newcommand\suep@patch@error[1]{%
+  \suep@error{Failed to patch command \protect#1}%
+}
 
-\newcommand\version{0.1.0}
+\RequirePackage{iftex}
+\ifXeTeX\else
+  \ifLuaTeX\else
+    \suep@error{XeLaTeX or LuaLaTeX is required to compile this document}
+  \fi
+\fi
+
+\hyphenation{SUEP-Thesis}
 \newcommand\suepthesis{\textup{\sffamily suepthesis}}
 \newcommand\SUEPThesis{\textup{\sffamily SUEPThesis}}
+\newcommand\version{0.1.0}
 
 % ==============================================================================
 % Options and Declarations
@@ -129,7 +143,7 @@
     default = {信息与计算科学专业 2018 级},
   },
   date = {
-    default = {2023 年 2 月 8 日},
+    default = {\today},
   },
   keywords,
   keywords* = {
@@ -140,14 +154,16 @@
 
 
 % 包依赖
-\LoadClass[a4paper,UTF8,zihao=-4,titlepage,oneside]{ctexbook}
-\RequirePackage{graphicx}
-% ==============================================================================
-% 页面边距
-% ==============================================================================
+\LoadClass[  
+  UTF8,
+  a4paper,
+  zihao = -4,
+  twoside, 
+  openany, 
+  % scheme = plain
+]{ctexbook}
 \RequirePackage{geometry}
-  \geometry{a4paper,top=2.54cm,bottom=2.54cm,left=3.17cm,right=3.17cm}
-
+\RequirePackage{graphicx}
 \RequirePackage{titlesec}
 \RequirePackage{fancyhdr}
 \RequirePackage[most,minted]{tcolorbox}
@@ -162,10 +178,26 @@
 \RequirePackage{titletoc}
 
 
+% ==============================================================================
+% 页面边距
+% ==============================================================================
+\geometry{
+  top=2.54cm,
+  bottom=2.54cm,
+  left=3.17cm,
+  right=3.17cm,
+  % headheight = 1.9cm,
+  % headsep    = 1.9cm,
+  % footskip   = 1.45cm,
+}
+
 % 设置图片文件夹路径
 \graphicspath{{figures/}{figure/}{pictures/}%
 {picture/}{pic/}{pics/}{image/}{images/}}
 
+% ==============================================================================
+% 字体设置
+% ==============================================================================
 
 % 英文默认为Times New Roman
 \setmainfont{Times New Roman}
@@ -178,19 +210,16 @@
 %     BoldItalicFont = *bi
 % ]{times} 
 
-% 默认行距
-\linespread{1.25}
-
 % 伪粗体等级
-\xeCJKsetup{EmboldenFactor=3} 
+% \xeCJKsetup{EmboldenFactor=3} 
 % 宋体
-\renewcommand{\songti}{\CJKfontspec[Path=fonts/,FallBack=simsunb.ttf,AutoFakeBold]{simsun.ttc}}
+\renewcommand{\songti}{\CJKfontspec[Path=fonts/,FallBack=simsunb.ttf,AutoFakeBold=3]{simsun.ttc}}
 % 中文默认为宋体,小四在\documentclass处设置
-\setCJKmainfont[Path=fonts/,FallBack=simsunb.ttf,AutoFakeBold]{simsun.ttc} 
+\setCJKmainfont[Path=fonts/,FallBack=simsunb.ttf,AutoFakeBold=3]{simsun.ttc} 
 % \newcommand{\宋体}{\songti}
 
 % 黑体
-\renewcommand{\heiti}{\CJKfontspec[Path=fonts/,AutoFakeBold]{simhei.ttf}}
+\renewcommand{\heiti}{\CJKfontspec[Path=fonts/,AutoFakeBold=3]{simhei.ttf}}
 \setCJKsansfont[Path=fonts/]{simhei.ttf}
 % \newcommand{\黑体}{\heiti}
 
@@ -201,69 +230,29 @@
 % 楷体
 \newcommand{\kaiti}{\CJKfontspec[Path=fonts/,AutoFakeBold={2.0}]{simkai.ttf}}
 
-% ==============================================================================
-% 设置标题
-% ==============================================================================
+% 默认行距
+\linespread{1.25}
 
-% 一级标题格式：第*章  后空一格（全角）黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
-\ctexset{
-  chapter = {
-    format = \heiti\zihao{-3}\linespread{1.5}\centering,
-    name = {第 ,章},
-    aftername = \hspace{\ccwd},
-    beforeskip = {0pt},
-    afterskip = {0.5ex},
-  }
-}
-% 二级标题格式： 1.1（半角）  后空一格(全角) 黑体四号字 居左 1.5倍行距 段前0.5行 段后0行
-\ctexset{
-  section = {
-    format = \heiti\zihao{4}\linespread{1.5}\raggedright,
-    aftername = \hspace{\ccwd},
-    beforeskip = {0.5ex},
-    afterskip = {0pt},
-  }
-}
-
-% 三级标题格式： 1.1.1（半角）前空两格、后空一格（全角） 黑体小四号字 居左 1.5倍行距 段前0.5行 段后0行
-\ctexset {
-  subsection = {
-    format = \heiti\zihao{-4}\linespread{1.5},
-    indent = {2\ccwd},
-    aftername = \hspace{\ccwd},
-    beforeskip = {0.5ex},
-    afterskip = {0pt},
-  },
-}
+% 字号汉化设置
+\newcommand{\chuhao}{\zihao {0}}
+\newcommand{\xiaochu}{\zihao{-0}}
+\newcommand{\yihao}{\zihao {1}}
+\newcommand{\xiaoyi}{\zihao{-1}}
+\newcommand{\erhao}{\zihao {2}}
+\newcommand{\xiaoer}{\zihao{-2}}
+\newcommand{\sanhao}{\zihao {3}}
+\newcommand{\xiaosan}{\zihao{-3}}
+\newcommand{\sihao}{\zihao {4}}
+\newcommand{\xiaosi}{\zihao{-4}}
+\newcommand{\wuhao}{\zihao {5}}
+\newcommand{\xiaowu}{\zihao{-5}}
+\newcommand{\liuhao}{\zihao {6}}
+\newcommand{\xiaoliu}{\zihao{-6}}
+\newcommand{\qihao}{\zihao {7}}
+\newcommand{\bahao}{\zihao {8}}
 
 
-% 页眉
-\pagestyle{fancy}
-\chead{\songti\zihao{-5}\suep@title \suep@sub@title}
-\lhead{}
 
-% 页脚
-\cfoot{\zihao{-5}-\ \thepage\ -}
-
-% ==============================================================================
-% 目录格式
-% ==============================================================================
-
-\renewcommand{\contentsname}{\heiti \zihao{-3} 目录 }
-
-\titlecontents{chapter}[4em]
-	{\zihao{4}\linespread{1.5} \bfseries}
-	{\contentslabel{4em}}
-	{\hspace*{-4em}}
-	{~\titlerule*[0.6pc]{$\cdot$}~\contentspage}
-
-\titlecontents{section}[1cm]{\fontsize{12pt}%
-  {\baselineskip}\selectfont}{\hspace*{3em}\contentslabel{2em}\ }%
-  {}{\titlerule*[0.5pc]{$\cdot$}\contentspage}%
-
-\titlecontents{subsection}[1cm]{\fontsize{10pt}%
-{\baselineskip}\selectfont}{\hspace*{3em}\contentslabel{2em}\ }%
-{}{\titlerule*[0.5pc]{$\cdot$}\contentspage}%
 
 % ==============================================================================
 % 设置封面
@@ -304,12 +293,12 @@
     \thispagestyle{empty}
     \begin{center}
     {
-        \kaiti\zihao{0}\bfseries 
+        \kaiti\chuhao\bfseries 
         上海电力大学
     }
     \vskip 50pt
     {
-        \STfangsong\zihao{-0}\bfseries 
+        \STfangsong\xiaochu\bfseries 
         本科毕业设计（论文）
     }
     \vskip 60pt
@@ -318,7 +307,7 @@
 
     {
         \songti
-        \zihao{4}
+        \sihao
         % 调整列距
         \def\tabcolsep{0.5pt}
         % 调整行距
@@ -365,13 +354,13 @@
     \thispagestyle{empty}
     \vskip 4.94mm
     \begin{center}
-        \heiti\zihao{-2}
+        \heiti\xiaoer
         上海电力大学 \\
         本科毕业设计（论文）原创性声明
     \end{center}
     \vskip 6.35mm
 
-    \songti\zihao{4}
+    \songti\sihao
     \linespread{2}
     本人郑重申明：本人所呈交的毕业论文，是在指导老师的指导下独立进行研究所取得的成果。
     论文中凡引用他人已经发布或未发表的成果、数据、观点等，均已明确注明出处。
@@ -383,7 +372,6 @@
     \vspace*{10ex}
 
     {\hfill{}论文作者签名：\hspace*{8em}日期：\hspace*{5em}}
-    \clearpage
 }
 
 % 使用授权声明
@@ -396,13 +384,13 @@
     \thispagestyle{empty}
     \vskip 4.94mm
     \begin{center}
-        \heiti\zihao{-2}
+        \heiti\xiaoer
         上海电力大学 \\
         本科毕业设计（论文）使用授权声明
     \end{center}
     \vskip 6.35mm
 
-    \songti\zihao{4}
+    \songti\sihao
     \linespread{2}
     本人在指导老师的指导下所完成的论文及相关的资料，知识产权归属上海电力大学。
     本人完全了解上海电力大学有关保存、使用毕业论文的规定，同意学校保存或向国家有关部门或机构送交论文的纸质版或电子版，允许论文被查阅或借阅。
@@ -416,39 +404,165 @@
     \vspace*{5ex}
 
     {\hfill{}指导老师签名：\hspace*{8em}日期：\hspace*{5em}}
-
-    \clearpage
 }
+
+% ==============================================================================
+% 设置标题
+% ==============================================================================
+
+% 一级标题格式：第*章  后空一格（全角）黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
+\ctexset{
+  chapter = {
+    format = \heiti \xiaosan \linespread{1.5} \centering,
+    titleformat = {},
+    nameformat = {},
+    name = {第 ,章},
+    aftername = \hspace{\ccwd},
+    beforeskip = {0pt},
+    afterskip = {0.5ex},
+    pagestyle = fancy,
+  }
+}
+% 二级标题格式： 1.1（半角）  后空一格(全角) 黑体四号字 居左 1.5倍行距 段前0.5行 段后0行
+\ctexset{
+  section = {
+    format = \heiti \sihao \linespread{1.5} \raggedright,
+    nameformat = {},
+    titleformat = {},
+    aftername = \hspace{\ccwd},
+    beforeskip = {0.5ex},
+    afterskip = {0pt},
+  }
+}
+
+% 三级标题格式： 1.1.1（半角）前空两格、后空一格（全角） 黑体小四号字 居左 1.5倍行距 段前0.5行 段后0行
+\ctexset {
+  subsection = {
+    format = \heiti \xiaosi \linespread{1.5},
+    nameformat = {},
+    titleformat = {},
+    indent = {2\ccwd},
+    aftername = \hspace{\ccwd},
+    beforeskip = {0.5ex},
+    afterskip = {0pt},
+  },
+}
+
+% \ctexset{
+%   paragraph = {
+%     runin = false,
+%     hang = true,
+%     indent = 2\ccwd,
+%     beforeskip = {0pt},
+%     afterskip = {0pt},
+%   },
+%   subparagraph = {
+%     runin = false,
+%     hang = true,
+%     indent = 2\ccwd,
+%     beforeskip = {0pt},
+%     afterskip = {0pt},
+%   }
+% }
+
+
+
+
+\pagestyle{fancy}
+\fancyhead[C]{\songti \xiaowu \suep@title}
+\fancyhead[LR]{}
+\fancyfoot[C]{\zihao{-5}-\ \thepage\ -}
+
+
+\linespread{1.25}
+
+% ==============================================================================
+% 目录格式
+% ==============================================================================
+
+\renewcommand{\contentsname}{\heiti \xiaosan 目录 }
+
+\titlecontents{chapter}[4em]
+	{\xiaosi \linespread{1.4} \bfseries}
+	{\contentslabel{4em}}
+	{ }
+	{~\titlerule*[0.6pc]{$\cdot$}~\contentspage}
+
+\titlecontents{section}[3em]
+	{ \xiaosi \linespread{1.4} }
+	{ \contentslabel{2em} }
+	{ }
+	{ ~\titlerule*[0.6pc]{$\cdot$}~\contentspage }
+
+\titlecontents{subsection}[4em]
+	{ \xiaosi \linespread{1.4} } 
+	{ \contentslabel{2.5em} }
+	{ }
+	{ ~\titlerule*[0.6pc]{$\cdot$}~\contentspage }
+
+% \titlecontents{chapter*}[0em]
+% 	{\xiaosi \linespread{1.4} \bfseries}
+% 	{\contentslabel{4em}}
+% 	{ }
+% 	{~\titlerule*[0.6pc]{$\cdot$}~\contentspage}
+
 
 % ------------------------------------------------------------------------------
 %   Abstract
 % ------------------------------------------------------------------------------
+\newcommand{\suep@abstract@name}{摘\hspace{0.5\ccwd}要}
+\newcommand{\suep@abstract@name@en}{Abstract}
 
 \newenvironment{abstract}{
+  % \let\cleardoublepage\clearpage
   \vspace*{\baselineskip}
-  \begin{center}
-    {\heiti\zihao{3}\bfseries 摘\hspace{0.5\ccwd}要}
-  \end{center}
-
-  \songti\zihao{-4}
+  \ctexset{
+    chapter/format += \heiti \xiaosan \bfseries, 
+    chapter/beforeskip = 0.5ex
+  }
+  % 黑体小三号，居中，1.5倍 行距，段前0、段后0.5
+  \chapter*{\suep@abstract@name}
+  \songti\xiaosi
 }{
   \vspace*{\baselineskip}
-  \par\noindent{\zihao{-4} \heiti \bfseries 关键词：} \suep@keywords
+  \par\noindent{\heiti \bfseries 关键词：} \suep@keywords
   \vfill
+  \fancyfoot{}
   \newpage
 }
 
 \newenvironment{abstract*}{
+  \let\clearpage\relax
   \vspace*{\baselineskip}
   \begin{center}
-    {\zihao{-2}\bfseries \suep@title@en} \\
-    {\zihao{-3}\bfseries Abstract}
+    {\xiaoer \bfseries \suep@title@en}
   \end{center}
-
-  \zihao{-4}
+  % \vspace*{\baselineskip}%
+  \ctexset{
+    chapter/format += \xiaosan \bfseries, 
+    chapter/beforeskip = 0pt
+  }
+  \chapter*{\suep@abstract@name@en}
 }{
   \vspace*{\baselineskip}
-  \par\noindent{\zihao{4} \bfseries Key Words: } \suep@keywords@en
+  \par\noindent{\sihao \bfseries Key Words: } \suep@keywords@en
   \vfill
+  \fancyfoot{}
   \newpage
+  \setcounter{page}{1}
+}
+
+
+\renewcommand{\thanks}{
+  \addcontentsline{toc}{chapter}{致谢}
+  \chaptermark{致谢}
+  \chapter*{致谢}
+}
+
+
+\newcommand{\reference}{
+
+  \addcontentsline{toc}{chapter}{参考文献}
+  \chaptermark{参考文献 Thanks}
+  \chapter*\centerline{参考文献}
 }
