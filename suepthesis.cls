@@ -200,15 +200,7 @@
 % ==============================================================================
 
 % 英文默认为Times New Roman
-\setmainfont{Times New Roman}
-% \setmainfont[
-%     Path=fonts/times/,
-%     Extension = .ttf,
-%     UprightFont = * ,
-%     BoldFont = *bd ,
-%     ItalicFont = *i ,
-%     BoldItalicFont = *bi
-% ]{times} 
+\setmainfont[Path=./fonts/, BoldFont={*Bold}, ItalicFont={*Italic}, BoldItalicFont={*BoldItalic}]{TimesNewRoman}
 
 % 伪粗体等级
 % \xeCJKsetup{EmboldenFactor=3} 
