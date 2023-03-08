@@ -20,7 +20,8 @@ $biber = "biber %O %S";
 # 5 代表使用 $xelatex
 $pdf_mode = 5;
 
-# @default_files=('main.tex')
+$dvi_mode = 0;
+$postscript_mode = 0;
 
 # Configure files to clean
 # 执行 latexmk -c 或 latexmk -C 时会清空 latex 程序生成的文件（-C 更强，会清空pdf）
