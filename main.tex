@@ -1,41 +1,130 @@
-\documentclass{suepthesis}
+%%
+% The BIThesis Template for Bachelor Graduation Thesis
+%
+% 上海电力大学毕业设计（论文） —— 使用 XeLaTeX 编译
+%
+% Copyright 2021-2023 
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Feng Kaiyu.
+%
+% Compile with: xelatex -> biber -> xelatex -> xelatex
 
-\suepsetup{
-  % 论文标题
-  title = {基于目标检测的人工智能算法},
-  % 标题拓展，当标题字数一行放不下时，可将剩下文字放至此处
-  sub-title = {},
-  % 论文标题英文
-  title* = {Artificial Intelligence Algorithm Based on Object Detection},
-  % 学生姓名
-  student = {某同学},
-  % 学号
-  student-id = {2022****},
-  % 院系
-  institution = {数理学院数学系},
-  % 专业年级
-  discipline = {信息与计算科学专业 2018 级},
-  % 指导老师
-  supervisor = {某老师},
-  % 日期
-  date = {\today},
+% !TeX program = xelatex
+% !BIB program = biber
+
+
+% 开启盲审格式 blindPeerReview=true (如：[type=bachelor,blindPeerReview=true])
+
+\documentclass[type=bachelor]{suepthesis}
+
+\SUEPSetup{
+  cover = {
+    %% 使用以下参数来自定义封面日期
+    % date = 2022年6月,
+  },
+  info = {
+    % 想要删除某项封面信息，直接删除该项即可。
+    % 想要让某项封面信息留空（但是保留下划线），请设置为空字符串。
+    % 如需要换行，则用 “\\” 符号分割。
+    title = 基于神经网络的目标检测算法,
+    % 当且仅当封面题目的第一栏写不下，再使用subtitle用于扩充
+    % subtitle = ,
+    titleEn = {The Subject of Undergraduate Graduation Project (Thesis) of Shanghai University of Electric Power},
+    institution = 数理学院数学系,
+    major = 信息与计算科学专业2018级,
+    author = 某同学,
+    studentId = 2018xxxx,
+    supervisor = 某老师,
+    keywords = {上海电力大学；本科生；毕业设计（论文）},
+    keywordsEn = {SUEP; Undergraduate; Graduation Project (Thesis)},
+    % 如果你的毕设为校外毕设，请将下面这一行语句解除注释（删除第一个百分号字符）并填写你的校外毕设导师名字
+    % externalSupervisor = 左偏树,
+  },
+  style = {
+    % 保持参考文献的缩进样式与 Word 模板一致。
+    % 如果你不需要此样式，请将此行注释掉。
+    bibliographyIndent = false,
+  }
 }
 
+% 使用 listings 宏包进行代码块使用，并使用了预定义的样式，
+% 你也可以选用自己的喜欢的其他宏包，如 minted；
+% 然而由于 minted 依赖 Python 的 Pygments 库作为外部依赖，因此出于模板的简洁程度考虑，我们没有提供 minted 进行代码块书写的示例。
+\usepackage{listings}
+
+\usepackage[
+  backend=biber,
+  style=gb7714-2015,
+  gbalign=gb7714-2015,
+  gbnamefmt=lowercase,
+  gbpub=false,
+  doi=false,
+  url=false,
+  eprint=false,
+  isbn=false,
+]{biblatex}
+
+% 参考文献引用文件位于 misc/ref.bib
+\addbibresource{misc/ref.bib}
+
+
+% 文档开始
 \begin{document}
 
-\makecover
-\makepromise
-\makeauthorize
+% 标题页面：如无特殊需要，本部分无需改动
+% \input{misc/0_cover.tex}
+\MakeCover
 
-\input{sections/abstract.tex}
+% 原创性声明：如无特殊需要，本部分无需改动
+% 更改为 PDF 页面插入，如需要添加内容，可考虑先用 Word 制作再覆盖 misc/1_originality.pdf
+% ====== 原创性声明（PDF 格式）======
+\MakeOriginality
+% \begin{blindPeerReview}
+%   \includepdf{misc/1_originality.pdf}\newpage
+% \end{blindPeerReview}
+% ====== 原创性声明（PDF 格式）======
+% ====== 原创性声明（LaTeX 格式）======
+% \input{./misc/1_originality.tex}
+% ====== 原创性声明（LaTeX 格式）======
 
-\tableofcontents
+% 前置页面定义
+\frontmatter
+% 摘要：在摘要相应的 TeX 文件处进行摘要部分的撰写
+\input{chapters/0_abstract.tex}
 
-\input{sections/chapter01.tex}
+\MakeTOC
 
+% 正文开始
+\mainmatter
 
-\input{sections/thanks.tex}
+% 第一章
+\input{chapters/1_chapter1.tex}
+% 在这里添加第二章、第三章……TeX 文件的引用
+\input{chapters/2_chapter2.tex}
+% \input{chapters/3_chapter3.tex}
 
-\bibliography{sections/reference.bib} 
+% 后置部分
+\backmatter
+
+% 结论：在结论相应的 TeX 文件处进行结论部分的撰写
+\input{misc/2_conclusion.tex}
+% 致谢：在致谢相应的 TeX 文件处进行致谢部分的撰写
+\input{misc/5_acknowledgements.tex}
+% 参考文献：如无特殊需要，参考文献相应的 TeX 文件无需改动，添加参考文献请使用 BibTeX 的格式
+%   添加至 misc/ref.bib 中，并在正文的相应位置使用 \cite{xxx} 的格式引用参考文献
+\input{misc/3_reference.tex}
+% 附录：在附录相应的 TeX 文件处进行附录部分的撰写
+\input{misc/4_appendix.tex}
+
 
 \end{document}
