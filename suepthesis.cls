@@ -630,17 +630,20 @@
     \ziju{0.08}
     \songti{\tl_use:N \l__suepthesis_value_title_tl \l__suepthesis_value_subtitle_tl}
   }
-  \fancyfoot[C]{\songti\zihao{5} \thepage}
+  \fancyfoot[C]{\songti\zihao{5} -\ \thepage\ -}
   % 页眉分割线稍微粗一些
   \RenewDocumentCommand \headrulewidth {} {0.6pt}
 }
 
+% 一级标题格式：第*章  后空一格（全角）黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
 \ctexset{chapter={
-    number = {\arabicHeiti{ \arabic{chapter} }},
-    format = { \l__suepthesis_title_font_cs:n \bfseries \centering \zihao{3}},
+    % number = {\arabicHeiti{ \arabic{chapter} }},
+    % number = {chapter},
+    format = { \xiaosan \heiti \centering },
     nameformat = {},
     titleformat = {},
-    aftername = \hspace{9bp},
+    % aftername = \hspace{9bp},
+    aftername = \quad,
     pagestyle = suepthesis,
     beforeskip = 8bp,
     afterskip = 32bp,
@@ -648,30 +651,34 @@
   }
 }
 
+% 二级标题格式： 1.1（半角）  后空一格(全角) 黑体四号字 居左 1.5倍行距 段前0.5行 段后0行
 \ctexset{section={
-    number = {\arabicHeiti{\thechapter.\hspace{1bp}\arabic{section}}},
-    format = {\l__suepthesis_title_font_cs:n \raggedright \bfseries \zihao{4}},
+    % number = {\arabicHeiti{\thechapter.\hspace{1bp}\arabic{section}}},
+    number = {
+      \thechapter.\hspace{1bp}
+      \arabic{section}
+    },
+    format = {\sihao \heiti \raggedright},
     nameformat = {},
     titleformat = {},
-    aftername = \hspace{8bp},
+    aftername = \quad,
     beforeskip = 20bp plus 1ex minus .2ex,
     afterskip = 18bp plus .2ex,
     fixskip = true,
   }
 }
 
+% 三级标题格式： 1.1.1（半角）前空两格、后空一格（全角） 黑体小四号字 居左 1.5倍行距 段前0.5行 段后0行
 \ctexset{subsection={
     number = {
-      \arabicHeiti{
         \thechapter.\hspace{1bp}
         \arabic{section}.\hspace{1bp}
         \arabic{subsection}
-      }
     },
-    format = {\l__suepthesis_title_font_cs:n \bfseries \raggedright \zihao{-4}},
+    format = {\xiaosi \heiti \raggedright},
     nameformat = {},
     titleformat = {},
-    aftername = \hspace{7bp},
+    aftername = \quad,
     beforeskip = 17bp plus 1ex minus .2ex,
     afterskip = 14bp plus .2ex,
     fixskip = true,
@@ -683,14 +690,12 @@
   subsubsection={
     numbering = true,
     number = {
-      \arabicHeiti{
-        \arabic{chapter}.\hspace{1bp}
-        \arabic{section}.\hspace{1bp}
-        \arabic{subsection}.\hspace{1bp}
-        \arabic{subsubsection}
-      }
+      \arabic{chapter}.\hspace{1bp}
+      \arabic{section}.\hspace{1bp}
+      \arabic{subsection}.\hspace{1bp}
+      \arabic{subsubsection}
     },
-    format={\l__suepthesis_title_font_cs:n \bfseries \raggedright \zihao{-4}},
+    format={\xiaosi \heiti \raggedright},
     nameformat = {},
     titleformat = {},
     beforeskip=28bp plus 1ex minus .2ex,
