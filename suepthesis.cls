@@ -39,10 +39,12 @@
 \seq_new:N \l__suepthesis_left_seq
 \cs_generate_variant:Nn \tl_if_empty:nTF {x}
 \cs_generate_variant:Nn \seq_set_split:Nnn {Nnx}
+
 \cs_new:Npn \__suepthesis_same_page: {
   \let\clearpage\relax
   \let\cleardoublepage\relax
 }
+
 \cs_new:Npn \__suepthesis_if_graduate:TF #1#2 {
     \int_compare:nNnTF {3} < {\g__suepthesis_thesis_type_int}
       {#1}
@@ -58,6 +60,7 @@
 \cs_new:Npn \__suepthesis_if_bachelor_thesis:T #1 {\__suepthesis_if_bachelor_thesis:TF {#1} {}}
 \cs_new:Npn \__suepthesis_if_master_thesis:TF #1#2 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {4} {#1} {#2}}
 \cs_new:Npn \__suepthesis_if_doctor_thesis:TF #1#2 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {5} {#1} {#2}}
+
 \clist_const:Nn \c__suepthesis_thesis_type_clist
     { bachelor, bachelor_translation, bachelor_english, master, doctor}
 \clist_const:Nn \c__suepthesis_publication_modes_clist
@@ -81,23 +84,17 @@
     \tl_const:cn { c__suepthesis_ #1 _label_ #2 _tl } {#3}
     \tl_const:cn { c__suepthesis_ #1 _label_ #2 _en_tl } {#4}
   }
+
 \cs_new:Npn \smallgap: {
   \hspace{0.45ex}
 }
+
 \cs_new:Npn \label_space: {
   \__suepthesis_if_bachelor_thesis:T {
     \quad
   }
 }
-\clist_map_inline:nn
-  {
-    {code} {代码},
-    {udc} {UDC分类号：},
-    {classification} {中国分类号：},
-    {classified_level} {密级},
-    {type} {种类},
-  }
-  {\__suepthesis_define_label:nn #1}
+
 \clist_map_inline:nn
   {
     {originality} {本科生毕业设计（论文）原创性声明},
@@ -139,7 +136,7 @@
     {supervisor} {指导教师} {Supervisor},
     {co_supervisor} {校外指导教师} {Co-Supervisor},
     {keywords} {关键词：} {Key~Words:~},
-    {toc} {目\label_space: 录} {Table~of~Contents},
+    {toc} {目录} {Table~of~Contents},
     {abstract} {摘\label_space: 要} {Abstract},
     {conclusion} {结\label_space: 论} {Conclusions},
     {appendix} {附\label_space: 录} {Appendices},
@@ -148,7 +145,7 @@
     {table} {表\quad 格} {Tables},
     {appendix_prefix} {附录} {Appendix},
     {reference} {参考文献} {References},
-    {university} {北京理工大学} {Beijing~Institute~of~Technology},
+    {university} {上海电力大学} {Shanghai~University~of~Electric~Power},
     {publications} {攻读学位期间发表论文与研究成果清单}
       {Publications~During~Studies},
     % TODO: Not so sure about the translation.
@@ -157,19 +154,6 @@
   }
   {\__suepthesis_define_label:nnn #1}
 
-\clist_const:Nn \c__suepthesis_bachelor_thesis_header_clist
-  {
-    北京理工大学本科生毕业设计（论文）,
-    北京理工大学本科生毕业设计（论文）外文翻译,
-    Beijing~Institute~of~Technology~Bachelor's~Thesis
-  }
-
-\clist_const:Nn \c__suepthesis_bachelor_thesis_cover_title_clist
-  {
-    本科生毕业设计（论文）,
-    本科生毕业设计（论文）外文翻译,
-    Beijing\nobreak{~}Institute\nobreak{~}of\nobreak{~}Technology~Bachelor's~Thesis,
-  }
 \keys_define:nn { suepthesis }
 {
   info .meta:nn = { suepthesis / info } {#1},
@@ -181,6 +165,7 @@
   appendices .meta:nn = { suepthesis / appendices } {#1},
   publications .meta:nn = { suepthesis / publications } {#1},
 }
+
 \keys_define:nn { suepthesis / option }
 {
   type .choice:,
@@ -200,6 +185,7 @@
   ctex .tl_set:N = \l__suepthesis_options_to_ctex_tl,
   quirks .bool_gset:N = \g__suepthesis_quirks_mode_bool,
 }
+
 \keys_define:nn { suepthesis / cover }
   {
     date .tl_set:N = \l__suepthesis_cover_date_tl,
@@ -223,6 +209,7 @@
     underlineOffset .dim_set:N = \l__suepthesis_cover_underline_offset_dim,
     underlineOffset .initial:n = { -10pt },
   }
+
 \keys_define:nn { suepthesis / info }
   {
     title .tl_set:N = \l__suepthesis_value_title_tl,
@@ -292,10 +279,11 @@
     % 因为默认不显示，所以不需要设置初始值。
     classifiedLevel .tl_set:N = \l__suepthesis_value_classified_level_tl,
   }
+
 \keys_define:nn { suepthesis / misc }
-  {
+{
     arialFont .tl_set:N = \l__suepthesis_misc_arial_font_path_tl,
-  }
+}
 
 \keys_define:nn { suepthesis / style }
 {
@@ -313,6 +301,7 @@
   bibliographyIndent .bool_set:N = \l__suepthesis_style_bibliography_indent_bool,
   bibliographyIndent .initial:n = {true},
 }
+
 \keys_define:nn { suepthesis / TOC }
 {
   abstract .bool_set:N = \l__suepthesis_add_abstract_to_toc_bool,
@@ -322,12 +311,14 @@
   symbols .bool_set:N = \l__suepthesis_add_symbols_to_toc_bool,
   symbols .initial:n = {true},
 }
+
 \keys_define:nn { suepthesis / appendices }
 {
   chapterLevel .bool_set:N = \l__suepthesis_appendices_chapter_level_bool,
   title .tl_set:N = \l__suepthesis_appendices_title_tl,
   TOCTitle .tl_set:N = \l__suepthesis_appendix_toc_title_tl,
 }
+
 \keys_define:nn { suepthesis / publications }
 {
   % mode .choice:,
@@ -393,7 +384,6 @@
 \RequirePackage{minted}
 \RequirePackage{ulem}
 \RequirePackage{tabularray}
-
 
 % 关于图片 graphicx
  % 如果图片没有指定后缀, 依次按下列顺序搜索
@@ -483,11 +473,14 @@
     footskip = 2.6cm + 7bp - 2cm,
   }
 }
-\__suepthesis_if_bachelor_thesis:T {
+
+ \__suepthesis_if_bachelor_thesis:T {
   \setlength{\intextsep}{2\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
 }
+
 \setmainfont{Times~New~Roman}
 \setromanfont{Times~New~Roman}
+
 \ctex_at_end_preamble:n {
   \__suepthesis_if_thesis_english:TF {
     \__suepthesis_if_thesis_int_type:nT {3} {
@@ -596,6 +589,7 @@
     }
   }
 }
+
 \cs_new:Npn \xihei:n #1 {
   \xeCJK_family_if_exist:nTF {xihei} {
     \CJKfamily{xihei} #1
@@ -603,6 +597,7 @@
     \heiti #1
   }
 }
+
 \cs_new:Npn \l__suepthesis_title_font_cs:n #1 {
   \int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {3}
   {
@@ -611,6 +606,7 @@
     \heiti #1
   }
 }
+
 \cs_new:Npn \l__suepthesis_unnumchapter_style_cs:n #1 {
   % 本科全英文、研究生学位论文需要加粗
   \int_compare:nNnTF {\g__suepthesis_thesis_type_int} > {2}
@@ -620,6 +616,7 @@
     \mdseries #1
   }
 }
+
 \cs_set:Npn \arabicHeiti #1 {#1}
 
 \fancypagestyle{suepthesis}{
@@ -705,20 +702,21 @@
 }
 \addtocontents{toc}{\protect\hypersetup{hidelinks}}
 
-\__suepthesis_if_graduate:TF {
-  % 对于研究生模板，定义各章标题为宋体四号。
-  \titlecontents{chapter}[0pt]{\songti \zihao{4}}
-  {\thecontentslabel\hspace{\ccwd}}{}
-  {\hspace{.5em}\titlerule*{.}\contentspage}
-} {
-  % 对于其他，定义各章标题为宋体小四号。
-  \titlecontents{chapter}[0pt]{\songti \zihao{-4}}
-  {\thecontentslabel\hspace{\ccwd}}{}
-  {\hspace{.5em}\titlerule*{.}\contentspage}
-}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 5. 目录 %
+% -----------------------------------------------%
+
+
+
+\titlecontents{chapter}[0pt]{\songti \zihao{-4} \bfseries}
+{\thecontentslabel\hspace{\ccwd}}{}
+{\hspace{.5em}\titlerule*{.}\contentspage}
+
 \titlecontents{section}[1\ccwd]{\songti \zihao{-4}}
 {\thecontentslabel\hspace{\ccwd}}{}
 {\hspace{.5em}\titlerule*{.}\contentspage}
+
 \titlecontents{subsection}[2\ccwd]{\songti \zihao{-4}}
 {\thecontentslabel\hspace{\ccwd}}{}
 {\hspace{.5em}\titlerule*{.}\contentspage}
@@ -738,6 +736,7 @@
     }
   }
   \pagestyle{suepthesis}
+  \fancyfoot[C]{\songti\zihao{5} \thepage }
 }
 
 \RenewDocumentCommand \mainmatter {} {
@@ -782,6 +781,7 @@
 } {
   \tl_set:Nn \g__suepthesis_label_divide_char_tl {-}
 }
+
 \cs_set:Npn \thefigure {\thechapter\g__suepthesis_label_divide_char_tl\arabic{figure}}
 \captionsetup[figure]{font=small,labelsep=space}
 
@@ -791,7 +791,8 @@
 \cs_set:Npn \theequation {\thechapter\g__suepthesis_label_divide_char_tl\arabic{equation}}
 
 \cs_set:Npn \thelstlisting {\thechapter\g__suepthesis_label_divide_char_tl\arabic{lstlisting}}
-\cs_set:Npn \lstlistingname {\c__suepthesis_label_code_tl}
+
+
 \tolerance=1
 \emergencystretch=\maxdimen
 \hyphenpenalty=10000
@@ -818,13 +819,16 @@
     showtabs=false,
     tabsize=2
 }
+
 \lstset{style=examplestyle}
 \cs_set:Npn \listfigurename {\c__suepthesis_label_figure_tl}
 \cs_set:Npn \listtablename {\c__suepthesis_label_table_tl}
+
 \unimathsetup{
   math-style = ISO,
   bold-style = ISO,
 }
+
 \theoremstyle{plain}
   \newtheorem{algo}{算法}[chapter]
   \newtheorem{them}{定理}[chapter]
@@ -840,6 +844,7 @@
 \theoremstyle{remark}
   \newtheorem{rem}{注}
   \renewcommand{\qedsymbol}{\ensuremath{\QED}}
+
 \cs_new:Npn \__suepthesis_dunderline:nnn #1#2#3 {
   {\setbox0=\hbox{#3}\ooalign{\copy0\cr\rule[\dimexpr#1-#2\relax]{\wd0}{#2}}}
 }
@@ -849,6 +854,7 @@
 \cs_new:Npn \__suepthesis_dunderline:n #1 {
   \__suepthesis_dunderline:nnn {-10pt} {1pt} {#1}
 }
+
 \newcommand\dunderline[3][-1pt]{{%
   \setbox0=\hbox{#3}
   \ooalign{\copy0\cr\rule[\dimexpr#1-#2\relax]{\wd0}{#2}}}}
@@ -884,6 +890,7 @@
         }
     \group_end:
   }
+
 \cs_new:Npn \__suepthesis_parse_entry #1 #2 {
   \seq_set_split:Nnx \l__suepthesis_tmp_right_seq {\\} {#2}
   \seq_clear:N \l__suepthesis_tmp_left_seq
@@ -893,6 +900,7 @@
   \seq_put_left:Nn \l__suepthesis_tmp_left_seq {#1}
   \seq_pop_right:NN \l__suepthesis_tmp_left_seq \g__suepthesis_trashcan_tl
 }
+
 \cs_new:Npn \__suepthesis_render_cover_entry:n #1 {
   % 左边是标签，右边是值。
   % 形如：
@@ -931,164 +939,6 @@
       }
   \group_end:
 }
-% \cs_new:Npn \make_graduate_cover: {
-%   \cleardoublepage
-%   \begin{titlepage}
-%     {
-%       \heiti\zihao{5}
-%       \tl_if_blank:VTF \l__suepthesis_value_classified_level_tl {} {
-%         \flushright
-%         \c__suepthesis_label_classified_level_tl：~
-%         \l__suepthesis_value_classified_level_tl \par
-%       }
-%     }
-%     \centering
-%     \vspace*{65mm}
-%     {\heiti\zihao{-2} \l__suepthesis_value_title_tl}
-%     \vskip 60mm
-%     % 黑体 小三
-%     {\heiti \zihao{-3} \l__suepthesis_value_author_tl}
-%     \vskip 10mm
-%     % 黑体 小三
-%     {\heiti \zihao{-3} \l__suepthesis_cover_date_tl}
-%   \end{titlepage}
-% }
-% \cs_new:Npn \make_paper_back: {
-%   \cleardoublepage
-%   \begin{titlepage}
-%    \vskip 5cm
-%    \begin{center}
-%     \setstretch{1.1}
-%     \begin{minipage}[t][19.7cm]{2em}
-%       \begin{center}
-%         {
-%           \heiti\zihao{3}
-%           \tl_if_blank:VTF \l__suepthesis_value_vertical_title_tl
-%             {\l__suepthesis_value_title_tl}{\l__suepthesis_value_vertical_title_tl}
-%         }
-%           \vfill
-%         {\heiti\zihao{3}\l__suepthesis_value_author_tl}
-%           \vfill
-%         {\heiti\zihao{3}\c__suepthesis_label_university_tl}
-%       \end{center}
-%     \end{minipage}
-%    \end{center}
-%    % \vskip 5cm
-%   \end{titlepage}
-% }
-% \cs_new:Npn \__suepthesis_make_chinese_title_page: {
-%   \cleardoublepage
-%   \begin{titlepage}
-%       {
-%         % 密级、分类号
-%         {\heiti \zihao{5} \noindent \c__suepthesis_label_classification_tl}
-%         \l__suepthesis_value_classification_tl\\
-%         {\heiti \zihao{5} \c__suepthesis_label_udc_tl}  \l__suepthesis_value_udc_tl
-%       }
-
-%      \begin{center}
-
-%       \vskip \stretch{1}
-
-%          {\heiti\zihao{-2} \l__suepthesis_value_title_tl}
-
-%       \vskip \stretch{1}
-
-%       \def\tabcolsep{1pt}
-%       \def\arraystretch{1.5}
-
-%       {
-%         \renewcommand{\baselinestretch}{2}
-
-%         \tl_if_empty:NT \l__suepthesis_cover_dilimiter_tl {
-%           \tl_set:Nn \l__suepthesis_cover_dilimiter_tl {\qquad}
-%         }
-%         \tl_set:Nn \l__suepthesis_cover_underline_offset_dim {-5pt}
-
-%         % 如果不是自动计算宽度，且用户没有自定义宽度，
-%         % 则尝试提供一个默认宽度。
-%         \bool_if:NF \l__suepthesis_cover_auto_width_bool {
-%           \dim_compare:nNnT {\l__suepthesis_cover_label_max_width_dim} = {0pt} {
-%             \dim_set:Nn \l__suepthesis_cover_label_max_width_dim {55mm}
-%           }
-%           \dim_compare:nNnT {\l__suepthesis_cover_value_max_width_dim} = {0pt} {
-%             \dim_set:Nn \l__suepthesis_cover_value_max_width_dim {70mm}
-%           }
-%         }
-
-%         % 渲染信息。
-%         \clist_set:Nn \l__suepthesis_input_clist {
-%             {\c__suepthesis_graduate_label_author_tl} {\l__suepthesis_value_author_tl},
-%             {\c__suepthesis_graduate_label_school_tl} {\l__suepthesis_value_school_tl},
-%             {\c__suepthesis_graduate_label_supervisor_tl} {\l__suepthesis_value_supervisor_tl},
-%             {\c__suepthesis_graduate_label_chairman_tl} {\l__suepthesis_value_chairman_tl},
-%             {\c__suepthesis_graduate_label_degree_tl} {\l__suepthesis_value_degree_tl},
-%             {\c__suepthesis_graduate_label_major_tl} {\l__suepthesis_value_major_tl},
-%             {\c__suepthesis_graduate_label_institute_tl} {\l__suepthesis_value_institute_tl},
-%             {\c__suepthesis_graduate_label_defense_date_tl} {\l__suepthesis_value_defense_date_tl},
-%          }
-
-%         \heiti\zihao{-3}
-%         \__suepthesis_render_cover_entry:n \l__suepthesis_input_clist
-%       }
-%     \end{center}
-%     \vskip \stretch{0.5}
-%   \end{titlepage}
-% }
-
-% \cs_new:Npn \__suepthesis_make_english_title_page: {
-%   \begin{titlepage}
-%     \begin{center}
-
-%     \vspace*{10em}
-
-%     {
-%       \zihao{-2}
-%       \textbf{\l__suepthesis_value_title_en_tl}
-%     }
-
-%     \vskip \stretch{1}
-
-%     {
-%       \tl_if_empty:NT \l__suepthesis_cover_dilimiter_tl {
-%         \tl_set:Nn \l__suepthesis_cover_dilimiter_tl {:~}
-%       }
-
-%       \tl_set:Nn \l__suepthesis_cover_label_align_tl {l}
-%       \tl_set:Nn \l__suepthesis_cover_underline_offset_dim {-5pt}
-
-%       % 如果不是自动计算宽度，且用户没有自定义宽度，
-%       % 则尝试提供一个默认宽度。
-%       \bool_if:NF \l__suepthesis_cover_auto_width_bool {
-%         \dim_compare:nNnT {\l__suepthesis_cover_label_max_width_dim} = {0pt} {
-%           \dim_set:Nn \l__suepthesis_cover_label_max_width_dim {55mm}
-%         }
-%         \dim_compare:nNnT {\l__suepthesis_cover_value_max_width_dim} = {0pt} {
-%           \dim_set:Nn \l__suepthesis_cover_value_max_width_dim {85mm}
-%         }
-%       }
-
-%       % 渲染信息。
-%       \clist_set:Nn \l__suepthesis_input_clist {
-%           {\c__suepthesis_graduate_label_author_en_tl} {\l__suepthesis_value_author_en_tl},
-%           {\c__suepthesis_graduate_label_school_en_tl} {\l__suepthesis_value_school_en_tl},
-%           {\c__suepthesis_graduate_label_supervisor_en_tl} {\l__suepthesis_value_supervisor_en_tl},
-%           {\c__suepthesis_graduate_label_chairman_en_tl} {\l__suepthesis_value_chairman_en_tl},
-%           {\c__suepthesis_graduate_label_degree_en_tl} {\l__suepthesis_value_degree_en_tl},
-%           {\c__suepthesis_graduate_label_major_en_tl} {\l__suepthesis_value_major_en_tl},
-%           {\c__suepthesis_graduate_label_institute_en_tl} {\l__suepthesis_value_institute_en_tl},
-%           {\c__suepthesis_graduate_label_defense_date_en_tl} {\l__suepthesis_value_defense_date_en_tl},
-%        }
-
-%       \zihao{-3}
-%       \__suepthesis_render_cover_entry:n \l__suepthesis_input_clist
-%     }
-
-%     \end{center}
-
-%     \vskip \stretch{0.5}
-%   \end{titlepage}
-% }
 
 \newcommand{\circled}[2][]{\tikz[baseline=(char.base)]
   {\node[shape = circle, draw, inner~sep = 1pt]
@@ -1159,6 +1009,7 @@
     \end{titlepage}
     \cleardoublepage
   }
+
 \DeclareDocumentCommand \SUEPSetup { m }
   { \keys_set:nn { suepthesis } { #1 }}
 
@@ -1223,28 +1074,12 @@
       {1}
       {
         \begin{titlepage}
-          % \vspace*{16mm}
 
           \centering
 
-          % \tl_if_blank:VTF \l_bit_coverheaderimage_tl {} {
-          %   \includegraphics[width=9.87cm]{\l_bit_coverheaderimage_tl}\\
-          % }
-
           \chuhao\textbf{\kaiti{上海电力大学}} \par
 
-          % \vspace*{-3mm}
-          % \zihao{-0}\textbf{\ziju{0.12}\songti{\c__suepthesis_bachelor_label_title_tl}}\par
-
           \vspace{16mm}
-
-          % \zihao{2}\textbf{\xihei:n \l__suepthesis_value_title_tl}\par
-
-          % \vspace{3mm}
-
-          % \begin{spacing}{1.2}
-          %   \zihao{3}\selectfont{\textbf{\l__suepthesis_value_title_en_tl}}\par
-          % \end{spacing}
           
           \xiaochu\textbf{\STfangsong{本科毕业设计（论文）}}\par
 
@@ -1289,39 +1124,6 @@
             \end{tabular} 
           }
 
-        
-          % \begin{spacing}{1.8}
-          %   \begin{center}
-
-          %   \tl_if_empty:NT \l__suepthesis_cover_dilimiter_tl {
-          %     \tl_set:Nn \l__suepthesis_cover_dilimiter_tl {：}
-          %   }
-          %   % if not auto width, try override width
-          %   \bool_if:NF \l__suepthesis_cover_auto_width_bool {
-          %     \dim_compare:nNnT {\l__suepthesis_cover_label_max_width_dim} = {0pt} {
-          %       \dim_set:Nn \l__suepthesis_cover_label_max_width_dim {35mm}
-          %     }
-          %     \dim_compare:nNnT {\l__suepthesis_cover_value_max_width_dim} = {0pt} {
-          %       \dim_set:Nn \l__suepthesis_cover_value_max_width_dim {78mm}
-          %     }
-          %   }
-
-          %   \clist_set:Nn \l__suepthesis_input_clist {
-          %     {\c__suepthesis_label_school_tl} {\l__suepthesis_value_school_tl},
-          %     {\c__suepthesis_label_major_tl} {\l__suepthesis_value_major_tl},
-          %     {\c__suepthesis_label_class_tl} {\l__suepthesis_value_class_tl},
-          %     {\c__suepthesis_label_author_tl} {\l__suepthesis_value_author_tl},
-          %     {\c__suepthesis_label_student_id_tl} {\l__suepthesis_value_student_id_tl},
-          %     {\c__suepthesis_label_supervisor_tl} {\l__suepthesis_value_supervisor_tl},
-          %     {\c__suepthesis_label_co_supervisor_tl} {\l__suepthesis_value_external_supervisor_tl},
-          %   }
-
-          %   \zihao{3}
-
-          %   \__suepthesis_render_cover_entry:n \l__suepthesis_input_clist
-
-          %   \end{center}
-          % \end{spacing}
           \par
 
           \vspace*{\fill}
@@ -1337,166 +1139,11 @@
           }
         \end{titlepage}
       }
-      % {2}
-      % {
-      %   \begin{titlepage}
-      %     \centering
-
-      %     \tl_if_blank:VTF \l_bit_coverheaderimage_tl {} {
-      %       \includegraphics[width=6.87cm]{\l_bit_coverheaderimage_tl}\\
-      %     }
-
-      %     \vspace{1.2mm}
-
-      %     \zihao{2}\textbf{\songti{本科生毕业设计（论文）外文翻译}}
-
-      %     \vspace{10mm}
-
-      %     {
-
-      %     \begin{spacing}{1.8}
-
-      %       \tl_set:Nn \l__suepthesis_cover_dilimiter_tl {\textbf{：}}
-      %       \bool_set_false:N \l__suepthesis_cover_auto_width_bool
-      %       \dim_set:Nn \l__suepthesis_cover_label_max_width_dim {35mm}
-      %       \dim_set:Nn \l__suepthesis_cover_value_max_width_dim {115mm}
-
-      %       \clist_set:Nn \l__suepthesis_input_clist {
-      %         {\zihao{4}\textbf{外文原文题目}} {\l__suepthesis_value_trans_origin_title_tl},
-      %         {\zihao{4}\textbf{中文翻译题目}} {\l__suepthesis_value_trans_title_tl},
-      %       }
-
-      %       \zihao{-3}
-      %       \centering
-
-      %       \__suepthesis_render_cover_entry:n \l__suepthesis_input_clist
-
-      %     \end{spacing}
-
-      %     }
-
-      %     \vspace{19mm}
-
-      %     \zihao{2}\textbf{\xihei:n \l__suepthesis_value_title_tl}\par
-
-      %     \vspace{3mm}
-
-      %     \begin{spacing}{1.2}
-      %       \zihao{3}\selectfont{\textbf{\l__suepthesis_value_title_en_tl}}\par
-      %     \end{spacing}
-
-      %     \vspace{19mm}
-
-      %     \begin{spacing}{1.8}
-      %       \tl_if_empty:NT \l__suepthesis_cover_dilimiter_tl {
-      %         \tl_set:Nn \l__suepthesis_cover_dilimiter_tl {：}
-      %       }
-
-      %       % 如果不是自动计算宽度，且用户没有自定义宽度，
-      %       % 则尝试提供一个默认宽度。
-      %       \bool_if:NF \l__suepthesis_cover_auto_width_bool {
-      %         \dim_compare:nNnT {\l__suepthesis_cover_label_max_width_dim} = {0pt} {
-      %           \dim_set:Nn \l__suepthesis_cover_label_max_width_dim {35mm}
-      %         }
-      %         \dim_compare:nNnT {\l__suepthesis_cover_value_max_width_dim} = {0pt} {
-      %           \dim_set:Nn \l__suepthesis_cover_value_max_width_dim {78mm}
-      %         }
-      %       }
-
-      %       \zihao{3}
-
-      %   % 渲染信息。
-      %       \clist_set:Nn \l__suepthesis_input_clist {
-      %         {\c__suepthesis_label_school_tl} {\l__suepthesis_value_school_tl},
-      %         {\c__suepthesis_label_major_tl} {\l__suepthesis_value_major_tl},
-      %         {\c__suepthesis_label_class_tl} {\l__suepthesis_value_class_tl},
-      %         {\c__suepthesis_label_author_tl} {\l__suepthesis_value_author_tl},
-      %         {\c__suepthesis_label_student_id_tl} {\l__suepthesis_value_student_id_tl},
-      %         {\c__suepthesis_label_supervisor_tl} {\l__suepthesis_value_supervisor_tl},
-      %         {\c__suepthesis_label_co_supervisor_tl} {\l__suepthesis_value_external_supervisor_tl},
-      %       }
-
-      %       \__suepthesis_render_cover_entry:n \l__suepthesis_input_clist
-
-      %     \end{spacing}
-
-      %     \vspace*{\fill}
-      %   \end{titlepage}
-      % }
-      % {3} {
-      %   \begin{titlepage}
-      %     \vspace*{16mm}
-
-      %     \centering
-
-      %     \tl_if_blank:VTF \l_bit_coverheaderimage_tl {} {
-      %       \includegraphics[width=9.87cm]{\l_bit_coverheaderimage_tl}\\
-      %     }
-
-      %     \vspace*{-3mm}
-
-      %     \zihao{1}\textbf{\ziju{0.12}Beijing\nobreak{~}Institute
-      %     \nobreak{~}of\nobreak{~}Technology~Bachelor's~Thesis}\par
-
-      %     \vspace{18mm}
-
-      %     \zihao{2}\textbf{\xihei:n \l__suepthesis_value_title_en_tl}\par
-
-      %     \vspace{10mm}
-
-      %     \begin{spacing}{1.8}
-      %       \begin{center}
-      %       \tl_if_empty:NT \l__suepthesis_cover_dilimiter_tl {
-      %         \tl_set:Nn \l__suepthesis_cover_dilimiter_tl {:}
-      %       }
-
-      %       % if not auto width, try override width
-      %       \bool_if:NF \l__suepthesis_cover_auto_width_bool {
-      %         \dim_compare:nNnT {\l__suepthesis_cover_label_max_width_dim} = {0pt} {
-      %           \dim_set:Nn \l__suepthesis_cover_label_max_width_dim {20mm}
-      %         }
-      %         \dim_compare:nNnT {\l__suepthesis_cover_value_max_width_dim} = {0pt} {
-      %           \dim_set:Nn \l__suepthesis_cover_value_max_width_dim {105mm}
-      %         }
-      %       }
-
-      %       \zihao{4}
-
-      %       \clist_set:Nn \l__suepthesis_input_clist {
-      %         {\c__suepthesis_label_school_en_tl} {\l__suepthesis_value_school_tl},
-      %         {\c__suepthesis_label_major_en_tl} {\l__suepthesis_value_major_tl},
-      %         {\c__suepthesis_label_author_en_tl} {\l__suepthesis_value_author_tl},
-      %         {\c__suepthesis_label_student_id_en_tl} {\l__suepthesis_value_student_id_tl},
-      %         {\c__suepthesis_label_supervisor_en_tl} {\l__suepthesis_value_supervisor_tl},
-      %         {\c__suepthesis_label_co_supervisor_en_tl} {\l__suepthesis_value_external_supervisor_tl},
-      %       }
-
-      %       \__suepthesis_render_cover_entry:n \l__suepthesis_input_clist
-
-      %       \end{center}
-      %     \end{spacing}
-
-      %     \vspace*{\fill}
-      %     \centering
-      %     \zihao{3}\ziju{0.5}\songti{
-      %       \tl_if_empty:NTF \l__suepthesis_cover_date_tl {
-      %         \today
-      %       } {
-      %         \l__suepthesis_cover_date_tl
-      %       }
-      %     }
-      %   \end{titlepage}
-      % }
-      % {4} {
-      %   \make_graduate_cover:
-      % }
-      % {5} {
-      %   \make_graduate_cover:
-      % }
     }
     \group_end:
     \end{blindPeerReview}
   }
+
 \NewDocumentCommand \MakeOriginality {}
   {
     \group_begin:
@@ -1507,19 +1154,14 @@
       \end{blindPeerReview}
     \group_end:
   }
+
 \NewDocumentCommand \MakePaperBack {}
   {
     \begin{blindPeerReview}
       \make_paper_back:
     \end{blindPeerReview}
   }
-% \NewDocumentCommand \MakeTitle {}
-%   {
-%     \begin{blindPeerReview}
-%       \__suepthesis_make_chinese_title_page:
-%       \__suepthesis_make_english_title_page:
-%     \end{blindPeerReview}
-%   }
+
 \DeclareDocumentCommand \MakeTOC {}
   {
     {
@@ -1529,11 +1171,7 @@
         \renewcommand{\baselinestretch}{1.56}
       }
 
-      \__suepthesis_if_thesis_english:TF {
-        \tl_set:Nn \l__suepthesis_toc_title_tl {\c__suepthesis_label_toc_en_tl}
-      } {
-        \tl_set:Nn \l__suepthesis_toc_title_tl {\c__suepthesis_label_toc_tl}
-      }
+      \tl_set:Nn \l__suepthesis_toc_title_tl {\c__suepthesis_label_toc_tl}
 
       % 自定义目录样式
       \cs_set:Npn \contentsname {
@@ -1547,15 +1185,11 @@
       % 制作目录
       \tableofcontents
 
-      % 在本科生全英文模板中，添加「目录」本身到目录中。
-      \__suepthesis_if_thesis_int_type:nT {3} {
-        \addcontentsline{toc}{chapter}{\c__suepthesis_label_toc_en_tl}
-      }
-
       % 单独成页
       \clearpage
     }
   }
+
 \NewDocumentEnvironment {abstract} {}
   {
 
@@ -1604,16 +1238,12 @@
     \par
     \vspace{4ex}
     \noindent
-    \__suepthesis_if_graduate:TF {
-      % 研究生模板中，“关键词”宋体小四加粗
-      % 关键词为宋体小四号字。
-      \textbf{\c__suepthesis_label_keywords_tl}\l__suepthesis_value_keywords_tl\par
-    } {
-      % 本科生模板中，关键词为黑体加粗
-      \textbf{\heiti \c__suepthesis_label_keywords_tl \l__suepthesis_value_keywords_tl}\par
-    }
+
+    % 本科生模板中，关键词为黑体加粗
+    \textbf{\heiti \c__suepthesis_label_keywords_tl \l__suepthesis_value_keywords_tl}\par
     \newpage
   }
+
 \NewDocumentEnvironment {abstractEn} {}
   {
     \setstretch{1.53}
@@ -1695,6 +1325,7 @@
     }
   }
   {}
+
 \NewDocumentEnvironment {bibprint} {}
   {
     % 设置参考文献字号为 5 号
@@ -1736,6 +1367,7 @@
     }
   }
   {}
+
 \NewDocumentEnvironment {appendices} {}
   {
     % Used in chapter, ToC.
@@ -1796,6 +1428,7 @@
   }
   {
   }
+
 \NewDocumentEnvironment {acknowledgements} {+b}
   {
     \begin{blindPeerReview}
@@ -1818,234 +1451,7 @@
       #1
     \end{blindPeerReview}
   } {}
-\NewDocumentCommand \Author {O{1} o o}
-  {
-    \bool_if:NTF \g__suepthesis_blind_mode_bool {
-      % 盲审模式
-      \IfValueTF {#3} {
-        #3
-      } {
-        第\zhnumber{#1}作者
-      }
-    } {
-      % 普通模式
-      \IfValueTF {#2} {
-        % 覆盖默认的 \author 命令
-        #2
-      } {
-        % 默认采用作者姓名
-        \l__suepthesis_value_author_tl
-      }
-    }
-  }
 
-\NewDocumentCommand \AuthorEn {O{1} o o}
-  {
-    \bool_if:NTF \g__suepthesis_blind_mode_bool {
-      % 盲审模式
-      \IfValueTF {#3} {
-        #3
-      } {
-        \Ordinalstringnum{#1}~Author
-      }
-    } {
-      % 普通模式
-      \IfValueTF {#2} {
-        % 覆盖默认的 \author 命令
-        #2
-      } {
-        % 默认采用作者姓名
-        \l__suepthesis_value_author_en_tl
-      }
-    }
-  }
-\NewDocumentCommand \addpub {m} {
-  \nocite{#1}
-  \addtocategory{mypub}{#1}
-}
-
-\NewDocumentCommand \addpubs {m} {
-  % apply a clist
-  \clist_map_function:nN {#1} \addpub
-}
-\NewDocumentCommand \pubsection {m} {
-  {
-    % 自增计数器
-    \par\stepcounter{pub}
-    % 设置小标题，暂时没有考虑英文模式
-    \noindent
-    \textbf{
-      \heiti{
-        \zhnumber{\thepub}、#1
-      }
-    }\par
-  }
-}
-\NewDocumentEnvironment {publications} {+b}
-  {
-    % 同时设置 omit 以及 blindPeerReview 才能跳过此章节生成。
-    \begin{blindPeerReview}[\l__suepthesis_publications_omit_bool]
-      % 将此章节视为特殊的附录页，关闭附录编号，重定义 section 编号。
-      % 不知为何，需要手动重置 section 计数器。
-      \setcounter{section}{0}
-      \ctexset{
-        appendix/numbering = false,
-        section/number = \arabic{section},
-        subsection/number = \arabic{section}. \arabic{subsection},
-        subsubsection/number = \arabic{section}. \arabic{subsection}. \arabic{subsubsection},
-      }
-      % 设置参考文献字号为 5 号
-      \renewcommand*{\bibfont}{\zihao{5}}
-      % 设置参考文献各个项目之间的垂直距离为 0
-      \setlength{\bibitemsep}{0ex}
-      \setlength{\bibnamesep}{0ex}
-      \setlength{\bibinitsep}{0ex}
-      % 设置参考文献顺序标签 `[1]` 与文献内容 `作者. 文献标题...` 的间距
-      \setlength{\biblabelsep}{1.7mm}
-
-      \bool_if:NF \l__suepthesis_style_bibliography_indent_bool {
-        % 设置参考文献后文缩进为 0（与 Word 模板保持一致）
-        % See: https://github.com/hushidong/biblatex-gb7714-2015
-        %      如何修参考文献表的缩进？
-        \cs_set:Npn \itemcmd {
-          \settowidth{\lengthid}{\mkgbnumlabel{\printfield{labelnumber}}}
-          %%这里是所做的调整，以下两句通过调整\lengthid来调整缩进
-          \setlength{\lengthid}{0pt}
-          \addtolength{\lengthid}{-\biblabelsep}
-          \setlength{\lengthlw}{\textwidth}
-          \addtolength{\lengthlw}{-\lengthid}
-          \addvspace{\bibitemsep}%恢复\bibitemsep的作用
-          \hangindent\lengthid
-          \leavevmode\mkgbnumlabel{\printfield{labelnumber}}%
-          \hspace{\biblabelsep}
-        }
-      }
-
-      % If in blindPeerReview mode, omit delimiters in author field.
-      \bool_if:NT \g__suepthesis_blind_mode_bool {
-        % 如果有多个作者，不修改此项的话，作者与标题之间会有逗号。
-        \DeclareDelimFormat[bib,biblist]{finalnamedelim}{}
-        % 如果自己不是第一个作者，不修改此项的话，会在最开始有逗号。
-        \DeclareDelimFormat{multinamedelim}{}
-      }
-
-      % ===== 上方定义与「参考文献」部分相同
-
-      % 中文姓名下，此部分不参与输出。
-      \cs_set:Npn \mkbibnamegiven ##1 {
-        \haspartannotation{myself}{
-          \bool_if:NTF \g__suepthesis_blind_mode_bool {
-            % 盲审模式，不输出内容
-          } {
-            % 普通模式
-            \textbf{##1}
-          }
-        }{
-          \bool_if:NTF \g__suepthesis_blind_mode_bool {
-            % 盲审模式，不输出内容
-          } {
-            % 普通模式
-            ##1
-          }
-        }
-      }
-
-      \cs_set:Npn \mkbibnamefamily ##1 {
-        \haspartannotation{myself}{
-          % 作者为自己
-          \bool_if:NTF \g__suepthesis_blind_mode_bool {
-            % 盲审模式
-            \getpartannotation{myself}
-          } {
-            % 普通模式
-            \textbf{##1}
-          }
-        }{
-          % 作者不是自己
-          \bool_if:NTF \g__suepthesis_blind_mode_bool {
-            % 盲审模式，不输出
-          } {
-            % 普通模式
-            ##1
-          }
-        }
-      }
-
-      \if_cs_exist:N \c@pub {
-        % 重置计数器
-        \setcounter{pub}{0}
-      } \else: {
-        % 设置计数器
-        \newcounter{pub}
-      } \fi:
-
-      % 设置参考文献的排序
-      \bool_if:NTF \l__suepthesis_publications_sorting_bool {
-        % Sorting by year, name, type.
-        \newrefcontext[sorting=ynt]
-      } {
-        % Do not sort.
-        \newrefcontext
-      }
-
-      % 根据 maxbibnames 的设置，覆盖 \blx@maxbibnames 选项，保证所有作者都能显示。
-      \cs_set:Npn \blx@maxbibnames {
-        \l__suepthesis_publications_maxbibnames_int
-      }
-
-      % 根据 minbibnames 的设置，覆盖 \blx@minbibnames 选项，保证所有作者都能显示。
-      \cs_set:Npn \blx@minbibnames {
-        \l__suepthesis_publications_minbibnames_int
-      }
-
-      \chapter{\c__suepthesis_label_publications_tl}
-      #1
-    \end{blindPeerReview}
-  }
-  {}
-\NewDocumentEnvironment {resume} {+b}
-  {
-    \begin{blindPeerReview}
-      % 将此章节视为特殊的附录页，关闭附录编号，重定义 section 编号。
-      % 不知为何，需要手动重置 section 计数器。
-      \setcounter{section}{0}
-      \ctexset{
-        appendix/numbering = false,
-        section/number = \arabic{section},
-        subsection/number = \arabic{section}. \arabic{subsection},
-        subsubsection/number = \arabic{section}. \arabic{subsection}. \arabic{subsubsection},
-      }
-      \chapter{\c__suepthesis_label_resume_tl}
-      #1
-    \end{blindPeerReview}
-  }
-  {
-  }
-
-\NewDocumentEnvironment {symbols} {}
-  {
-    \bool_if:NTF \l__suepthesis_add_symbols_to_toc_bool {
-      \chapter{\c__suepthesis_label_symbols_tl}
-    } {
-      \chapter*{\c__suepthesis_label_symbols_tl}
-      \currentpdfbookmark{\c__suepthesis_label_symbols_tl}{ch:symbols}
-    }
-    \zihao{-4}
-    \begin{itemize}[
-      labelwidth=2.5cm,
-      labelsep=0.5cm,
-      leftmargin=3cm,
-      itemindent=0cm,
-      itemsep=0cm
-    ]
-    \cs_set:Npn \makelabel ##1 {##1\hfil}
-  }
-  {
-    \end{itemize}
-
-    % 单独一页
-    \clearpage
-  }
 \endinput
 %%
 %% End of file `suepthesis.cls'.
