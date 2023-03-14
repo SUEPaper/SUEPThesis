@@ -14,7 +14,7 @@
 
 - 其他文件
 
-  请使用小写字母+下划线形式，如`csuthesis_main.tex`。
+  `main.tex`
 
 ```txt
 <修改类型>(<影响范围>): <不多于20字的标题>
@@ -35,7 +35,7 @@ feat(本科生模板): 添加页码
 ## 项目结构
 
 ```txt
-csu-thesis
+SUEPThesis
 ├─.vscode   // vscode配置文件
 ├─content   // 论文正文
 │  └─chapters   // 按章节存放的正文.tex文件

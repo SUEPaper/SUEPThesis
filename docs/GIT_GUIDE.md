@@ -16,7 +16,7 @@
 
 ### 使用 https 方式克隆本仓库
 
-该方法与 [README.md - 下载至本地](https://github.com/disc0ver-csu/csu-thesis#%E4%B8%8B%E8%BD%BD%E8%87%B3%E6%9C%AC%E5%9C%B0) 中所述一致，请参考之。
+`https://github.com/SUEPaper/SUEPThesis.git`
 
 ### 使用 ssh 方式克隆本仓库
 
@@ -26,7 +26,7 @@
 
 注意：这里的 `git clone` 命令有别于仓库根目录 `README.md` 中使用 https 方式克隆仓库的命令。此处命令使用 ssh 方式克隆仓库，如果你已经使用 https 方式克隆了仓库，可以考虑执行
 
-`git config remote.origin.url git@github.com:disc0ver-csu/csu-thesis.git`
+`git config remote.origin.url git@github.com:SUEPaper/SUEPThesis.git`
 
 从而使用 ssh 方式与远端通信。
 
@@ -43,7 +43,7 @@
 现在，你已经准备好克隆仓库了。请切换到合适的目录，执行以下命令：
 
 ```shell
-git clone git@github.com:disc0ver-csu/csu-thesis.git
+git clone git@github.com:SUEPaper/SUEPThesis.git
 ```
 
 #### :congratulations: YOU ARE READY TO GO! :congratulations:

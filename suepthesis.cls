@@ -1,30 +1,22 @@
 %%
-%% This is file `suepthesis.cls',
-%% generated with the docstrip utility.
+% The SUEPThesis Template for Bachelor Graduation Thesis
+%
+% 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
+%
+% Copyright 2020-2023 SUEPaper
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Haiwen Zhang.
 %%
-%% The original source files were:
-%%
-%% suepthesis.dtx  (with options: `cls,thesis')
-%% 
-%%     Copyright (C) 2023 HaiwenZhang
-%% 
-%% ------------------------------------------------------------------------------
-%% 
-%%     This work may be distributed and/or modified under the
-%%     conditions of the LaTeX Project Public License, either
-%%     version 1.3c of this license or (at your option) any later
-%%     version. This version of this license is in
-%%        http://www.latex-project.org/lppl/lppl-1-3c.txt
-%%     and the latest version of this license is in
-%%        http://www.latex-project.org/lppl.txt
-%%     and version 1.3 or later is part of all distributions of
-%%     LaTeX version 2020/11/27 or later.
-%% 
-%%     This work has the LPPL maintenance status `maintained'.
-%% 
-%%     The Current Maintainer of this work is Feng Kaiyu.
-%% ------------------------------------------------------------------------------
-%% 
 \RequirePackage{expl3,l3keys2e}
 \ProvidesExplClass{suepthesis}
 {2023-03-05}{3.4.2}{SUEP Thesis Templates}
@@ -63,8 +55,10 @@
 
 \clist_const:Nn \c__suepthesis_thesis_type_clist
     { bachelor, bachelor_translation, bachelor_english, master, doctor}
+
 \clist_const:Nn \c__suepthesis_publication_modes_clist
     { biblatex, custom }
+
 \cs_new_protected:Npn \__suepthesis_define_label:nn #1#2
   { \tl_const:cn { c__suepthesis_label_ #1 _tl } {#2} }
 
@@ -90,9 +84,7 @@
 }
 
 \cs_new:Npn \label_space: {
-  \__suepthesis_if_bachelor_thesis:T {
-    \quad
-  }
+  \quad
 }
 
 \clist_map_inline:nn
@@ -136,7 +128,7 @@
     {supervisor} {指导教师} {Supervisor},
     {co_supervisor} {校外指导教师} {Co-Supervisor},
     {keywords} {关键词：} {Key~Words:~},
-    {toc} {目录} {Table~of~Contents},
+    {toc} {目\label_space: 录} {Table~of~Contents},
     {abstract} {摘\label_space: 要} {Abstract},
     {conclusion} {结\label_space: 论} {Conclusions},
     {appendix} {附\label_space: 录} {Appendices},
@@ -289,14 +281,6 @@
 {
   head .tl_set:N = \l__suepthesis_style_head_tl,
   head .initial:n = {
-    % \int_case:nn {\g__suepthesis_thesis_type_int}
-    % {
-    %   {1} {北京理工大学本科生毕业设计（论文）}
-    %   {2} {北京理工大学本科生毕业设计（论文）外文翻译}
-    %   {3} {Beijing~Institute~of~Technology~Bachelor's~Thesis}
-    %   {4} {北京理工大学硕士学位论文}
-    %   {5} {北京理工大学博士学位论文}
-    % } 
   },
   bibliographyIndent .bool_set:N = \l__suepthesis_style_bibliography_indent_bool,
   bibliographyIndent .initial:n = {true},
@@ -478,133 +462,8 @@
   \setlength{\intextsep}{2\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
 }
 
-\setmainfont{Times~New~Roman}
-\setromanfont{Times~New~Roman}
-
-\ctex_at_end_preamble:n {
-  \__suepthesis_if_thesis_english:TF {
-    \__suepthesis_if_thesis_int_type:nT {3} {
-      % 对于本科全英文专业模板
-      % Font Arial is needed.
-      \newfontfamily\arialfamily{Arial}
-    }
-
-  } {
-    % 对于其他的中文模板，
-    % 需要加载细黑体。
-    \tl_if_blank:VTF \l__suepthesis_cover_xihei_font_path_tl {}
-    {
-      \setCJKfamilyfont{xihei}[AutoFakeBold,AutoFakeSlant]
-        {\l__suepthesis_cover_xihei_font_path_tl}
-    }
-  }
-
-  % 对于本科全英文专业模板，需要自定义日期格式。
-  \__suepthesis_if_thesis_int_type:nT {3} {
-    \RequirePackage[en-US]{datetime2}
-    \RequirePackage{indentfirst}
-    \DTMlangsetup[en-US]{dayyearsep={\space}}
-  }
-
-  % Define biblatex category if it was imported.
-  % 这部分是给研究生模板中的
-  % 「攻读学位期间发表论文与研究成果清单」使用的。
-  \cs_if_exist:NT \DeclareBibliographyCategory {
-    \DeclareBibliographyCategory{mypub}
-  }
-
-  % 修改 biblatex 中「专利」（patent）部分的著录格式。
-  % 主要根据北理工自定义的规范，参考 biblatex 和
-  % biblatex-gb7714-2015 的实现修改而成。
-  %
-  % 默认不开启，因为此修改可能会产生其他边界问题。
-  \bool_if:NT \g__suepthesis_quirks_mode_bool {
-    \cs_if_exist:NT \DeclareBibliographyDriver {
-      %
-      %   重设专利title的输出，将文献类型标识符输出出去
-      %
-      \newbibmacro*{patenttitle}{%原输出来自biblatex.def文件
-        \ifboolexpr{%
-          test{\iffieldundef{title}}%
-          and%
-          test{\iffieldundef{subtitle}}%
-        }%
-          {}%
-          {\printtext[title]{\bibtitlefont%
-             \printfield[titlecase]{title}%
-             \ifboolexpr{test {\iffieldundef{subtitle}}}%这里增加了对子标题的判断，解决不判断多一个点的问题
-             {}{\setunit{\subtitlepunct}%
-             \printfield[titlecase]{subtitle}}%
-              \iftoggle{bbx:gbtype}{\printfield[gbtypeflag]{usera}}{}%
-             \iffieldundef{titleaddon}{}%判断一下titleaddon，否则直接加可能多一个空格
-              {\setunit{\subtitlepunct}\printfield{titleaddon}}%
-              % ：地区
-              \setunit{\subtitlepunct}\iflistundef{location}
-                {}
-                {\setunit*{\subtitlepunct}%
-                 \printtext{%[parens]
-                   \printlist[][-\value{listtotal}]{location}}}%
-              % ，专利号
-              \setunit{\addcomma\addspace}\printfield{number}%写专利号
-              \setunit{\addcomma\addspace}
-              \usebibmacro{newsdate}%
-           }%
-        }%
-      }
-
-      %
-      %   重定义专利文献驱动
-      %
-        \DeclareBibliographyDriver{patent}{%源来自standard.BBX
-        \usebibmacro{bibindex}%
-        \usebibmacro{begentry}%
-        \usebibmacro{author}%
-        \ifnameundef{author}{}{\setunit{\labelnamepunct}\newblock}%这一段用于去除作者不存在时多出的标点
-        \usebibmacro{patenttitle}%给出专利专用的标题输出
-        \iftoggle{bbx:gbstrict}{}{%
-          \newunit%
-          \printlist{language}%
-          \newunit\newblock
-          \usebibmacro{byauthor}
-        }%
-        \newunit\newblock
-        \printfield{type}%
-        \setunit*{\addspace}%
-        \newunit\newblock
-        \usebibmacro{byholder}%
-        \newunit\newblock
-        \printfield{note}%
-        \newunit\newblock
-        \usebibmacro{doi+eprint+url}%
-        \newunit\newblock
-        \usebibmacro{addendum+pubstate}%
-        \setunit{\bibpagerefpunct}\newblock
-        \usebibmacro{pageref}%
-        \newunit\newblock
-        \iftoggle{bbx:related}
-          {\usebibmacro{related:init}%
-           \usebibmacro{related}}
-          {}%
-        \usebibmacro{annotation}\usebibmacro{finentry}}
-    }
-  }
-}
-
-\cs_new:Npn \xihei:n #1 {
-  \xeCJK_family_if_exist:nTF {xihei} {
-    \CJKfamily{xihei} #1
-  }{
-    \heiti #1
-  }
-}
-
 \cs_new:Npn \l__suepthesis_title_font_cs:n #1 {
-  \int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {3}
-  {
-    \arialfamily #1
-  } {
     \heiti #1
-  }
 }
 
 \cs_new:Npn \l__suepthesis_unnumchapter_style_cs:n #1 {
@@ -1240,13 +1099,13 @@
     \noindent
 
     % 本科生模板中，关键词为黑体加粗
-    \textbf{\heiti \c__suepthesis_label_keywords_tl \l__suepthesis_value_keywords_tl}\par
+    \heiti{\textbf{\c__suepthesis_label_keywords_tl} \l__suepthesis_value_keywords_tl}\par
     \newpage
   }
 
 \NewDocumentEnvironment {abstractEn} {}
   {
-    \setstretch{1.53}
+    \setstretch{1.5}
 
     \__suepthesis_if_bachelor_thesis:T {
       \begin{spacing}{0.95}
@@ -1268,25 +1127,8 @@
       chapter/numbering = false,
     }
 
-    \__suepthesis_if_bachelor_thesis:TF {
-      \int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {3}
-      {
-        \ctexset{
-          chapter = {
-            titleformat = {\heiti\zihao{3}\centering\textbf},
-          }
-        }
-      } {
-        \ctexset{
-          chapter = {
-            titleformat = {\heiti\zihao{-3}\centering\textmd},
-          }
-        }
-      }
-    } {
-      \ctexset {
-        chapter/titleformat = {\heiti\zihao{3}\centering\textbf}
-      }
+    \ctexset {
+      chapter/titleformat = {\heiti\zihao{3}\centering\textbf}
     }
 
     {
@@ -1301,14 +1143,7 @@
   }
   {
     \par\vspace{3ex}\noindent
-    \__suepthesis_if_graduate:TF {
-      % Times New Roman小四号字，行距22磅
-      % “Key Words”
-      % Times New Roman小四号字加粗
-      \textbf{\c__suepthesis_label_keywords_en_tl} \l__suepthesis_value_keywords_en_tl
-    } {
-      \textbf{\c__suepthesis_label_keywords_en_tl \l__suepthesis_value_keywords_en_tl}
-    }
+    \sihao{\textbf{\c__suepthesis_label_keywords_en_tl } \l__suepthesis_value_keywords_en_tl}
     \newpage
   }
 
@@ -1375,13 +1210,8 @@
     % Used before reference label.
     \tl_new:N \l__suepthesis_appendix_default_title_tl
 
-    \__suepthesis_if_thesis_english:TF {
-      \tl_set:Nn \l__suepthesis_appendix_plain_label_tl {\c__suepthesis_label_appendix_prefix_en_tl}
-      \tl_set:Nn \l__suepthesis_appendix_default_title_tl {\c__suepthesis_label_appendix_en_tl}
-    } {
-      \tl_set:Nn \l__suepthesis_appendix_plain_label_tl {\c__suepthesis_label_appendix_prefix_tl}
-      \tl_set:Nn \l__suepthesis_appendix_default_title_tl {\c__suepthesis_label_appendix_tl}
-    }
+    \tl_set:Nn \l__suepthesis_appendix_plain_label_tl {\c__suepthesis_label_appendix_prefix_tl}
+    \tl_set:Nn \l__suepthesis_appendix_default_title_tl {\c__suepthesis_label_appendix_tl}
 
     \bool_if:NTF \l__suepthesis_appendices_chapter_level_bool {
       % 附录章节级别
@@ -1431,25 +1261,19 @@
 
 \NewDocumentEnvironment {acknowledgements} {+b}
   {
-    \begin{blindPeerReview}
-      % 将此章节视为特殊的附录页，关闭附录编号，重定义 section 编号。
-      % 不知为何，需要手动重置 section 计数器。
-      \setcounter{section}{0}
-      \ctexset{
-        appendix/numbering = false,
-        section/number = \arabic{section},
-        subsection/number = \arabic{section}. \arabic{subsection},
-        subsubsection/number = \arabic{section}. \arabic{subsection}. \arabic{subsubsection},
-      }
+    % 将此章节视为特殊的附录页，关闭附录编号，重定义 section 编号。
+    % 不知为何，需要手动重置 section 计数器。
+    \setcounter{section}{0}
+    \ctexset{
+      appendix/numbering = false,
+      section/number = \arabic{section},
+      subsection/number = \arabic{section}. \arabic{subsection},
+      subsubsection/number = \arabic{section}. \arabic{subsection}. \arabic{subsubsection},
+    }
 
-      \__suepthesis_if_thesis_english:TF {
-        \chapter{\c__suepthesis_label_ack_en_tl}
-      } {
-        \chapter{\c__suepthesis_label_ack_tl}
-      }
-      \__suepthesis_if_graduate:TF {\fangsong}{}
-      #1
-    \end{blindPeerReview}
+
+    \chapter{\c__suepthesis_label_ack_tl}
+    #1
   } {}
 
 \endinput
