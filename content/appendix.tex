@@ -28,19 +28,20 @@
     \section{\LaTeX 环境的安装}
     \LaTeX 环境的安装。
 
-
-    % \section{堆溢出检测算法}
-    % \begin{algorithm}[h]
-    %     \caption{堆溢出检测算法}\label{alg:ovf}
-    %     \begin{algorithmic}[1]
-    %         \IF {$\beta \in \mathbb{N^{*}} \land \Delta_\beta = \Delta_{\beta - 1} \land \beta < S$}
-    %             \STATE 正常写入
-    %         \ELSIF {$\beta \in \mathbb{N^{*}} \land \Delta_\beta \neq \Delta_{\beta - 1} \land \beta \geq S$}
-    %             \STATE 发生堆溢出
-    %         \ENDIF
-    %     \end{algorithmic}
-    % \end{algorithm}
-  
+    \newpage
+    \section{堆溢出检测算法}
+    \begin{algorithm}[h]
+        \caption{堆溢出检测算法}\label{alg:ovf}
+        \begin{algorithmic}[1]
+            \IF {$\beta \in \mathbb{N^{*}} \land \Delta_\beta = \Delta_{\beta - 1} \land \beta < S$}
+                \STATE 正常写入
+            \ELSIF {$\beta \in \mathbb{N^{*}} \land \Delta_\beta \neq \Delta_{\beta - 1} \land \beta \geq S$}
+                \STATE 发生堆溢出
+            \ENDIF
+        \end{algorithmic}
+    \end{algorithm}
+    
+    \newpage
     \section{SUEPThesis 使用说明}
     SUEPThesis 使用说明。
   

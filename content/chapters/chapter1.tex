@@ -27,18 +27,14 @@
 
 \subsection{三级标题}
 
-\subsubsection{四级标题}
+一级标题根据学校提供的Word模板要求，小三号黑体居中，章节号空一个汉字，段前0行，段后0.5行
+并且每一章节单独起一页，章节号格式应使用中文汉字。
 
-一级标题根据学校提供的Word模板要求，三号黑体居中，上下各空一行，章节号空一个汉字，
-并且每一章节单独起一页，章节号格式应使用阿拉伯数字而非中文汉字。
+二级标题为黑体四号字，居左，1.5倍行距，段前0.5行，段后0行。章节号后空一个汉字。
 
-二级标题为小四号黑体，缩进两个汉字。章节号后空一个汉字。
+三级标题黑体小四号字，1.5倍行距，段前0.5行，段后0行，缩进两个汉字，章节号后空一个汉字。
 
-三级标题小四号楷体GB2312，字体包含在项目中，同样缩进两个汉字，章节号后空一个汉字。
-
-四级标题参照本科学术论文设计样式，分项采取(1)、(2)、(3)的序号。
-
-所有标题样式由 suepthesis.cls 模板文件 ctexset 进行设置。
+所有标题样式由 \textbf{suepthesis.cls} 模板文件 \textbf{ctexset} 进行设置。
 
 \section{字体}
 
@@ -56,36 +52,46 @@ TeX (/tɛx, tɛk/, see below), stylized within the system as TEX, is a typesetti
 可以使用 命令来调节字号。
 
 \begin{tabular}{ll}
-  \verb|\zihao{3} | & \zihao{3}  三号字 English \\
-  \verb|\zihao{-3}| & \zihao{-3} 小三号 English \\
-  \verb|\zihao{4} | & \zihao{4}  四号字 English \\
-  \verb|\zihao{-4}| & \zihao{-4} 小四号 English \\
-  \verb|\zihao{5} | & \zihao{5}  五号字 English \\
-  \verb|\zihao{-5}| & \zihao{-5} 小五号 English \\
+  \verb|\chuhao | & \chuhao  初号字 English \\
+  \verb|\xiaochu| & \xiaochu 小初号 English \\
+  \verb|\yihao  | & \yihao  一号字 English \\
+  \verb|\xiaoyi | & \xiaoyi 小一号 English \\
+  \verb|\erhao  | & \erhao  二号字 English \\
+  \verb|\xiaoer | & \xiaoer 小二号 English \\
+  \verb|\sanhao | & \sanhao  三号字 English \\
+  \verb|\xiaosan| & \xiaosan 小三号 English \\
+  \verb|\sihao  | & \sihao  四号字 English \\
+  \verb|\xiaosi | & \xiaosi 小四号 English \\
+  \verb|\wuhao  | & \wuhao  五号字 English \\
+  \verb|\xiaowu | & \xiaowu 小五号 English \\
+  \verb|\liuhao  | & \liuhao  六号字 English \\
+  \verb|\xiaoliu | & \xiaoliu 小六号 English \\
+  \verb|\qihao  | & \qihao  七号字 English \\
+  \verb|\bahao | & \bahao 八号字 English \\
+
 \end{tabular}
 
 \subsection{调节字体}
 
-需要说明的是由于学校写作指导要求的字体部分不可在Linux上使用，即便你的写作过程是在Linux或者macOS上完成的，
-我们仍\textbf{强烈建议}您在Windows操作系统上编译最终版论文。
+需要说明的是由于Linux或者macOS系统上不包含学校写作指导要求的字体，因此我们将Windows的字体放在了fonts目录下，
+由于这些字体具有版权，所以我们仍\textbf{强烈建议}您在Windows操作系统上编译最终版论文。
 
 中文可选字体以及选用指令如下：
 
 \begin{tabular}{l l}
   \verb|\songti| & {\songti 宋体} \\
-  \verb|\heiti| & {\heiti 黑体}  \\
-  \verb|\kaiti| & {\kaiti 楷体}
+  \verb|\heiti| & {\heiti 黑体}
 \end{tabular}
 
-我们在模板中通过调整\verb|\newCJKfontfamily|的AutoFakeBold参数来简单实现字体加粗，在正文中你可以使用习惯的\verb|\textbf|指令来加粗对应中文。如果你需要调整字体，也可以组合使用字体选择并加粗，比如\verb|\kaiti\bfseries|
+我们在模板中通过调整\verb|\newCJKfontfamily|的AutoFakeBold参数来简单实现字体加粗，
+在正文中你可以使用习惯的\verb|\textbf|指令来加粗对应中文。
+如果你需要调整字体，也可以组合使用字体选择并加粗，比如\verb|\heiti\bfseries|
 
 \textbf{宋体加粗测试}，宋体不加粗测试。
 
-{\kaiti\bfseries 楷体加粗测试。}{\kaiti 楷体不加粗测试。}
+{\heiti\bfseries 黑体加粗测试。}{\heiti 黑体不加粗测试。}
 
-目前模板并没有按照一些其他模板写法中常见的，重定向加粗和倾斜效果到upright，TODO：后续可能考虑重定义\verb|emph|和\verb|strong|样式。
-
-
+目前模板并没有按照一些其他模板写法中常见的，重定向加粗和倾斜效果到upright。
 
 
 \section{模板主要结构}

@@ -344,6 +344,10 @@
 \RequirePackage{titletoc}
 \RequirePackage{setspace}
 \RequirePackage{graphicx}
+% jing: ccaption宏包不能出现在 caption 宏包之后
+% 设置浮动体的标题
+\RequirePackage[justification=centering]{caption}
+\RequirePackage[justification=centering]{subcaption}
 \RequirePackage{fancyhdr}
 \RequirePackage{pdfpages}
 \RequirePackage{setspace}
@@ -356,10 +360,20 @@
 \RequirePackage{caption}
 \RequirePackage{array}
 \RequirePackage{amsmath}
-\RequirePackage{amssymb}
+% 下面的数学宏包和unicode-math 冲突
+% \RequirePackage{amsfonts}
+% \RequirePackage{amssymb}
+% \RequirePackage{bm}
+% 使用 \pkg{unicode-math} 处理数学字体
+\RequirePackage{unicode-math}
 \RequirePackage{pifont}
 \RequirePackage{amsthm}
-\RequirePackage{unicode-math}
+
+% 算法排版宏包
+\RequirePackage[chapter]{algorithm}
+\RequirePackage{algorithmic}
+\floatname{algorithm}{算法}
+
 \RequirePackage{pdfpages}
 \RequirePackage{listings}
 \RequirePackage{enumitem}
@@ -369,9 +383,22 @@
 \RequirePackage{ulem}
 \RequirePackage{tabularray}
 
+% 默认情况下, \LaTeX{} 要求每页的文字至少占据 20%,否则该页就只单独放置一个浮动环境,
+% 而这通常不是我们想要的, 我们将这个要求降低到 5%.
+\renewcommand*{\textfraction}{0.05}
+% 有时如果多个浮动环境连续放在一起, \LaTeX{}
+% 会将它们分在几个不同页，即使它们可在同一页放
+% 得下. 我们可以通过修改 |\topfraction| 和 |\bottomfraction| 分别设置顶端和底端的浮
+% 动环境的最大比例.
+ \renewcommand*{\topfraction}{0.9}
+ \renewcommand*{\bottomfraction}{0.8}
+% 有时\LaTeX{}会把一个浮动环境单独放在一页,
+% 我们要求这个环境至少要占据 85% 才能单独放在一页.
+% 注意:  |\floatpagefraction| 的数值必须小于 |\topfraction|.
+ \renewcommand*{\floatpagefraction}{0.85}
 % 关于图片 graphicx
  % 如果图片没有指定后缀, 依次按下列顺序搜索
- \DeclareGraphicsExtensions{.pdf,.eps,.jpg,.png,.tif}
+\DeclareGraphicsExtensions{.pdf,.eps,.jpg,.png,.tif}
  % 设置图表搜索路径, 可以给图表文件夹取如下名字
 \graphicspath{{figures/}{figure/}{pictures/}%
   {picture/}{pic/}{pics/}{image/}{images/}}
@@ -423,6 +450,8 @@
 \newcommand{\qihao}{\zihao {7}}
 \newcommand{\bahao}{\zihao {8}}
 
+% 代码格式和颜色定义
+% \usemintedstyle{emacs}
 
 \pdfstringdefDisableCommands{%
   \let\quad\empty
@@ -491,7 +520,7 @@
   \RenewDocumentCommand \headrulewidth {} {0.6pt}
 }
 
-% 一级标题格式：第*章  后空一格（全角）黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
+% 一级标题格式：第*章  后空一格 黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
 \ctexset{chapter={
     % number = {\arabicHeiti{ \arabic{chapter} }},
     % number = {chapter},
@@ -507,7 +536,7 @@
   }
 }
 
-% 二级标题格式： 1.1（半角）  后空一格(全角) 黑体四号字 居左 1.5倍行距 段前0.5行 段后0行
+% 二级标题格式： 1.1  后空一格 黑体四号字 居左 1.5倍行距 段前0.5行 段后0行
 \ctexset{section={
     % number = {\arabicHeiti{\thechapter.\hspace{1bp}\arabic{section}}},
     number = {
@@ -524,17 +553,17 @@
   }
 }
 
-% 三级标题格式： 1.1.1（半角）前空两格、后空一格（全角） 黑体小四号字 居左 1.5倍行距 段前0.5行 段后0行
+% 三级标题格式： 1.1.1 前空两格、后空一格 黑体小四号字 居左 1.5倍行距 段前0.5行 段后0行
 \ctexset{subsection={
     number = {
         \thechapter.\hspace{1bp}
         \arabic{section}.\hspace{1bp}
         \arabic{subsection}
     },
-    format = {\xiaosi \heiti \raggedright},
-    nameformat = {},
-    titleformat = {},
+    format = \xiaosi \heiti \raggedright,
     aftername = \quad,
+    indent = 2\ccwd,
+    afterindent  = true,
     beforeskip = 17bp plus 1ex minus .2ex,
     afterskip = 14bp plus .2ex,
     fixskip = true,
@@ -546,19 +575,15 @@
   subsubsection={
     numbering = true,
     number = {
-      \arabic{chapter}.\hspace{1bp}
-      \arabic{section}.\hspace{1bp}
-      \arabic{subsection}.\hspace{1bp}
-      \arabic{subsubsection}
+      \Alph{subsubsection}
     },
-    format={\xiaosi \heiti \raggedright},
+    format={\xiaosi \songti \raggedright},
     nameformat = {},
     titleformat = {},
-    beforeskip=28bp plus 1ex minus .2ex,
-    afterskip=24bp plus .2ex,
     fixskip=true,
   }
 }
+
 \addtocontents{toc}{\protect\hypersetup{hidelinks}}
 
 
@@ -608,9 +633,8 @@
   % 页码使用阿拉伯数字。
   \pagenumbering{arabic}
   \pagestyle{suepthesis}
-  % 正文 22 磅的行距
-  \setlength{\parskip}{0em}
-  \setstretch{1.53}
+  % 正文 1.25倍行距
+  \linespread{1.25}
   % 修复脚注出现跨页的问题
   \interfootnotelinepenalty=10000
 }
@@ -683,10 +707,14 @@
 \cs_set:Npn \listfigurename {\c__suepthesis_label_figure_tl}
 \cs_set:Npn \listtablename {\c__suepthesis_label_table_tl}
 
+% 使用 \pkg{unicode-math} 配置数学字体。
 \unimathsetup{
   math-style = ISO,
   bold-style = ISO,
+  nabla      = upright,
+  partial    = upright,
 }
+
 
 \theoremstyle{plain}
   \newtheorem{algo}{算法}[chapter]
