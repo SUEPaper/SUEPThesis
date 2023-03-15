@@ -20,7 +20,7 @@
 
 \chapter{一级标题}
 
-这是中南大学学位论文\LaTeX{}模板，下面的文字主要作用为对重构后的模板样式设置进行测试。
+这是上海电力大学本科学位论文\LaTeX{}模板，下面的文字主要作用为对重构后的模板样式设置进行测试。
 测试样例基本覆盖模板设定，包括多级标题的基本样式，段落与缩进距离。
 
 \section{二级标题}
@@ -38,15 +38,13 @@
 
 四级标题参照本科学术论文设计样式，分项采取(1)、(2)、(3)的序号。
 
-所有标题样式由\cls{undergraduate.cls}模板文件 \cs{ctexset} 进行设置。
+所有标题样式由 suepthesis.cls 模板文件 ctexset 进行设置。
 
 \section{字体}
 
 正文字体默认使用小四号宋体，英文为小四号 Times New Romen，各段行首缩进两个汉字
 
-中南大学\cite{csu__2020}坐落在中国历史文化名城──湖南省长沙市，占地面积317万平方米，建筑面积217万平方米，跨湘江两岸，依巍巍岳麓，临滔滔湘水，环境幽雅，景色宜人，是求知治学的理想园地。
 
-中南大学由原湖南医科大学、长沙铁道学院与中南工业大学于2000年4月合并组建而成。原中南工业大学的前身为创建于1952年的中南矿冶学院，原长沙铁道学院的前身为创建于1953年的中南土木建筑学院，两校的主体学科最早溯源于1903年创办的湖南高等实业学堂的矿科和路科。原湖南医科大学的前身为1914年创建的湘雅医学专门学校，是我国创办最早的西医高等学校之一。中南大学秉承百年办学积淀，顺应中国高等教育体制改革大势，弘扬以“知行合一、经世致用”为核心的大学精神，力行“向善、求真、唯美、有容”的校风，坚持自身办学特色，服务国家和社会重大需求，团结奋进，改革创新，追求卓越，综合实力和整体水平大幅提升。
 
 英文字体展示如下：
 
@@ -55,7 +53,7 @@ TeX (/tɛx, tɛk/, see below), stylized within the system as TEX, is a typesetti
 
 \subsection{调节字号}
 
-可以使用 \cs{zihao}命令来调节字号。
+可以使用 命令来调节字号。
 
 \begin{tabular}{ll}
   \verb|\zihao{3} | & \zihao{3}  三号字 English \\
@@ -99,12 +97,16 @@ TeX (/tɛx, tɛk/, see below), stylized within the system as TEX, is a typesetti
   \centering
   \begin{tabular}{r|l|l}
     \hline\hline
-    \multicolumn{2}{l|}{csuthesis\_main.tex } & 主文档，可以理解为文章入口。                      \\ \hline
-                                              & info.tex                     & 作者、文章基本信息 \\ \cline{2-3}
-                                              & abstactzh/en.tex             & 中/英文摘要内容    \\ \cline{2-3}
-    \raisebox{1em}{content 目录 }             & subchapters 目录             & 章节内容           \\ \hline
-    \multicolumn{2}{l|}{images 目录}          & 用于存放图片文件                                  \\ \hline
-    \multicolumn{2}{l|}{csuthesis.cls }       & 模板入口                                          \\ \hline\hline
+    \multicolumn{2}{l|}{main.tex } & 主文档，可以理解为文章入口。  \\ \hline
+                                            & abstact.tex    & 中/英文摘要内容    \\ \cline{2-3}
+                                            & acknowledgements.tex       & 致谢 \\ \cline{2-3}
+                                            & appendix.tex       & 附录 \\ \cline{2-3}
+                                            & conclusion.tex       & 结论 \\ \cline{2-3}
+                                            & ref.bib       & 参考文献库 \\ \cline{2-3}
+                                            & reference.tex       & 参考文献 \\ \cline{2-3}
+    \raisebox{1em}{content 目录 }            & chapters 目录   & 章节内容           \\ \hline
+    \multicolumn{2}{l|}{images 目录}         & 用于存放图片文件                                  \\ \hline
+    \multicolumn{2}{l|}{suepthesis.cls }    & 模板入口                                          \\ \hline\hline
   \end{tabular}
 \end{table}
 

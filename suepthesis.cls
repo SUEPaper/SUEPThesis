@@ -428,35 +428,35 @@
   \let\quad\empty
 }
 
-\__suepthesis_if_graduate:TF {
-  \int_set:Nn \g__suepthesis_head_zihao_int {5}
-  \geometry{
-    a4paper,
-    left=2.7cm,
-    bottom=2.5cm + 7bp,
-    top=3.5cm + 7bp,
-    right=2.7cm,
-    % `headsep' is affected by `top' option.
-    headsep = 3.5cm + 7bp - 2.5cm - 15bp,
-    headheight = 15 bp,
-    % `footskip' is affected by `bottom' option.
-    footskip = 2.5cm + 7bp - 1.8cm,
-  }
-} {
-  \int_set:Nn \g__suepthesis_head_zihao_int {4}
-  \geometry{
-    a4paper,
-    left=3cm,
-    bottom=2.6cm + 7bp,
-    top=3.5cm + 7bp,
-    right=2.6cm,
-    % `headsep' is affected by `top' option.
-    headsep = 3.5cm + 7bp - 2.4cm - 20bp,
-    headheight = 20 bp,
-    % `footskip' is affected by `bottom' option.
-    footskip = 2.6cm + 7bp - 2cm,
-  }
+
+\int_set:Nn \g__suepthesis_head_zihao_int {4}
+
+% \geometry{
+%   a4paper,
+%   left=3.17cm,
+%   bottom=2.6cm + 7bp,
+%   top=3.5cm + 7bp,
+%   right=2.5cm,
+%   % `headsep' is affected by `top' option.
+%   headsep = 3.5cm + 7bp - 2.4cm - 20bp,
+%   headheight = 20 bp,
+%   % `footskip' is affected by `bottom' option.
+%   footskip = 2.6cm + 7bp - 2cm,
+% }
+
+\geometry{
+  a4paper,
+  left=3.17cm,
+  bottom=2.54cm,
+  top=2.54cm,
+  right=2.5cm,
+  % `headsep' is affected by `top' option.
+  % headsep = 3.5cm + 7bp - 2.4cm - 20bp,
+  headheight = 20 bp,
+  % `footskip' is affected by `bottom' option.
+  % footskip = 2.6cm + 7bp - 2cm,
 }
+
 
  \__suepthesis_if_bachelor_thesis:T {
   \setlength{\intextsep}{2\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
@@ -812,10 +812,12 @@
       chapter / pagestyle = plain,
     }
 
+    \linespread{2.0}
+
     \begin{titlepage}
       \newgeometry{%
-      top=3.57cm,bottom=2.54cm,
-      left=3.17cm,right=3.17cm
+        top=3.57cm,bottom=2.54cm,
+        left=3.17cm,right=3.17cm
       }
       % 不计算页码。
       \pagenumbering{gobble}
@@ -823,13 +825,13 @@
       % 原创性声明部分
       \begin{center}
         \__suepthesis_same_page:
+        \linespread{1.5}
         \heiti\xiaoer
         \l__suepthesis_value_school_tl \par
         \c__suepthesis_bachelor_label_originality_tl
       \end{center}~\par
 
       \songti\sihao
-      \linespread{2}
       \c__suepthesis_bachelor_label_originality_clause_tl
 
       \vspace{17mm}
@@ -849,13 +851,13 @@
       % 使用授权声明部分。
       \begin{center}
         \__suepthesis_same_page:
+        \linespread{1.5}
         \heiti\xiaoer
         \l__suepthesis_value_school_tl \par
-        \c__suepthesis_bachelor_label_authorization_tl
+        \c__suepthesis_bachelor_label_authorization_tl 
       \end{center}~\par
-
+      
       \songti\sihao
-      \linespread{2}
       \c__suepthesis_bachelor_label_authorization_clause_tl
 
       \vspace*{15mm}
@@ -925,13 +927,12 @@
 
 \DeclareDocumentCommand \MakeCover {}
   {
-    \begin{blindPeerReview}
     \group_begin:
-
-    \int_case:nn {\g__suepthesis_thesis_type_int}
-    {
-      {1}
       {
+        \newgeometry{%
+          top=3.57cm,bottom=2.54cm,
+          left=3.17cm,right=3.17cm
+        }
         \begin{titlepage}
 
           \centering
@@ -998,19 +999,15 @@
           }
         \end{titlepage}
       }
-    }
     \group_end:
-    \end{blindPeerReview}
   }
 
 \NewDocumentCommand \MakeOriginality {}
   {
     \group_begin:
-      \begin{blindPeerReview}
       \__suepthesis_ungraduate_originality:
       % 单独成页
       \clearpage
-      \end{blindPeerReview}
     \group_end:
   }
 

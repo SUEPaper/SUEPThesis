@@ -9,21 +9,28 @@
 ```sh
 .
 ├── README.md
-├── chapters
-│   ├── 0_abstract.tex
-│   ├── 1_chapter1.tex
-│   └── 2_chapter2.tex
 ├── images
 │   ├── logo.png
 │   └── logo_black.png
-├── main.pdf
+├── output
+│   ├── ...
+│   └── main.pdf
+├── fonts
+│   ├── ...
+│   └── simhei.ttf
 ├── main.tex
-└── misc
-    ├── 1_originality.tex
-    ├── 2_conclusion.tex
-    ├── 3_reference.tex
-    ├── 4_appendix.tex
-    ├── 5_acknowledgements.tex
+├── latexmkrc
+├── suepthesis.cls
+└── content
+    │────chapters
+    │    ├── chapter1.tex
+    │    └── chapter2.tex
+    ├── abstract.tex
+    ├── appendix.tex
+    ├── acknowledgements.tex
+    ├── conclusion.tex
+    ├── content.tex
+    ├── reference.tex
     └── ref.bib
 ```
 
