@@ -480,16 +480,15 @@
   top=2.54cm,
   right=2.5cm,
   % `headsep' is affected by `top' option.
-  % headsep = 3.5cm + 7bp - 2.4cm - 20bp,
-  headheight = 20 bp,
+  headsep = 20pt ,
+  % headheight = 9pt,
   % `footskip' is affected by `bottom' option.
-  % footskip = 2.6cm + 7bp - 2cm,
+  footskip = 25pt,
 }
 
 
- \__suepthesis_if_bachelor_thesis:T {
-  \setlength{\intextsep}{2\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
-}
+% 浮动体的间距
+\setlength{\intextsep}{1.0\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}
 
 \cs_new:Npn \l__suepthesis_title_font_cs:n #1 {
     \heiti #1
@@ -512,10 +511,10 @@
   % 定义页眉、页码
   \fancyhead[C]{
     \xiaowu
-    \ziju{0.08}
+    \ziju{0.1}
     \songti{\tl_use:N \l__suepthesis_value_title_tl \l__suepthesis_value_subtitle_tl}
   }
-  \fancyfoot[C]{\songti\zihao{5} -\ \thepage\ -}
+  \fancyfoot[C]{\songti\xiaowu -\ \thepage\ -}
   % 页眉分割线稍微粗一些
   \RenewDocumentCommand \headrulewidth {} {0.6pt}
 }
@@ -530,8 +529,8 @@
     % aftername = \hspace{9bp},
     aftername = \quad,
     pagestyle = suepthesis,
-    beforeskip = 8bp,
-    afterskip = 32bp,
+    beforeskip = 0pt,
+    afterskip = 22.5pt,
     fixskip = true,
   }
 }
@@ -634,7 +633,8 @@
   \pagenumbering{arabic}
   \pagestyle{suepthesis}
   % 正文 1.25倍行距
-  \linespread{1.25}
+  % \linespread{1.25}
+  \renewcommand{\baselinestretch}{1.25}  
   % 修复脚注出现跨页的问题
   \interfootnotelinepenalty=10000
 }
