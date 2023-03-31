@@ -55,6 +55,6 @@ latexmk
 
 感谢如下项目为本模板提供参考：
 
-- [BIThesis （北京理工大学论文模板）](https://github.com/BIT-thesis/LaTeX-template)
+- [BIThesis （北京理工大学论文模板）](https://github.com/BITNP/BIThesis)
 - [fduthesis（复旦大学论文模板）](https://github.com/stone-zeng/fduthesis)
 - [ThuThesis（清华大学论文模板）](https://github.com/tuna/thuthesis)

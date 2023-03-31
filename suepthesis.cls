@@ -205,11 +205,11 @@
 \keys_define:nn { suepthesis / info }
   {
     title .tl_set:N = \l__suepthesis_value_title_tl,
-    title .initial:n = {形状记忆聚氨酯的合成及其在织物中的应用（示例）},
+    title .initial:n = {上海电力大学本科生毕业},
     subtitle .tl_set:N = \l__suepthesis_value_subtitle_tl,
-    subtitle .initial:n = {},
+    subtitle .initial:n = {设计（论文）题目},
     titleEn .tl_set:N = \l__suepthesis_value_title_en_tl,
-    titleEn .initial:n = {Synthesis~and~Application~on~Texttiles~of~the~Shape~Memory~Polyurethane~(example)},
+    titleEn .initial:n = {The~Subject~of~Undergraduate~Graduation~Project~(Thesis)~of~Shanghai~University~of~Electric~Power},
 
     institution .tl_set:N = \l__suepthesis_value_institution_tl,
     institution .initial:n = {数理学院数学系},
@@ -350,7 +350,6 @@
 \RequirePackage[justification=centering]{subcaption}
 \RequirePackage{fancyhdr}
 \RequirePackage{pdfpages}
-\RequirePackage{setspace}
 \RequirePackage{booktabs}
 \RequirePackage{multirow}
 \RequirePackage{tikz}
@@ -374,14 +373,15 @@
 \RequirePackage{algorithmic}
 \floatname{algorithm}{算法}
 
-\RequirePackage{pdfpages}
-\RequirePackage{listings}
+% \RequirePackage{pdfpages}
+% \RequirePackage{listings}
 \RequirePackage{enumitem}
 \RequirePackage{fmtcount}
 \RequirePackage[most,minted]{tcolorbox}
 \RequirePackage{minted}
 \RequirePackage{ulem}
 \RequirePackage{tabularray}
+\RequirePackage{zhlipsum}
 
 % 默认情况下, \LaTeX{} 要求每页的文字至少占据 20%,否则该页就只单独放置一个浮动环境,
 % 而这通常不是我们想要的, 我们将这个要求降低到 5%.
@@ -1078,23 +1078,17 @@
   {
 
     \cleardoublepage
-    \setstretch{1.53}
 
-    \__suepthesis_if_bachelor_thesis:T {
-      \begin{center}
-        \vspace*{-17bp}
-        \heiti\zihao{-2}\textbf{
-          \int_case:nn {\g__suepthesis_thesis_type_int}
-          {
-            {1} {\l__suepthesis_value_title_tl}
-            {2} {\l__suepthesis_value_trans_title_tl}
-            {3} {\l__suepthesis_value_title_tl}
-          }
-        }
-      \end{center}
+    \setstretch{1.74}
 
-      \vspace*{2mm}
-    }
+    \begin{center}
+      \vspace*{-17bp}
+      \heiti\zihao{-2}\textbf{
+        \l__suepthesis_value_title_tl \l__suepthesis_value_subtitle_tl
+      }
+    \end{center}
+
+    \vspace*{2mm}
 
     \ctexset{
       chapter/numbering = false,
@@ -1130,30 +1124,26 @@
 
 \NewDocumentEnvironment {abstractEn} {}
   {
-    \setstretch{1.5}
+    \setstretch{1.74}
 
-    \__suepthesis_if_bachelor_thesis:T {
-      \begin{spacing}{0.95}
-        \centering
-        \vspace*{-2bp}
 
-        \__suepthesis_if_thesis_int_type:nTF {3} {
-          \arialfamily\zihao{-2}\textbf
-          \l__suepthesis_value_title_en_tl\\
-        } {
-          \heiti\zihao{3}\textbf
-          \l__suepthesis_value_title_en_tl\\
-        }
-      \end{spacing}
-      \vspace*{10mm}
-    }
+    \begin{spacing}{0.95}
+      \centering
+      \vspace*{-2bp}
+
+      \zihao{-2}\textbf
+      \l__suepthesis_value_title_en_tl\\
+
+    \end{spacing}
+    \vspace*{10mm}
+
 
     \ctexset{
       chapter/numbering = false,
     }
 
     \ctexset {
-      chapter/titleformat = {\heiti\zihao{3}\centering\textbf}
+      chapter/titleformat = {\heiti\xiaosan\centering\textbf}
     }
 
     {
