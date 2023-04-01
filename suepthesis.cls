@@ -46,15 +46,14 @@
 \cs_new:Npn \__suepthesis_if_thesis_int_type:nTF #1#2#3 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {#1} {#2} {#3}}
 \cs_new:Npn \__suepthesis_if_thesis_int_type:nT #1#2 {\__suepthesis_if_thesis_int_type:nTF {#1} {#2} {}}
 
-\cs_new:Npn \__suepthesis_if_thesis_english:TF #1#2 {\bool_if:nTF {\g__suepthesis_thesis_type_english_bool} {#1} {#2}}
-\cs_new:Npn \__suepthesis_if_thesis_english:T #1 {\__suepthesis_if_thesis_english:TF {#1}{}}
-\cs_new:Npn \__suepthesis_if_bachelor_thesis:TF #1#2 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} < {4} {#1} {#2}}
-\cs_new:Npn \__suepthesis_if_bachelor_thesis:T #1 {\__suepthesis_if_bachelor_thesis:TF {#1} {}}
-\cs_new:Npn \__suepthesis_if_master_thesis:TF #1#2 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {4} {#1} {#2}}
-\cs_new:Npn \__suepthesis_if_doctor_thesis:TF #1#2 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {5} {#1} {#2}}
+% \cs_new:Npn \__suepthesis_if_thesis_english:TF #1#2 {\bool_if:nTF {\g__suepthesis_thesis_type_english_bool} {#1} {#2}}
+% \cs_new:Npn \__suepthesis_if_thesis_english:T #1 {\__suepthesis_if_thesis_english:TF {#1}{}}
+% \cs_new:Npn \__suepthesis_if_bachelor_thesis:TF #1#2 {\int_compare:nNnTF {\g__suepthesis_thesis_type_int} < {4} {#1} {#2}}
+% \cs_new:Npn \__suepthesis_if_bachelor_thesis:T #1 {\__suepthesis_if_bachelor_thesis:TF {#1} {}}
 
-\clist_const:Nn \c__suepthesis_thesis_type_clist
-    { bachelor, bachelor_translation, bachelor_english, master, doctor}
+
+% \clist_const:Nn \c__suepthesis_thesis_type_clist
+%     { bachelor, bachelor_translation, bachelor_english, master, doctor}
 
 \clist_const:Nn \c__suepthesis_publication_modes_clist
     { biblatex, custom }
@@ -126,7 +125,6 @@
     {author} {学生姓名} {Author},
     {student_id} {学\qquad 号} {Student~ID},
     {supervisor} {指导教师} {Supervisor},
-    {co_supervisor} {校外指导教师} {Co-Supervisor},
     {keywords} {关键词：} {Key~Words:~},
     {toc} {目\label_space: 录} {Table~of~Contents},
     {abstract} {摘\label_space: 要} {Abstract},
@@ -162,16 +160,6 @@
 {
   type .choice:,
   type .value_required:n = true,
-  type .choices:Vn =
-    \c__suepthesis_thesis_type_clist
-    {
-      \int_set_eq:NN \g__suepthesis_thesis_type_int \l_keys_choice_int
-      \int_case:nn {\l_keys_choice_int} {
-        % 本科全英文也是英文模板。
-        {3} {\bool_set_true:N \g__suepthesis_thesis_type_english_bool}
-      }
-    },
-  type .initial:n = bachelor,
   twoside .bool_gset:N = \g__suepthesis_twoside_bool,
   blindPeerReview .bool_gset:N = \g__suepthesis_blind_mode_bool,
   ctex .tl_set:N = \l__suepthesis_options_to_ctex_tl,
@@ -238,38 +226,6 @@
     keywordsEn .initial:n = {Polyurethane,Shape Memory,Textiles (example)},
     translationTitle .tl_set:N = \l__suepthesis_value_trans_title_tl,
     translationOriginTitle .tl_set:N = \l__suepthesis_value_trans_origin_title_tl,
-    % 中国分类号，研究生学位论文使用
-    classification .tl_set:N = \l__suepthesis_value_classification_tl,
-    classification .initial:n = {TQ~028.1（示例）},
-    % UDC 分类号，研究生学位论文使用
-    UDC .tl_set:N = \l__suepthesis_value_udc_tl,
-    UDC .initial:n = {540（示例）},
-    chairman .tl_set:N = \l__suepthesis_value_chairman_tl,
-    chairman .initial:n = {王五教授（示例）},
-    degree .tl_set:N = \l__suepthesis_value_degree_tl,
-    degree .initial:n = {工学博士（示例）},
-    degreeEn .tl_set:N = \l__suepthesis_value_degree_en_tl,
-    degreeEn .initial:n = {Doctor~of~Engineering~(example)},
-    institute .tl_set:N = \l__suepthesis_value_institute_tl,
-    institute .initial:n = {\c__suepthesis_label_university_tl},
-    defenseDate .tl_set:N = \l__suepthesis_value_defense_date_tl,
-    defenseDate .initial:n = {2019年6月（示例）},
-    authorEn .tl_set:N = \l__suepthesis_value_author_en_tl,
-    authorEn .initial:n = {San~Zhang~(example)},
-    schoolEn .tl_set:N = \l__suepthesis_value_school_en_tl,
-    schoolEn .initial:n = {School~of~Network~Space~Security\\(example)},
-    supervisorEn .tl_set:N = \l__suepthesis_value_supervisor_en_tl,
-    supervisorEn .initial:n = {Prof.~Si~Li~(example)},
-    chairmanEn .tl_set:N = \l__suepthesis_value_chairman_en_tl,
-    chairmanEn .initial:n = {Prof.~Wu~Wang~(example)},
-    majorEn .tl_set:N = \l__suepthesis_value_major_en_tl,
-    majorEn .initial:n = {Cyberspace~Security~and~Technology\\(example)},
-    instituteEn .tl_set:N = \l__suepthesis_value_institute_en_tl,
-    instituteEn .initial:n = {\c__suepthesis_label_university_en_tl},
-    defenseDateEn .tl_set:N = \l__suepthesis_value_defense_date_en_tl,
-    defenseDateEn .initial:n = {June,~2019~(example)},
-    % 因为默认不显示，所以不需要设置初始值。
-    classifiedLevel .tl_set:N = \l__suepthesis_value_classified_level_tl,
   }
 
 \keys_define:nn { suepthesis / misc }
@@ -326,9 +282,9 @@
 \ProcessKeysOptions { suepthesis / option }
 
 
-\__suepthesis_if_thesis_english:T {
-  \PassOptionsToClass{scheme=plain}{ctexbook}
-}
+% \__suepthesis_if_thesis_english:T {
+%   \PassOptionsToClass{scheme=plain}{ctexbook}
+% }
 \bool_if:NTF \g__suepthesis_twoside_bool {} {
   \PassOptionsToClass{oneside}{ctexbook}
 }
@@ -619,7 +575,7 @@
     }
   }
   \pagestyle{suepthesis}
-  \fancyfoot[C]{\songti\zihao{5} \thepage }
+  \fancyfoot[C]{\songti\xiaowu -\ \thepage\ -}
 }
 
 \RenewDocumentCommand \mainmatter {} {
@@ -1049,11 +1005,9 @@
 \DeclareDocumentCommand \MakeTOC {}
   {
     {
-      \__suepthesis_if_bachelor_thesis:TF {
-        \renewcommand{\baselinestretch}{1.35}
-      } {
-        \renewcommand{\baselinestretch}{1.56}
-      }
+
+      \renewcommand{\baselinestretch}{1.4}
+
 
       \tl_set:Nn \l__suepthesis_toc_title_tl {\c__suepthesis_label_toc_tl}
 
@@ -1094,11 +1048,11 @@
       chapter/numbering = false,
     }
 
-    \__suepthesis_if_bachelor_thesis:T {
+    % \__suepthesis_if_bachelor_thesis:T {
       \ctexset{
         chapter/titleformat = {\textmd}
       }
-    }
+    % }
 
     {
       \__suepthesis_same_page:
@@ -1168,11 +1122,11 @@
       section/number = \arabic{section}
     }
 
-    \__suepthesis_if_thesis_english:TF {
-      \chapter{\c__suepthesis_label_conclusion_en_tl}
-    } {
-      \chapter{\c__suepthesis_label_conclusion_tl}
-    }
+    % \__suepthesis_if_thesis_english:TF {
+    %   \chapter{\c__suepthesis_label_conclusion_en_tl}
+    % } {
+    \chapter{\c__suepthesis_label_conclusion_tl}
+    % }
   }
   {}
 
@@ -1210,11 +1164,11 @@
       }
     }
 
-    \__suepthesis_if_thesis_english:TF {
-      \chapter{\c__suepthesis_label_reference_en_tl}
-    } {
-      \chapter{\c__suepthesis_label_reference_tl}
-    }
+    % \__suepthesis_if_thesis_english:TF {
+    %   \chapter{\c__suepthesis_label_reference_en_tl}
+    % } {
+    \chapter{\c__suepthesis_label_reference_tl}
+    % }
   }
   {}
 
