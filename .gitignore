@@ -256,3 +256,4 @@ thesis.pdf
 thesis-bot.yml
 
 out/
+!docs/*.pdf
