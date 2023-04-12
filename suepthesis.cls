@@ -338,6 +338,7 @@
 \RequirePackage{ulem}
 \RequirePackage{tabularray}
 \RequirePackage{zhlipsum}
+\RequirePackage{longtable}
 
 % 默认情况下, \LaTeX{} 要求每页的文字至少占据 20%,否则该页就只单独放置一个浮动环境,
 % 而这通常不是我们想要的, 我们将这个要求降低到 5%.
