@@ -1,5 +1,5 @@
 %%
-% The BIThesis Template for Bachelor Graduation Thesis
+% The SUEPThesis Template for Bachelor Graduation Thesis
 %
 % 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
 %
@@ -18,204 +18,268 @@
 % The Current Maintainer of this work is Haiwen Zhang.
 %%
 
-\chapter{图表示例}
+\chapter{不允许缺货的WPCR生产和存储模型}
 
-\section{图片与布局}
+\section{不允许缺货的WPCR生产和存储模型的建立}
 
-\subsection{插图}
+下面研究$n$阶段生产存储计划，$d_k$设为第$k$阶段对产品WPCR的需求，根据题目设置如下约定：
+\begin{equation}
+    C_j(x_k)=k_j + c_j \cdot x_k
+\end{equation}
+\begin{equation}
+    T_k=\sum_{j=1}t_j \cdot x_k
+\end{equation}
+\begin{equation}
+    t_k \leq T_k
+\end{equation}
 
-图片可以通过\verb|includegraphics|指令插入，我们建议模板使用者将文章所需插入的图片源文件放置在 images 目录中，
-另外，矢量图片应使用PDF格式，位图照片则应使用JPG格式（LaTeX不支持TIFF格式）。具有透明背景的栅格图可以使用PNG格式。
-模板已经配置了相对路径，所以在文中插图片时，直接用 images 目录下的相对路径即可，比如 images/logo.png ，
-在正文中插入只需要\verb|includegraphics{logo.png}|，不需要再增加前缀。
+$x_k$表示第$k$天的产量，$c_j$表示第$j$种单间库存费用，$k_j$表示第$j$种生产准备费用，$C_j$表示第$j$种成本费用，
+$t_j$表示第$j$种单件消耗工时，$t_k$表示第$k$天生产所有组件所耗时间，
+$T_k$表示第$k$天生产所有组件总工时限制\cite{芮世春2012生产与存储问题}。
 
-下面是一个简单的插图示例。
+\subsection{生产和库存平衡关系}
 
-\begin{figure}[hbt]
+设为$x_k$第$k$阶段WPCR的生产量，$v_k$为第$k$阶段结束时WPCR的库存量，则对于WPCR而言，有
+\begin{equation}
+    v_k = v_{k-1} + x_k - d_k
+\end{equation}
+
+再结合该工厂第一天（周一）开始时没有任何组件库存，也不希望第7天（周日）结束后留下任何组件库存，则
+\begin{equation}
+    \begin{cases}
+        v_0=0 \\ 
+        v_k=v_{k-1} + x_k - d_k,k=1,2,...,n \\ 
+        v_n=0
+    \end{cases}
+\end{equation}
+
+某工厂生产的WPCR装置需要用3个容器艇（用A表示）、4个机器臂（用B表示）、5个动力系统（用C表示）组装而成。
+
+对A而言，第$k$阶段生产量为$x_k^A$，第$k$阶段结束时A的库存量为$v_k^A$，消耗量为$x_k^A=3x_k$，
+则根据A的生产和消耗平衡关系，有
+\begin{equation}
+    v_k^A=v_{k-1}^A + x_k^A - 3x_k
+\end{equation}
+
+对B而言，第$k$阶段生产量为$x_k^B$，第$k$阶段结束时B的库存量为$v_k^B$，消耗量为$x_k^B=4x_k$，
+则根据B的生产和消耗平衡关系，有
+\begin{equation}
+    v_k^B=v_{k-1}^B + x_k^B - 4x_k
+\end{equation}
+
+对C而言，第k阶段生产量为$x_k^C$，第k阶段结束时C的库存量为$v_k^C$，消耗量为$x_k^C=5x_k$，则根据C的生产和消耗平衡关系，有
+\begin{equation}
+    v_k^C=v_{k-1}^C + x_k^C - 5x_k
+\end{equation}
+
+同理，对于A1、A2、A3、B1、B2、C1、C2、C3可以类似研究，设生产一件WPCR所需要的A1、A2、A3、B1、B2、C1、C2、C3分别为
+$u_{A1}$，$u_{A2}$，$u_{A3}$，$u_{B1}$，$u_{B2}$，$u_{C1}$，$u_{C2}$，$u_{C3}$，则
+\begin{equation}
+    v_k^{Ai}=v_{k-1}^{Ai} + x_k^{Ai} - u_{Ai}x_k,i=1,2,3
+\end{equation}
+\begin{equation}
+    v_k^{Bi}=v_{k-1}^{Bi} + x_k^{Bi} - u_{Bi}x_k,i=1,2
+\end{equation}
+\begin{equation}
+    v_k^{Ci}=v_{k-1}^{Ci} + x_k^{Ci} - u_{Ci}x_k,i=1,2
+\end{equation}
+
+具体地，有
+\begin{equation}
+    \begin{cases}
+        v_k^{A1}=v_{k-1}^{A1} + x_k^{A1} - 18x_k \\ 
+        v_k^{A2}=v_{k-1}^{A2} + x_k^{A2} - 24x_k \\ 
+        v_k^{A3}=v_{k-1}^{A3} + x_k^{A3} - 6x_k \\ 
+        v_k^{B1}=v_{k-1}^{B1} + x_k^{B1} - 8x_k \\ 
+        v_k^{B2}=v_{k-1}^{B2} + x_k^{B2} - 16x_k \\ 
+        v_k^{C1}=v_{k-1}^{C1} + x_k^{C1} - 40x_k \\ 
+        v_k^{C2}=v_{k-1}^{C2} + x_k^{C2} - 10x_k \\ 
+        v_k^{C3}=v_{k-1}^{C3} + x_k^{C3} - 60x_k
+    \end{cases}
+\end{equation}
+
+\subsection{不允许缺货约束}
+
+按照工厂的信誉要求，目前接收的所有订单到期必须全部交货，轻易不能有缺货事件发生。
+引入不允许缺货模型，或者设缺货损失为无穷大，则有如下条件限制。
+\begin{equation}
+    s.t.
+    \begin{cases}
+        v_k \geqslant 0, V_k^A \geqslant 0,V_k^B \geqslant 0,V_k^C \geqslant 0, & k=1,2,...,n \\
+        v_k^{A1} \geqslant 0, V_k^{A2} \geqslant 0,V_k^{A3} \geqslant 0, & k=1,2,...,n \\
+        v_k^{B1} \geqslant 0, V_k^{B2} \geqslant 0, & k=1,2,...,n \\
+        v_k^{C1} \geqslant 0, V_k^{C2} \geqslant 0,V_k^{C3} \geqslant 0, & k=1,2,...,n \\
+    \end{cases}
+\end{equation}
+
+\subsection{总工时约束}
+
+已知A、B、C的工时消耗分别为3时/件、5时/件和5时/件，即生产1件A需要占用3个工时，
+生产1件B需要占用5个工时，生产1件C需要占用5个工时。
+
+第$k$阶段$x_k^A$、$x_k^A$、$x_k^A$的生产量为分别为，所需总工时不能超过总工时$T_k$的限制，
+即工时约束条件为
+\begin{equation}
+    3x_k^A + 5x_k^B + 5x_k^C \leq T_k
+\end{equation}
+
+\subsection{WPCR各组件的生产准备成本和存储成本}
+
+为了顺利生产WPCR，工厂在某一天生产组件产品时，需要付出一个与生产数量无关的固定成本，称为生产准备费用。
+比如第一天生产了A，则要支付A的生产准备费用，若第二天再生产A，则需要再支付A的生产准备费用。
+
+首先根据表\ref{t.ch2-1}可知，单件WPCR生产准备费用为240元，单件WPCR库存费用为5元。
+生产组件A的生产准备费用为120元，库存费用为2元，组件B的生产准备费用为160元，
+库存费用为1.5元，组件C的生产准备费用为180元，库存费用为1.7元。
+生产零件A1的生产准备费用为40元，库存费用为5元，生产零件A2的生产准备费用为60元，
+库存费用为3元，生产零件A3的生产准备费用为50元，库存费用为6元。
+生产零件B1的生产准备费用为80元，库存费用为4元，生产零件B2的生产准备费用为100元，库存费用为5元。
+生产零件C1的生产准备费用为60元，库存费用为3元，生产零件C2的生产准备费用为40元，库存费用为2元，
+生产零件C3的生产准备费用为70元，库存费用为3元。
+
+\begin{table}[h]
+    \renewcommand\arraystretch{1.5} 
     \centering
-    \includegraphics[width=0.3\linewidth]{logo.png}
-    \caption{插图示例}
-    \label{f.example}
-\end{figure}
+    \caption{每次生产准备费用和单件库存费用（单位：元）}
+    \xiaowu
+    \label{t.ch2-1}
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+     \textbf{产品} & \textbf{WPCR} & \textbf{A} & \textbf{A1} & \textbf{A2} & \textbf{A3} & \textbf{B} & \textbf{B1} & \textbf{B2} & \textbf{C} & \textbf{C1} & \textbf{C2} & \textbf{C3} \\ \hline
+     \textbf{生产准备费用} &  &  &  &  &  &  &  &  &  &  &  &  \\ \hline
+     \textbf{单件库存费用} &  &  &  &  &  &  &  &  &  &  &  &  \\ \hline
+    \end{tabular}
+\end{table}
 
 
-如果一个图由多个分图（子图）组成，应通过(a),(b),(c)进行标识并附注在分图（子图下方）。
 
-\subsection{横向布局}
+设$c_k(x_k)$表示第$k$阶段生产$x_k$的WPCR时的生产准备费用，则
+\begin{equation}
+    c_k(x_k)=\begin{cases}
+        0, & x_k=0\\
+        240, & x_k>0
+    \end{cases}
+\end{equation}
 
-模板提供常见的图片布局，比如单图布局\ref{f.example}，另外还有横排布局如下：
+引入$0-1$变量$y_k$和任意大正数$M$（取相对$10^3$倍的数）
+\begin{equation}
+    y_k=\begin{cases}
+        1, & x_k>0,\text{表示生产}x_k\text{生产准备费用不为}0 \\
+        0, & x_k=0,\text{表示不生产}x_k\text{生产准备费用为}0
+    \end{cases}
+\end{equation}
+且满足
+\begin{equation}
+    x_k \leq My_k
+\end{equation}
 
-\begin{figure}[!htb]
-    \centering
-    \begin{subfigure}[t]{0.24\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo.png}
-        \caption{test}
-        \end{minipage}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.24\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo_black.png}
-        \caption{test}
-        \end{minipage}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.24\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo.png}
-        \caption{test}
-        \end{minipage}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.24\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo_black.png}
-        \caption{test}
-        \end{minipage}
-    \end{subfigure}
-    \caption{图片横排布局示例}
-    \label{f.row}
-\end{figure}
+则生产准备费用表达式等价于
+\begin{equation}
+    c_k(x_k)=240y_k
+\end{equation}
+注意到$v_k$为第$k$阶段结束时WPCR的库存量，单件WPCR的库存费用为5元/件，则库存费用为
+\begin{equation}
+    h_k(v_k)=5v_k
+\end{equation}
 
-\subsection{纵向布局}
+这样对于WPCR的费用为
+\begin{equation}
+    C_{\uppercase\expandafter{\romannumeral1}}=\sum_{k=1}^{n}[C_k(x_k)+h_k(v_k)]=\sum_{k=1}^{n}(240y_k+5v_k)
+\end{equation}
 
-纵向布局如图\ref{f.col}
+同理研究A、B、C的生产准备费和库存费用。引入$0-1$变量$y_k^A$，$y_k^B$，$y_k^C$，即
+\begin{equation}
+    y_k^A=\begin{cases}
+        1, & x_k^A>0\\
+        0, & x_k^A=0
+    \end{cases}
+\end{equation}
+\begin{equation}
+    y_k^B=\begin{cases}
+        1, & x_k^B>0\\
+        0, & x_k^B=0
+    \end{cases}
+\end{equation}
+\begin{equation}
+    y_k^C=\begin{cases}
+        1, & x_k^C>0\\
+        0, & x_k^C=0
+    \end{cases}
+\end{equation}
+且满足
+\begin{equation}
+    x_k^A \leq My_k^A,x_k^B \leq My_k^B,x_k^C \leq My_k^C
+\end{equation}
+则对于A、B、C的生产和存储费用为
+\begin{equation}
+    C_{\uppercase\expandafter{\romannumeral2}}=\sum_{k=1}^{n}(120y_k^A+2v_k^A+160y_k^B+1.5v_k^B+180y_k^C+1.7v_k^C)
+\end{equation}
 
-\begin{figure}[!htb]
-    \centering
-    \begin{subfigure}[t]{0.15\linewidth}
-        \captionsetup{justification=centering} %ugly hacks
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo.png}
-        \caption{test}
-        \end{minipage}
-    \end{subfigure}\\
-    \begin{subfigure}[t]{0.15\linewidth}
-        \captionsetup{justification=centering} %ugly hacks
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo_black.png}
-        \caption{test}
-        \end{minipage}
-    \end{subfigure}
-    \caption{图片纵向布局示例}
-    \label{f.col}
-\end{figure}
-
-\subsection{竖排多图横排布局}
-
-\begin{figure}[!htb]
-    \centering
-    \begin{subfigure}[t]{0.13\linewidth}
-        \captionsetup{justification=centering} 
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo.png} 
-        \vspace{-1ex} \vfill
-        \includegraphics[width=1\linewidth]{logo_black.png}
-        \caption{aaa}
-        \end{minipage}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.13\linewidth}
-        \captionsetup{justification=centering} 
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=1\linewidth]{logo_black.png} 
-        \vspace{-1ex} \vfill
-        \includegraphics[width=1\linewidth]{logo.png}
-        \caption{bbb}
-        \end{minipage}
-    \end{subfigure}
-    \caption{图片竖排多图横排布局}
-    \label{f.suep_col_row}
-\end{figure}
-
-竖排多图横排布局如图\ref{f.suep_col_row}所示。注意看(a)、(b)编号与图关系
+再进一步研究A1、A2、A3、B1、B2、C1、C2、C3的生产准备费和库存费用。
+引入$0-1$变量$y_k^{A1}$，$y_k^{A2}$，$y_k^{A3}$，$y_k^{B1}$，$y_k^{B2}$，$y_k^{C1}$，$y_k^{C2}$，$y_k^{C3}$即
+\begin{equation}
+    y_k^{Ai}=\begin{cases}
+        1, & x_k^{Ai}>0\\
+        0, & x_k^{Ai}=0
+    \end{cases},i=1,2,3
+\end{equation}
+\begin{equation}
+    y_k^{Bi}=\begin{cases}
+        1, & x_k^{Bi}>0\\
+        0, & x_k^{Bi}=0
+    \end{cases},i=1,2
+\end{equation}
+\begin{equation}
+    y_k^{Ci}=\begin{cases}
+        1, & x_k^{Ci}>0\\
+        0, & x_k^{Ci}=0
+    \end{cases},i=1,2,3
+\end{equation}
+且满足
+\begin{equation}
+    \begin{cases}
+        x_k^{Ai} \leq My_k^{Ai}, &i=1,2,3 \\
+        x_k^{Bi} \leq My_k^{Bi},&i=1,2 \\
+        x_k^{Ci} \leq My_k^{Ci},&i=1,2,3
+    \end{cases}
+\end{equation}
+则对于A1、A2、A3、B1、B2、C1、C2、C3的生产和存储费用为
+\begin{equation}
+    \begin{aligned}
+        C_{\uppercase\expandafter{\romannumeral3}} &= 
+            \sum_{k=1}^{n}(40y_k^{A1}+5v_k^{A1}+60y_k^{A2}+3v_k^{A2}+50y_k^{A3}+6v_k^{A3}) \\
+            &+ \sum_{k=1}^{n}(80y_k^{B1}+4v_k^{B1}+100y_k^{B2}+5v_k^{B2}) \\
+            &+ \sum_{k=1}^{n}(60y_k^{C1}+3v_k^{C1}+40y_k^{C2}+2v_k^{C2}+70y_k^{C3}+3v_k^{C3})
+    \end{aligned}
+\end{equation}
 
 
-\subsection{横排多图竖排布局}
 
-\begin{figure}[!htb]
-    \centering
-    \begin{subfigure}[t]{0.3\linewidth}
-        \captionsetup{justification=centering} 
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=0.45\linewidth]{logo.png}
-        \includegraphics[width=0.45\linewidth]{logo_black.png}
-        \caption{}
-        \end{minipage}
-    \end{subfigure}\\
-    \begin{subfigure}[t]{0.3\linewidth}
-        \captionsetup{justification=centering} 
-        \begin{minipage}[b]{1\linewidth}
-        \includegraphics[width=0.45\linewidth]{logo_black.png}
-        \includegraphics[width=0.45\linewidth]{logo.png}
-        \caption{}
-        \end{minipage}
-    \end{subfigure}
-    \caption{图片横排多图竖排布局}
-    \label{f.suep_row_col}
-\end{figure}
+\subsection{不允许缺货的WPCR生产和存储模型}
 
-横排多图竖排布局如图\ref{f.suep_row_col}所示。注意看(a)、(b)编号与图关系。
+汇总1-20，1-25，1-30三式得目标函数为
+\begin{equation}
+    \text{min}\sum_{k=1}^{n}(C_{\uppercase\expandafter{\romannumeral1}}
+        + C_{\uppercase\expandafter{\romannumeral2}} 
+        + C_{\uppercase\expandafter{\romannumeral3}})
+\end{equation}
+综上，所有限制条件总结如下：
+\begin{equation}
+    s.t.
+    \begin{cases}
+        v_k=v_{k-1}+x_k-d_k,v_0=0 \\
+        3x_k^A+5x_k^B+5x_k^C \leq T_k \\
+        ... \\
+        y_k,y_k^A,y_k^B,y_k^C,y_k^{Ai},y_k^{Bi},y_k^{Ci}=0\text{或}1
+    \end{cases} \qquad k=1,2,...,n
+\end{equation}
 
-\subsection{2x2图片布局}
+\section{不允许缺货情形WPCR生产和存储模型的求解}
+表2-2为每天WPCR需求和关键设备工时限制，可以看出周一到周日WPCR的需求分别为39、36、38、40、37、33、40，
+同时A、B、C周一到周日生产总工时限制分别为4500、2500、2750、2100、2500、2750、1500。
+通过编写Lingo程序求解结果为表2-3所示。
 
-\begin{figure}[!htb]
-    \centering
-    \begin{subfigure}[t]{0.3\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-            \centering
-            \includegraphics[width=0.45\linewidth]{logo.png}
-            \caption{}
-        \end{minipage}
-    \end{subfigure}
-    \hspace{-5em}
-    \begin{subfigure}[t]{0.3\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-            \centering
-            \includegraphics[width=0.45\linewidth]{logo_black.png}
-            \caption{}
-        \end{minipage}
-    \end{subfigure}\\
-    \begin{subfigure}[t]{0.3\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-            \centering
-            \includegraphics[width=0.45\linewidth]{logo.png}
-            \caption{}
-        \end{minipage}
-    \end{subfigure}
-    \hspace{-5em}
-    \begin{subfigure}[t]{0.3\linewidth}
-        \captionsetup{justification=centering}
-        \begin{minipage}[b]{1\linewidth}
-            \centering
-            \includegraphics[width=0.45\linewidth]{logo_black.png}
-            \caption{}
-        \end{minipage}
-    \end{subfigure}
-    \caption{图片2x2布局}
-    \label{f.csu_2x2}
-\end{figure}
-
-\newpage
-
-\section{图表编号}
-
-本节主要阐述在图表下侧的编号，以及引用时的编号设置问题。
-使用在上一节（上一个section， \verb|\section{插图}| ）中引入的图\ref{f.example}，
-以及在本节加入下方新图片对比来说明。
-
-\begin{figure}[hbt]
-    \centering
-    \includegraphics[width=0.3\linewidth]{logo.png}
-    \caption{图标编号示例}
-    \label{f.example.2}
-\end{figure}
-
-可以看到在上一节“插图示例”的编号为图\ref{f.example}。
-而在本节“图标编号示例”为图\ref{f.example.2}。
-
-\textcolor{blue}{\zhlipsum 阅后删除蓝色文字。}
+从表2-2可以看出，周一没有库存费用，只有生产准备费用。周二只有关于B组件的组装计划，而周三只有组件B不需要组装。
+周四和周日没有生产计划，只有库存费用。周五和周六的生产计划比较全面，生产准备费用和库存费用都需要。
+同时，有该表可知，如果生产计划很全面，WPCR、A、B、C都需要组装，无论其中需要组装的数量是多少，
+生产准备费用都不变，都为1200元。总的生产和存储成本为6260.9元。

@@ -1,0 +1,46 @@
+%%
+% The SUEPThesis Template for Bachelor Graduation Thesis
+%
+% 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
+%
+% Copyright 2020-2023 SUEPaper
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Haiwen Zhang.
+%%
+
+\chapter{结论}
+
+\section{模型评价}
+
+（1）模型构建了需求与生产的反馈过程及在需求随机的情况下，优化生产组装计划，进一步拓展了模型的适用范围。
+
+（2）考虑到总工时的动态改变，设计了一种带末端优化的遗传算法求解，并构建了一种双层规划模型，通过修改部分参数，
+模型能同时适用于多种场景。
+
+（3）模型的自适应能力强，针对未来订单未知情形的WPCR不确定生产和存储模型加入了自适应动态规划，
+在遗传训练下具有更高的适应性和推广性，对供求关系动态平衡的研究具有一定的数学理论价值。
+
+\section{模型的缺点}
+
+（1）只考虑了生产总工时，没有考虑有多少生产机器以及如何安排生产顺序，在实际应用中考虑不够全面。
+
+（2）总费用只考虑了生产准备费及存储费用，没有考虑人力、物力、时间等成本。
+
+（3）本文A、B、C消耗工时固定，未考虑组件加工过程中有可能出现的时间差。
+
+\section{模型的改进}
+
+（1）研究在更多约束条件下，完成多任务、多目标的混合优化模型，增加模型的适应性和广谱性，
+进而探讨实际生产中供求平衡和成本优化问题。
+
+（2）发展模型的逆向运用，即已知生产成本的前提下，解决具体生产分配问题。

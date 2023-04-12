@@ -136,8 +136,6 @@
     {appendix_prefix} {附录} {Appendix},
     {reference} {参考文献} {References},
     {university} {上海电力大学} {Shanghai~University~of~Electric~Power},
-    {publications} {攻读学位期间发表论文与研究成果清单}
-      {Publications~During~Studies},
     % TODO: Not so sure about the translation.
     {resume} {作者简介} {},
     {symbols} {主要符号对照表} {},
@@ -613,8 +611,8 @@
   }
 }
 
-\setlength{\abovecaptionskip}{11pt}
-\setlength{\belowcaptionskip}{9pt}
+% \setlength{\abovecaptionskip}{5pt}
+% \setlength{\belowcaptionskip}{5pt}
 
 \__suepthesis_if_graduate:TF {
   \tl_set:Nn \g__suepthesis_label_divide_char_tl {.}

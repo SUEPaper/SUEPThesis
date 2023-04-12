@@ -1,5 +1,5 @@
 %%
-% The BIThesis Template for Bachelor Graduation Thesis
+% The SUEPThesis Template for Bachelor Graduation Thesis
 %
 % 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
 %
@@ -20,33 +20,38 @@
 
 \begin{appendices}
     
-    \textcolor{blue}{附录部分用于存放这里用来存放不适合放置在正文的大篇幅内容、典型如代码、图纸、完整数学证明过程等内容。}
-  
-    % 这里示范一下添加多个附录的方法：
-    % 使用 \section 来添加一个附录
-  
-    \section{\LaTeX 环境的安装}
-    \LaTeX 环境的安装。
+\section{不允许缺货的WPCR生产和存储模型求解的Lingo源程序}
+\inputminted[
+    frame=lines,
+    framesep=2mm,
+    baselinestretch=1.2,
+    fontsize=\small
+]{matlab}{code/demo.m}
 
-    \newpage
-    \section{堆溢出检测算法}
-    \begin{algorithm}[h]
-        \caption{堆溢出检测算法}\label{alg:ovf}
-        \begin{algorithmic}[1]
-            \IF {$\beta \in \mathbb{N^{*}} \land \Delta_\beta = \Delta_{\beta - 1} \land \beta < S$}
-                \STATE 正常写入
-            \ELSIF {$\beta \in \mathbb{N^{*}} \land \Delta_\beta \neq \Delta_{\beta - 1} \land \beta \geq S$}
-                \STATE 发生堆溢出
-            \ENDIF
-        \end{algorithmic}
-    \end{algorithm}
-    
-    \newpage
-    \section{SUEPThesis 使用说明}
-    SUEPThesis 使用说明。
-  
-    \textcolor{blue}{附录是毕业设计（论文）主体的补充项目，为了体现整篇文章的完整性，写入正文又可能有损于论文的条理性、逻辑性和精炼性，这些材料可以写入附录段，但对于每一篇文章并不是必须的。附录依次用大写正体英文字母 A、B、C……编序号，如附录 A、附录 B。阅后删除此段。}
-  
-    \textcolor{blue}{附录正文样式与文章正文相同：宋体、小四；行距：1.25 倍行距；间距段前段后均为 0 行。阅后删除此段。}
+
+\newpage
+\section{符号说明}
+
+\begin{center}
+    \begin{longtable}{m{8cm}m{7cm}}
+        \toprule
+        \textbf{符号}&\textbf{说明}\\
+        \midrule
+        \endfirsthead
+        \toprule
+        \textbf{符号}&\textbf{说明}\\
+        \midrule
+        \endhead 
+        \bottomrule
+        \endfoot
+        \bottomrule
+        \endlastfoot
+
+        $d_k$ & 第$k$阶段对组件的需求量 \\
+        $x_k$ & 第$k$天的产量 \\ 
+        $c_j$ & 第$j$种单间库存费用 \\ 
+        $k_j$ & 第$j$种生产准备费用 \\ 
+	\end{longtable}
+\end{center}
   
 \end{appendices}
