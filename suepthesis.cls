@@ -1174,60 +1174,30 @@
   {}
 
 \NewDocumentEnvironment {appendices} {}
-  {
-    % Used in chapter, ToC.
-    \tl_new:N \l__suepthesis_appendix_plain_label_tl
-    % Used before reference label.
-    \tl_new:N \l__suepthesis_appendix_default_title_tl
+{
+  % Used in chapter, ToC.
+  \tl_new:N \l__suepthesis_appendix_plain_label_tl
+  % Used before reference label.
+  \tl_new:N \l__suepthesis_appendix_default_title_tl
 
-    \tl_set:Nn \l__suepthesis_appendix_plain_label_tl {\c__suepthesis_label_appendix_prefix_tl}
-    \tl_set:Nn \l__suepthesis_appendix_default_title_tl {\c__suepthesis_label_appendix_tl}
+  \tl_set:Nn \l__suepthesis_appendix_plain_label_tl {\c__suepthesis_label_appendix_prefix_tl}
+  \tl_set:Nn \l__suepthesis_appendix_default_title_tl {\c__suepthesis_label_appendix_tl}
 
-    \bool_if:NTF \l__suepthesis_appendices_chapter_level_bool {
-      % 附录章节级别
-
-      % 仅设置 \setcounter{chapter}{0} 时，pdf 目录会索引到正文章节。
-      % 因此，需要使用 \appendix 重置计数器，并将附录后面的
-      % 几个章节视为特殊的附录页。
-      \appendix
-
-      \ctexset{
-        chapter/numbering = true,
-        chapter/name = {},
-        chapter/number = \l__suepthesis_appendix_plain_label_tl\hspace{1ex}\Alph{chapter},
-        section/number = \Alph{chapter}. \arabic{section},
-        subsection/number = \Alph{chapter}. \arabic{section}. \arabic{subsection},
-      }
-
-      \cs_set:Npn \thechapter {
-        \Alph{chapter}
-      }
-    } {
-      % 附录节（section）级别
-      \ctexset{
-        section/number = \l__suepthesis_appendix_plain_label_tl\hspace{1ex}\Alph{section},
-        subsection/number = \Alph{section}. \arabic{subsection},
-      }
-
-      \cs_set:Npn \thechapter {
-        \Alph{section}
-      }
-
-      \tl_if_blank:VTF \l__suepthesis_appendices_title_tl {
-        \chapter{\l__suepthesis_appendix_default_title_tl}
-      } {
-        \chapter*{\l__suepthesis_appendices_title_tl}
-        \stepcounter{chapter}
-        \tl_if_blank:VTF \l__suepthesis_appendix_toc_title_tl {
-          \addcontentsline{toc}{chapter}{\l__suepthesis_appendix_default_title_tl}
-        } {
-          \addcontentsline{toc}{chapter}{\l__suepthesis_appendix_toc_title_tl}
-        }
-      }
-    }
+  % 附录节（section）级别
+  \ctexset{
+    section/number = \l__suepthesis_appendix_plain_label_tl\hspace{1ex}\chinese{section},
+    subsection/number = \chinese{section}. \arabic{subsection},
   }
-  {
+
+  \cs_set:Npn \thechapter {
+    \Alph{section}
   }
+
+  \chapter*{\l__suepthesis_appendices_title_tl}
+  \stepcounter{chapter}
+  \addcontentsline{toc}{chapter}{\l__suepthesis_appendix_default_title_tl}
+}
+{}
 
 \NewDocumentEnvironment {acknowledgements} {+b}
   {
