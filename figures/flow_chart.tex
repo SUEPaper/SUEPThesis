@@ -1,0 +1,15 @@
+\begin{tikzpicture}[node distance=25pt]
+    \node[draw, rounded corners]                        (start)   {待优化的问题};
+    \node[draw, below=of start]                         (step 1)  {确定目标函数和解的空间};
+    \node[draw, below=of step 1]                        (step 2)  {计算个体的适应度值};
+    \node[draw, diamond, aspect=2, below=of step 2]     (choice)  {满足收敛条件或达到进化代数};
+    \node[draw, right=30pt of choice]                   (step x)  {遗传算子操作生成新种群};
+    \node[draw, rounded corners, below=20pt of choice]  (end)     {输出最优解};
+    
+    \draw[->] (start)  -- (step 1);
+    \draw[->] (step 1) -- (step 2);
+    \draw[->] (step 2) -- (choice);
+    \draw[->] (choice) -- node[left]  {是} (end);
+    \draw[->] (choice) -- node[above] {否}  (step x);
+    \draw[->] (step x) -- (step x|-step 2) -> (step 2);
+\end{tikzpicture}

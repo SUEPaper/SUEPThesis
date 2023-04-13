@@ -280,31 +280,16 @@
 \RequirePackage[justification=centering]{subcaption}
 \RequirePackage{fancyhdr}
 \RequirePackage{pdfpages}
-\RequirePackage{booktabs}
-\RequirePackage{multirow}
-\RequirePackage{tikz}
-\RequirePackage{etoolbox}
 \RequirePackage[hidelinks,bookmarksnumbered]{hyperref}
 \RequirePackage{xcolor}
 \RequirePackage{caption}
 \RequirePackage{array}
 \RequirePackage{amsmath}
-% 下面的数学宏包和unicode-math 冲突
-% \RequirePackage{amsfonts}
-% \RequirePackage{amssymb}
-% \RequirePackage{bm}
-% 使用 \pkg{unicode-math} 处理数学字体
 \RequirePackage{unicode-math}
 \RequirePackage{pifont}
 \RequirePackage{amsthm}
 
 % 算法排版宏包
-\RequirePackage[chapter]{algorithm}
-\RequirePackage{algorithmic}
-\floatname{algorithm}{算法}
-
-% \RequirePackage{pdfpages}
-% \RequirePackage{listings}
 \RequirePackage{enumitem}
 \RequirePackage{fmtcount}
 \RequirePackage[most,minted]{tcolorbox}
@@ -321,19 +306,12 @@
 % 会将它们分在几个不同页，即使它们可在同一页放
 % 得下. 我们可以通过修改 |\topfraction| 和 |\bottomfraction| 分别设置顶端和底端的浮
 % 动环境的最大比例.
- \renewcommand*{\topfraction}{0.9}
- \renewcommand*{\bottomfraction}{0.8}
+\renewcommand*{\topfraction}{0.9} 
+\renewcommand*{\bottomfraction}{0.8}
 % 有时\LaTeX{}会把一个浮动环境单独放在一页,
 % 我们要求这个环境至少要占据 85% 才能单独放在一页.
 % 注意:  |\floatpagefraction| 的数值必须小于 |\topfraction|.
- \renewcommand*{\floatpagefraction}{0.85}
-% 关于图片 graphicx
- % 如果图片没有指定后缀, 依次按下列顺序搜索
-\DeclareGraphicsExtensions{.pdf,.eps,.jpg,.png,.tif}
- % 设置图表搜索路径, 可以给图表文件夹取如下名字
-\graphicspath{{figures/}{figure/}{pictures/}%
-  {picture/}{pic/}{pics/}{image/}{images/}}
-
+\renewcommand*{\floatpagefraction}{0.85}
 
 % ==============================================================================
 % 字体设置
@@ -753,12 +731,6 @@
       }
   \group_end:
 }
-
-\newcommand{\circled}[2][]{\tikz[baseline=(char.base)]
-  {\node[shape = circle, draw, inner~sep = 1pt]
-  (char) {\phantom{\ifblank{#1}{#2}{#1}}};
-  \node at (char.center) {\makebox[0pt][c]{#2}};}}
-\robustify{\circled}
 
 \cs_new:Npn \__suepthesis_ungraduate_originality:
 {
