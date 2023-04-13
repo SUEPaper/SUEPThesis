@@ -1,0 +1,77 @@
+\chapter{SUEPThesis简介}
+
+\textbf{SUEPThesis}由上海电力大学数学系纸上得来终觉浅团队开发。
+本文是\textbf{SUEPThesis}的示例文档，基本上覆盖了模板中所有格式的设置。
+建议大家在使用模板之前，仔细阅读本文档，以及示例论文。
+
+\section{二级标题}
+
+\subsection{三级标题}
+
+一级标题根据学校提供的Word模板要求，小三号黑体居中，章节号空一个汉字，1.5 倍行距，段前0行，段后0.5行
+并且每一章节单独起一页，章节号格式应使用中文汉字。
+
+二级标题为黑体四号字，居左，1.5倍行距，段前0.5行，段后0行。标题号后空一个汉字。
+
+三级标题黑体小四号字，1.5倍行距，段前0.5行，段后0行，缩进两个汉字，标题号后空一个汉字。
+
+所有标题样式由 \textbf{suepthesis.cls} 模板文件 \textbf{ctexset} 进行设置。
+
+\section{字体}
+
+正文字体默认使用小四号宋体，英文为小四号 Times New Romen，各段行首缩进两个汉字。
+
+英文字体展示如下：
+
+TeX (/tɛx, tɛk/, see below), stylized within the system as TEX, 
+is a typesetting system (or a "formatting system") which was designed and mostly written by
+Donald Knuth\cite{knuth1984texbook} and released in 1978. 
+TeX is a popular means of typesetting complex mathematical formulae; 
+it has been noted as one of the most sophisticated digital typographical systems.
+
+
+\subsection{调节字号}
+
+可以使用 命令来调节字号。
+
+\begin{tabular}{ll}
+  \verb|\chuhao | & \chuhao  初号字 English \\
+  \verb|\xiaochu| & \xiaochu 小初号 English \\
+  \verb|\yihao  | & \yihao  一号字 English \\
+  \verb|\xiaoyi | & \xiaoyi 小一号 English \\
+  \verb|\erhao  | & \erhao  二号字 English \\
+  \verb|\xiaoer | & \xiaoer 小二号 English \\
+  \verb|\sanhao | & \sanhao  三号字 English \\
+  \verb|\xiaosan| & \xiaosan 小三号 English \\
+  \verb|\sihao  | & \sihao  四号字 English \\
+  \verb|\xiaosi | & \xiaosi 小四号 English \\
+  \verb|\wuhao  | & \wuhao  五号字 English \\
+  \verb|\xiaowu | & \xiaowu 小五号 English \\
+  \verb|\liuhao  | & \liuhao  六号字 English \\
+  \verb|\xiaoliu | & \xiaoliu 小六号 English \\
+  \verb|\qihao  | & \qihao  七号字 English \\
+  \verb|\bahao | & \bahao 八号字 English \\
+\end{tabular}
+
+\subsection{调节字体}
+
+需要说明的是由于Linux或者macOS系统上不包含学校写作指导要求的字体，因此我们将Windows的字体放在了fonts目录下，
+由于这些字体具有版权，所以我们仍\textbf{强烈建议}您在Windows操作系统上编译最终版论文。
+
+中文可选字体以及选用指令如下：
+
+\begin{tabular}{l l}
+  \verb|\songti| & {\songti 宋体} \\
+  \verb|\heiti| & {\heiti 黑体}
+\end{tabular}
+
+我们在模板中通过调整\verb|\newCJKfontfamily|的AutoFakeBold参数来简单实现字体加粗，
+在正文中你可以使用习惯的\verb|\textbf|指令来加粗对应中文。
+如果你需要调整字体，也可以组合使用字体选择并加粗，比如\verb|\heiti\bfseries|
+
+\textbf{宋体加粗测试}，宋体不加粗测试。
+
+{\heiti\bfseries 黑体加粗测试。}{\heiti 黑体不加粗测试。}
+
+
+\textcolor{blue}{\zhlipsum 阅后删除蓝色文字。}

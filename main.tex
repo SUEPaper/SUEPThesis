@@ -96,6 +96,15 @@
 \usepackage{tikz}
 \usetikzlibrary{positioning, shapes.geometric}
 
+% 一些文档中用到的 logo
+\usepackage{hologo}
+\providecommand{\XeTeX}{\hologo{XeTeX}}
+\providecommand{\BibLaTeX}{\textsc{Bib}\LaTeX}
+
+% 借用 ltxdoc 里面的几个命令方便写文档
+\DeclareRobustCommand\cs[1]{\texttt{\char`\\#1}}
+\providecommand\pkg[1]{{\sffamily#1}}
+
 
 % 文档开始
 \begin{document}
@@ -118,13 +127,27 @@
 % 正文开始
 \mainmatter
 
-\input{content/content.tex}
+% ====== SUEPThesis 使用说明部分，正式写论文时请删除 ======
+\input{content/intro.tex}
+\input{content/math_and_citations.tex}
+\input{content/float.tex}
+% ====== SUEPThesis 使用说明部分，正式写论文时请删除======
+
+
+% ====== 论文主体 ======
+%子章节为了便于查找和修改，建议通过input拆分文件
+\input{content/chapters/chapter1.tex}
+\input{content/chapters/chapter2.tex}
+\input{content/chapters/chapter3.tex}
+\input{content/chapters/chapter4.tex}
+\input{content/chapters/chapter5.tex}
+\input{content/chapters/chapter6.tex}
+\input{content/chapters/chapter7.tex}
+% ====== 论文主体 ======
 
 % 后置部分
 \backmatter
 
-% 结论：在结论相应的 TeX 文件处进行结论部分的撰写
-% \input{content/conclusion.tex}
 % 致谢：在致谢相应的 TeX 文件处进行致谢部分的撰写
 \input{content/acknowledgements.tex}
 % 参考文献：如无特殊需要，参考文献相应的 TeX 文件无需改动，添加参考文献请使用 BibTeX 的格式
@@ -132,6 +155,5 @@
 \input{content/reference.tex}
 % 附录：在附录相应的 TeX 文件处进行附录部分的撰写
 \input{content/appendix.tex}
-
 
 \end{document}

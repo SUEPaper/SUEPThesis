@@ -278,11 +278,11 @@
 % 设置浮动体的标题
 \RequirePackage[justification=centering]{caption}
 \RequirePackage[justification=centering]{subcaption}
+\RequirePackage{bicaption}
 \RequirePackage{fancyhdr}
 \RequirePackage{pdfpages}
 \RequirePackage[hidelinks,bookmarksnumbered]{hyperref}
 \RequirePackage{xcolor}
-\RequirePackage{caption}
 \RequirePackage{array}
 \RequirePackage{amsmath}
 \RequirePackage{unicode-math}
