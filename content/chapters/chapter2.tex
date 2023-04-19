@@ -128,7 +128,7 @@ $u_{A1}$，$u_{A2}$，$u_{A3}$，$u_{B1}$，$u_{B2}$，$u_{C1}$，$u_{C2}$，$u_
 为了顺利生产WPCR，工厂在某一天生产组件产品时，需要付出一个与生产数量无关的固定成本，称为生产准备费用。
 比如第一天生产了A，则要支付A的生产准备费用，若第二天再生产A，则需要再支付A的生产准备费用。
 
-首先根据表\ref{t.ch2-1}可知，单件WPCR生产准备费用为240元，单件WPCR库存费用为5元。
+首先根据表\ref{T.ch2-1}可知，单件WPCR生产准备费用为240元，单件WPCR库存费用为5元。
 生产组件A的生产准备费用为120元，库存费用为2元，组件B的生产准备费用为160元，
 库存费用为1.5元，组件C的生产准备费用为180元，库存费用为1.7元。
 生产零件A1的生产准备费用为40元，库存费用为5元，生产零件A2的生产准备费用为60元，
@@ -137,21 +137,20 @@ $u_{A1}$，$u_{A2}$，$u_{A3}$，$u_{B1}$，$u_{B2}$，$u_{C1}$，$u_{C2}$，$u_
 生产零件C1的生产准备费用为60元，库存费用为3元，生产零件C2的生产准备费用为40元，库存费用为2元，
 生产零件C3的生产准备费用为70元，库存费用为3元。
 
-\begin{table}[h]
-    \renewcommand\arraystretch{1.5} 
-    \centering
+\begin{table}[!hpt]
     \caption{每次生产准备费用和单件库存费用（单位：元）}
-    \xiaowu
-    \label{t.ch2-1}
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
-    \hline
-     \textbf{产品} & \textbf{WPCR} & \textbf{A} & \textbf{A1} & \textbf{A2} & \textbf{A3} & \textbf{B} & \textbf{B1} & \textbf{B2} & \textbf{C} & \textbf{C1} & \textbf{C2} & \textbf{C3} \\ \hline
-     \textbf{生产准备费用} &  &  &  &  &  &  &  &  &  &  &  &  \\ \hline
-     \textbf{单件库存费用} &  &  &  &  &  &  &  &  &  &  &  &  \\ \hline
+    \label{T.ch2-1}
+    \centering
+    \renewcommand\arraystretch{1.5} 
+    \begin{tabular}{@{}ccccccccccccc@{}} 
+    \toprule
+    \textbf{产品} & \textbf{WPCR} & \textbf{A} & \textbf{A1} & \textbf{A2} & \textbf{A3} & \textbf{B} & \textbf{B1} & \textbf{B2} & \textbf{C} & \textbf{C1} & \textbf{C2} & \textbf{C3} \\
+    \midrule
+    \textbf{生产准备费用} & 240 & 120 & 40 & 60 & 50 & 160 & 80 & 100 & 180 & 60 & 40 & 70 \\ 
+    \textbf{单件库存费用} & 5 & 2 & 5 & 3 & 6 & 1.5 & 4 & 5 & 1.7 & 3 & 2 & 3 \\
+    \bottomrule
     \end{tabular}
 \end{table}
-
-
 
 设$c_k(x_k)$表示第$k$阶段生产$x_k$的WPCR时的生产准备费用，则
 \begin{equation}

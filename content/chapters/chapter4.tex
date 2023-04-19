@@ -162,58 +162,68 @@ Step4：使用变异算子来调整个体编码串中的部分基因值，
 \end{figure}
 
 
-\subsection{考虑检修的生产和存储问题的求解结果}
-\begin{table}[h]
-    \renewcommand\arraystretch{1.5} 
-    \centering
+\begin{table}[!hpt]
     \caption{考虑检修的生产和存储模型求解的结果}
     \label{T.ch4-1}
-    \xiaowu
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
-    \hline
-    \textbf{第1次} & \textbf{第2次} & \textbf{第3次} & \textbf{第4次} & \textbf{第5次} & \textbf{第6次} & \textbf{第7次} & \textbf{总成本} \\ \hline
-    24  & 72 & 99 & 120 & 153 & 171 & 202 & 6308701 \\ \hline
+    \centering
+    \renewcommand\arraystretch{1.5} 
+    \begin{tabular}{@{}cccccccc@{}} 
+    \toprule
+    \textbf{第1次} & \textbf{第2次} & \textbf{第3次} & \textbf{第4次} & \textbf{第5次} & \textbf{第6次} & \textbf{第7次} & \textbf{总成本} \\
+    \midrule
+    24  & 72 & 99 & 120 & 153 & 171 & 202 & 6308701 \\
+    \bottomrule
     \end{tabular}
 \end{table}
 
-\begin{table}[H]
-    \renewcommand\arraystretch{1.5} 
-    \centering
+\begin{longtable}[c]{c*{7}{r}}
     \caption{考虑检修的生产和存储模型求解结果展示}
-    \label{T.ch4-2}
-    \xiaowu
-    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \label{T.ch4-2} \\
+    \toprule
+    \textbf{天} & \textbf{周一} & \textbf{周二} & \textbf{周三} & 
+    \textbf{周四} & \textbf{周五} & \textbf{周六} & \textbf{周日} \\
+    \midrule
+    \endfirsthead
+    \multicolumn{8}{l}{\textbf{续表~\thetable}} \\
+
+    \toprule
+    \textbf{天} & \textbf{周一} & \textbf{周二} & \textbf{周三} & 
+    \textbf{周四} & \textbf{周五} & \textbf{周六} & \textbf{周日} \\
+    \midrule
+    \endhead
     \hline
-    \textbf{天} & \textbf{周一} & \textbf{周二} & \textbf{周三} & \textbf{周四} & \textbf{周五} & \textbf{周六} & \textbf{周日} \\ \hline
-    \textbf{第1周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第2周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第3周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第4周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第5周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第6周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第7周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第8周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第9周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第10周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第11周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第12周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第13周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第14周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第15周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第16周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第17周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第18周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第19周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第20周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第21周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第22周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第23周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第24周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第25周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第26周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第27周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第28周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第29周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \textbf{第30周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ \hline
-    \end{tabular}
-\end{table}
+    \multicolumn{8}{r}{续下页}
+    \endfoot
+    \endlastfoot
+    \textbf{第1周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第2周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第3周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第4周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第5周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第6周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第7周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第8周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第9周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第10周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第11周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第12周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第13周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第14周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第15周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第16周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第17周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第18周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第19周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第20周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第21周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第22周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第23周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第24周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第25周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第26周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第27周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第28周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第29周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第30周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \bottomrule
+\end{longtable}
