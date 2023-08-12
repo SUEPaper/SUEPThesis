@@ -1,5 +1,5 @@
 %%
-% The BIThesis Template for Bachelor Graduation Thesis
+% The SUEPThesis Template for Bachelor Graduation Thesis
 %
 % 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
 %
@@ -18,48 +18,64 @@
 % The Current Maintainer of this work is Haiwen Zhang.
 %%
 
-\chapter{引用文献标注}
+\chapter{不同情形WPCR生产和存储模型的综合分析}
 
-文献标注和索引的处理一直是学术写作中一个繁琐步骤，特别是在word环境下。
-而在\LaTeX 中我们只需要编辑（或直接获取） BibLaTeX 格式索引文件然后在正文中使用\verb|cite| \verb|citet|等指令进行引用标注就可以。
-注意，引文参考文献的每条都应该在正文中标注出来 \cite{knuth1984texbook}，下面介绍在文章中标注引用指令的具体使用方法。
+\section{不同情形的WPCR生产和存储总成本比较}
 
-参考文献格式应符合国标 GB/T 7714 的要求，模板使用 BibLaTeX 配合 \textbf{biblatex-gbt7714-2015} 样式包，
-\footnote{\url{https://www.ctan.org/pkg/biblatex-gb7714-2015}}控制参考文献的输出样式，
+通过前面四个模型优化结果可知，连续多周生产统筹规划模型相较于不允许缺货的WPCR生产和存储模型增加组装迟滞，
+由图表可以看出其费用大大升高，对研究组装分配计划具有重要现实意义。
+考虑检修的生产和存储模型和WPCR不确定生产和存储模型在连续多周生产统筹规划模型的基础上展开，
+分别得出增设检修日期和需求未知条件下的最小费用，经对比分析，可对复杂生产中组装计划的调度具有指导意义。
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{ch6-1.png}
+    \caption{各问题优化结果比较}
+    \label{f.ch6-1}
+\end{figure}
 
-\section{顺序编码}
+\section{不同情形的WPCR生产和存储求解的灵敏度分析}
 
-根据学校要求，参考文献标注用中括号上标形式进行标注。使用方式与效果如下表所展示
+经过灵敏度分析验证，通过遗传算法的迭代次数，以及种群数、变异率、交叉率以求得最短运行时间下的最优结果，
+得出模型运算灵敏度分析，模型在大于150次迭代运算的情况下运行结果基本一致，在策略迭代中采取大种群，
+在费用估计中可用最优变异交叉率来节省运算时间来求得全局最优解和动态稳定解。
 
-\begin{tabular}{l@{\quad$\Rightarrow$\quad}l}
-    \verb|\cite{knuth1984texbook}|               & \cite{knuth1984texbook}               \\
-    \verb|\citet{knuth1984texbook}|              & \citet{knuth1984texbook}              \\
-    \verb|\citep{knuth1984texbook}|              & \citep{knuth1984texbook}              \\
-    % 暂不支持
-    % \verb|\cite[42]{knuth1984texbook}|           & \cite[42]{knuth1984texbook}           \\
-    \verb|\cite{knuth1984texbook,lamport1994latex}| & \cite{knuth1984texbook,lamport1994latex} \\
-\end{tabular}
-
-\section{获取BibTeX格式索引}
-
-获取参考文献的 BibTeX 格式索引有两种方式：
-
-\begin{itemize}
-    \item 通过Google Scholare或者百度学术等学术文献搜索引擎获取，自行编辑 .bib 文件
-    \item 通过Zotero等学术文献整理软件，添加所有的引用文献至库中，导出对应的 .bib 文件
-\end{itemize}
-
-编译带参考文献的文章时，我们需要两次编译过程。我们提供了对应的自动化脚本，以及配合vscode latex插件的任务流程，
-帮助模板使用者进行编译。
-
-\section{参考文献插入示例}
-
-LaTeX \cite{lamport1994latex} 插入参考文献最方便的方式是使用bibliography 
-\cite{knuth1984texbook} ，
-大多数出版商的论文页面 \cite{lamport1994latex,knuth1984texbook} 
-都会有导出bib格式参考文献的链接，
-把每个文献的bib放入``content\verb|\|ref.bib''，然后用bibkey即可插入参考文献。
-
-
-
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{0.5\linewidth}
+        \captionsetup{justification=centering}
+        \begin{minipage}[b]{1\linewidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{ch6-2-1.png}
+            \caption{}
+        \end{minipage}
+    \end{subfigure}
+    \hspace{-5em}
+    \begin{subfigure}[t]{0.5\linewidth}
+        \captionsetup{justification=centering}
+        \begin{minipage}[b]{1\linewidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{ch6-2-2.png}
+            \caption{}
+        \end{minipage}
+    \end{subfigure}\\
+    \begin{subfigure}[t]{0.5\linewidth}
+        \captionsetup{justification=centering}
+        \begin{minipage}[b]{1\linewidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{ch6-2-3.png}
+            \caption{}
+        \end{minipage}
+    \end{subfigure}
+    \hspace{-5em}
+    \begin{subfigure}[t]{0.5\linewidth}
+        \captionsetup{justification=centering}
+        \begin{minipage}[b]{1\linewidth}
+            \centering
+            \includegraphics[width=0.8\linewidth]{ch6-2-3.png}
+            \caption{}
+        \end{minipage}
+    \end{subfigure}
+    \caption{不同迭代次数对比}
+    \label{f.ch6-2}
+\end{figure}

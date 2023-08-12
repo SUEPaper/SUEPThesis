@@ -1,5 +1,5 @@
 %%
-% The BIThesis Template for Bachelor Graduation Thesis
+% The SUEPThesis Template for Bachelor Graduation Thesis
 %
 % 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
 %
@@ -20,20 +20,71 @@
 
 % 中英文摘要章节
 \begin{abstract}
-  % 中文摘要正文从这里开始
-  本文……。
+
+  本文研究的是基于生产与存储优化问题的WPCR的组装计划问题。
+
+  首先，在无存货无结余的情况安排组装生产，且无需组装等待，
+  将每次生产准备费用和单件库存费用及每天WPCR需求和关键设备工时限制引入约束条件，
+  采用0-1变量规划分段函数，以层次分析法进行权重判断，
+  将多约束的多任务动态规划问题简化为在不同权重下的最优求解问题，
+  并将中间结果输出显示，最终得到最小费用为6260.9元。
+
+  其次，加入了需要生产等待的前提条件，重新规划时间序列，
+  首先在不允许缺货情形WPCR生产和存储模型求解结果的基础上同样进行0-1规划和分段函数的设定，
+  然后采用顺序递推的方法进行循环判断，为防止陷入局部最优解的情况，
+  对设置不同初值的情况进行对比分析，最终得到全局最优解，经过多次求解得最小费用为207658元。
+
+  然后，增加检修时间节点，同时生产周期大幅延长，故而在模型上增设衰减系数以及检修约定的0-1规划，
+  对连续多周生产统筹规划的WPCR生产和存储模型进行补充，而后依据启发式算法中的遗传算法进行迭代优化，
+  通过修改迭代次数以及种群适应性调节，随机设置初始时间节点，通过多次解算对比得出全局最优解，
+  选取第24天、第72天、第99天、第120天、第153天、第171天和第202天，最小费用为6308701元。
+
+  最后，将连续30周的WPCR需求数据作为历史数据在需求未知的情况下进行需求和生产分配，
+  选取带有反馈调节过程的策略迭代算法进行模型的自适应动态规划的训练，同时使用遗传算法进行训练加强，
+  通过修改种群变异率、种群规模参数并多次求解对比，
+  在连续多周生产统筹规划的WPCR生产和存储模型的基础上得出全局最优解，其最小费用为194879元。
   
-  \textcolor{blue}{摘要正文选用模板中的样式所定义的“正文”，每段落首行缩进 2 个字符；或者手动设置成每段落首行缩进 2 个汉字，字体：宋体，字号：小四，行距：1.5倍，间距：段前、段后均为 0 行。阅后删除此段。}
+\end{abstract}
   
-  \textcolor{blue}{摘要是一篇具有独立性和完整性的短文，应概括而扼要地反映出本论文的主要内容。包括研究目的、研究方法、研究结果和结论等，特别要突出研究结果和结论。中文摘要力求语言精炼准确，本科生毕业设计（论文）摘要建议 300-500 字。摘要中不可出现参考文献、图、表、化学结构式、非公知公用的符号和术语。英文摘要与中文摘要的内容应一致。阅后删除此段。}
-  
-  \end{abstract}
-  
-  % 英文摘要章节
-  \begin{abstractEn}
-  % 英文摘要正文从这里开始
-  In order to study……
-  
-  \textcolor{blue}{Abstract 正文设置成每段落首行缩进 2 字符，字体：Times New Roman，字号：小四，行距：固定值 25 磅，间距：段前、段后均为 0 行。阅后删除此段。}
-  \end{abstractEn}
+% 英文摘要章节
+\begin{abstractEn}
+
+  In this paper, the assembly planning problem of WPCR based on production and storage optimization is studied.
+
+  Firstly, the assembly and production are arranged in the case of no inventory and no balance,
+  and there is no need to wait for assembly, the data of each production preparation cost, 
+  one-piece inventory cost, 
+  daily WPCR requirement and key equipment man-hour limit are introduced into the constraint conditions, 
+  the 0-1 variable programming segmentation function is adopted, 
+  and the weight judgment is carried out by the analytic hierarchy method, 
+  and the multi-task dynamic programming problem with multiple constraints is simplified to the optimal 
+  solution problem under different weights, and the intermediate result output is displayed, 
+  and the final minimum cost is 6260.9 yuan.
+
+  Secondly, the precondition of needing production waiting is added, the time series is replanned,
+  first 0-1 planning and segmentation function setting are also carried out on the basis of WPCR 
+  production and storage model solution results that are not allowed to be out of stock, 
+  and then the sequential recursion method is used for circular judgment, in order to prevent falling 
+  into the situation of local optimal solution, the situation of setting different initial values is 
+  compared and analyzed, and finally the global optimal solution is obtained, and the minimum cost is 
+  207658 yuan after multiple solutions.
+
+  Then, the maintenance time node is increased, and the production cycle is greatly extended, 
+  so the attenuation coefficient and the 0-1 planning of the maintenance agreement are added to the 
+  model to supplement the WPCR production and storage model of continuous multi-week production 
+  overall planning, and then iterative optimization is carried out according to the genetic algorithm 
+  in the heuristic algorithm, the initial time node is randomly set by modifying the number of iterations
+  and population adaptability adjustment, and the global optimal solution is obtained by multiple solution 
+  comparisons, and the 24th day, day 72, 99th day, day 120, day 24, day 72, day 99, day 120, On days 153,
+  171 and 202, the minimum fee is 6308701 yuan.
+
+  Finally, WPCR demand data for 30 consecutive weeks is used as historical data for demand and production
+  allocation under the condition of unknown demand, and the strategy iteration algorithm with feedback
+  adjustment process is selected to train the adaptive dynamic programming of the model, and at the same 
+  time the genetic algorithm is used for training and strengthening, and the global optimal solution is 
+  obtained on the basis of the WPCR production and storage model of continuous multi-week production overall
+  planning by modifying the population variation rate and population size parameters and solving and 
+  comparing them for multiple times, and the minimum cost is 194879 yuan.
+
+\end{abstractEn}
   

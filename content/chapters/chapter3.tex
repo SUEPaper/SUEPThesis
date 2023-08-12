@@ -1,5 +1,5 @@
 %%
-% The BIThesis Template for Bachelor Graduation Thesis
+% The SUEPThesis Template for Bachelor Graduation Thesis
 %
 % 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
 %
@@ -18,25 +18,230 @@
 % The Current Maintainer of this work is Haiwen Zhang.
 %%
 
-\chapter{表格插入示例}
+\chapter{连续多周生产统筹规划的WPCR生产和存储模型}
 
-\textcolor{blue}{\zhlipsum 阅后删除蓝色文字。}
+\section{连续多周生产统筹规划模型的建立}
 
-\begin{table}[htb]
-  \linespread{1.5}
-  \centering
-  \caption{统计表}
-  \label{T.example}
-  \begin{tabular}{*{5}{>{\centering\arraybackslash}p{2cm}}} \toprule
-    项目    & 产量    & 销量    & 产值   & 比重    \\ \hline
-    手机    & 1000  & 10000 & 500  & 50\%  \\
-    计算机   & 5500  & 5000  & 220  & 22\%  \\
-    笔记本电脑 & 1100  & 1000  & 280  & 28\%  \\
-    合计    & 17600 & 16000 & 1000 & 100\% \\ \bottomrule
+令$V_{i-1}$为状态变量，表示第$i$天开始时的库存量；$x_i$为决策变量，表示第$i$天的生产量。
+状态转移方程为
+\begin{equation*}
+    v_i=v_{i-1}+x_i-d_i \qquad i=1,2,...,n
+\end{equation*}
+
+最优值函数$f_i(v_i)$表示从第一天初始库存量为$0$到第$i$天末库存量为$v_i$时的最小总费用，
+因而可写出顺序递推关系式\cite{韩中庚2007实用运筹学模型}：
+\begin{equation}
+    f_i(v_i)=\mathop{\min}_{0\leq x_i \leq \sigma_i}[C_i(x_i)+h_i(v_i)+f_{i-1}(V_{i-1})] \qquad i=1,2,...,n
+\end{equation}
+
+其中，
+\begin{equation}
+    \sigma_i=\min(v_i+d_i,m)
+\end{equation}
+
+不允许缺货的WPCR生产和存储模型在无存货无结余的情况下进行一周（7天）的机器人的组装计划，
+求解总成本最小。
+
+然而，事实上，组件A、B、C需要提前一天生产入库才能组装WPCR，
+A1、A2、A3、B1、B2、C1、C2、C3也需要提前一天生产入库才能组装A、B、C。
+在连续多周生产情况下，需要统筹规划。
+由不允许缺货的WPCR生产和存储模型的求解结果列出库存量和生产准备成本如下：
+\begin{equation}
+    v_k=v_{k-1}+x_k-d_k
+\end{equation}
+\begin{equation}
+    C_k(x_k)=\begin{cases}
+        0, & x_k=0 \\
+        K+c_j \cdot x_k, & x_k=1,2,...,n \\
+        \infty, & x_k > m
+    \end{cases}
+\end{equation}
+
+$d_k$表示第$k$阶段对组件的需求量，$v_k$表示第$k$阶段结束时组件库存量，$m$表示每个阶段最多能生产该组件的上限数。
+\begin{equation}
+    \min g = \sum_{n}^{k=1}[C_k(x_k)+h_k(v_k)]
+\end{equation}
+\begin{equation}
+    \begin{cases}
+        v_0=0,v_n=0 \\
+        v_k=\sum_{k}^{i}(x_i - d_i) \ge 0 & k=2,3,...,n-1 \\
+        0 \leq x_k \leq m & k=1,2,...,n \\
+        x_k \text{为整数} & k=1,2,...,n
+    \end{cases}
+\end{equation}
+
+$h_k(v_k)$表示第$k$阶段结束时有库存量$v_k$所需的存储费用。
+\begin{equation}
+    y_k=\begin{cases}
+        1, & x_k > 0, \text{表示生产}x_k，\text{生产准备费不为}0 \\
+        0, & x_k = 0, \text{表示不生产}x_k，\text{生产准备用费为}0 
+    \end{cases}
+\end{equation}
+\begin{equation}
+    C=\sum_{n}^{k=1}[C_k(x_k)+h_k{v_k}]=\sum_{k=1}^{n}[K \cdot y_k + c_j \cdot x_k]
+\end{equation}
+
+对于WPCR而言，
+\begin{equation}
+    v_k=v_{k-1} + x_k - d_k    
+\end{equation}
+
+对于A，B，C组件而言，根据A，B，C生产与组装关系，有
+\begin{equation}
+    v_{k+2}^A=v_{k+1}^A + x_{k+2}^A - 3x_{k+2}
+\end{equation}
+\begin{equation}
+    v_{k+2}^B=v_{k+1}^B + x_{k+2}^B - 4x_{k+2}
+\end{equation}
+\begin{equation}
+    v_{k+2}^C=v_{k+1}^C + x_{k+2}^C - 5x_{k+2}
+\end{equation}
+
+同理，对于A1、A2、A3、B1、B2、C 1、C2、C3可以类似研究，设生产一件WPCR所需要的
+A1、A2、A3、B1、B2、C1、C2、C3分别为$u_{A1}$，$u_{A2}$，$u_{A3}$，$u_{B1}$，
+$u_{B2}$，$u_{C1}$，$u_{C2}$，$u_{C3}$，则
+\begin{equation}
+    v_{k+1}^{Ai}=v_k^{Ai} + x_{k+1}^{Ai} - u_{Ai}3x_k,\quad i=1,2,3
+\end{equation}
+\begin{equation}
+    v_{k+1}^{Bi}=v_k^{Bi} + x_{k+1}^{Bi} - u_{Bi}3x_k,\quad i=1,2
+\end{equation}
+\begin{equation}
+    v_{k+1}^{Ci}=v_k^{Ci} + x_{k+1}^{Ci} - u_{Ci}3x_k,\quad i=1,2,3
+\end{equation}
+
+$s.t.$
+\begin{equation}
+    3x_{k+2}^A+5x_{k+2}^B+5x_{k+2}^C \leq T_k
+\end{equation}
+\begin{equation}
+    y_k=\begin{cases}
+        1, & x_k > 0, \text{表示生产}x_k，\text{生产准备费不为}0 \\
+        0, & x_k = 0, \text{表示不生产}x_k，\text{生产准备用费为}0 
+    \end{cases}
+\end{equation}
+\begin{equation}
+    x_k \leq My_k
+\end{equation}
+
+则各费用为，
+\begin{equation}
+    C_{\uppercase\expandafter{\romannumeral1}}^{'}=
+        \sum_{n}^{k=1}[C_k(x_k)+h_k{v_k}]=
+        \sum_{n}^{k=1}(240y_k+5v_k)
+\end{equation}
+\begin{equation}
+    C_{\uppercase\expandafter{\romannumeral2}}^{'}=
+        \sum_{n}^{k=1}(120y_{k+2}^A+2v_{k+2}^A+160y_{k+2}^B+1.5v_{k+2}^B+180y_{k+2}^C+1.7v_{k+2}^C)
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+        C_{\uppercase\expandafter{\romannumeral3}}^{'} &= 
+            \sum_{k=1}^{n}(40y_{k+1}^{A1}+5v_{k+1}^{A1}+60y_{k+1}^{A2}+3v_{k+1}^{A2}+50y_{k+1}^{A3}+6v_{k+1}^{A3}) \\
+            &+ \sum_{k=1}^{n}(80y_{k+1}^{B1}+4v_{k+1}^{B1}+100y_{k+1}^{B2}+5v_{k+1}^{B2}) \\
+            &+ \sum_{k=1}^{n}(60y_{k+1}^{C1}+3v_{k+1}^{C1}+40y_{k+1}^{C2}+2v_{k+1}^{C2}+70y_{k+1}^{C3}+3v_{k+1}^{C3})
+    \end{aligned}
+\end{equation}
+
+
+
+汇总三式得目标函数为
+\begin{equation}
+    \min\sum_{k=1}^{n}(
+            C_{\uppercase\expandafter{\romannumeral1}}^{'}+
+            C_{\uppercase\expandafter{\romannumeral2}}^{'}+
+            C_{\uppercase\expandafter{\romannumeral3}}^{'}) 
+\end{equation}
+
+\section{连续多周生产统筹规划模型的求解}
+
+基于以下表\ref{T.ch3-1}的连续30周的WPCR需求的数据，
+带入到连续多周生产统筹规划模型中并求解，得出表\ref{T.ch3-2}的求解结果表格。
+
+\begin{longtable}[c]{c*{7}{r}}
+    \caption{考虑检修的生产和存储模型求解结果展示}
+    \label{T.ch3-1} \\
+    \toprule
+    \textbf{天} & \textbf{周一} & \textbf{周二} & \textbf{周三} & 
+    \textbf{周四} & \textbf{周五} & \textbf{周六} & \textbf{周日} \\
+    \midrule
+    \endfirsthead
+    \multicolumn{8}{l}{\textbf{续表~\thetable}} \\
+
+    \toprule
+    \textbf{天} & \textbf{周一} & \textbf{周二} & \textbf{周三} & 
+    \textbf{周四} & \textbf{周五} & \textbf{周六} & \textbf{周日} \\
+    \midrule
+    \endhead
+    \hline
+    \multicolumn{8}{r}{续下页}
+    \endfoot
+    \endlastfoot
+    \textbf{第1周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第2周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第3周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第4周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第5周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第6周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第7周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第8周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第9周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第10周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第11周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第12周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第13周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第14周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第15周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第16周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第17周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第18周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第19周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第20周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第21周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第22周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第23周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第24周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第25周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第26周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第27周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第28周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \textbf{第29周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \textbf{第30周}  & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\ 
+    \bottomrule
+\end{longtable}
+
+\begin{table}[!hpt]
+    \caption{连续多周生产统筹规划的WPCR生产和存储模型求解的结果}
+    \label{T.ch3-2}
+    \centering
+    \renewcommand\arraystretch{1.5} 
+    \begin{tabular}{@{}ccccccc@{}} 
+    \toprule
+    \textbf{日期} & \multicolumn{1}{c}{\textbf{WPCR}} & \multicolumn{1}{c}{\textbf{A组装}} 
+    & \multicolumn{1}{c}{\textbf{B组装}} & \multicolumn{1}{c}{\textbf{C组装}}
+    & \multicolumn{1}{c}{\textbf{生产准备}} & \multicolumn{1}{c}{\textbf{库存}} \\
+                & \multicolumn{1}{c}{\textbf{组装数量}} & \multicolumn{1}{c}{\textbf{数量}} 
+    & \multicolumn{1}{c}{\textbf{数量}} & \multicolumn{1}{c}{\textbf{数量}}
+    & \multicolumn{1}{c}{\textbf{费用}} & \multicolumn{1}{c}{\textbf{费用}} \\
+    \midrule
+    \textbf{周一} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{周二} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{周三} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{周四} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{周五} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{周六} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{周日} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\
+    \textbf{总和} & 237 & 316 & 395 & 41 & 700 & 1619.5 \\ 
+    \bottomrule
     \end{tabular}
 \end{table}
 
-\textbf{表格如表\ref{T.example}所示，latex表格技巧很多，这里不再详细介绍。}
 
 
-
+从表\ref{T.ch3-2}可以看出，连续多周生产统筹规划模型中周一、周二、周五、周六、周日的生产计划很全面，
+和不允许缺货的WPCR生产和存储模型一样，如果生产计划很全面，WPCR、A、B、C都需要组装，
+无论其中需要组装的数量是多少，生产准备费用都不变，都为1200元。周三只进行WPCR组装的生产计划，
+而周四进行组件A、B、C的组装生产计划。总的生产和存储成本为207658元，
+连续多周生产统筹规划模型平均单周所用的成本为6921.93元，
+要高于不允许缺货的WPCR生产和存储模型每周的生产成本。

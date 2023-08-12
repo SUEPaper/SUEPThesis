@@ -1,5 +1,5 @@
 %%
-% The BIThesis Template for Bachelor Graduation Thesis
+% The SUEPThesis Template for Bachelor Graduation Thesis
 %
 % 上海电力大学毕业设计（论文）中英文摘要 —— 使用 XeLaTeX 编译
 %
@@ -18,105 +18,51 @@
 % The Current Maintainer of this work is Haiwen Zhang.
 %%
 
-\chapter{一级标题}
+\chapter{引言}
 
-这是上海电力大学本科学位论文\LaTeX{}模板，下面的文字主要作用为对重构后的模板样式设置进行测试。
-测试样例基本覆盖模板设定，包括多级标题的基本样式，段落与缩进距离。
+随着人们对自来水质量的要求逐渐提高，自来水管道的清理工作也逐渐被重视。
+如何高效率、高质量地完成管道清洁工作，以及用什么工具辅助或代替清洁人员完成工作，
+成为亟待解决的一大问题，由此，自来水管道清理机器人（Water pipe cleaning robot，简称WPCR）应运而生。
 
-\section{二级标题}
+自来水管道清理机器人由三大部分组成。首先要有容器艇以确保机器人可在水下移动，能在“自来水管道”环境中运作，
+这一部分由控制器、划桨和感知器组成；其次，要有机械臂来完成“清理”工作，这一部分由力臂组件和遥感器组成；
+最后，要有动力系统提供电能，这是组成“机器人”的核心，由蓄电池、微型发电机和发电螺旋组成。
+为确保机器人拥有正常的视觉及感知能力，能及时探测周围环境变化、精确得到力的反馈以及实时接收遥控信号，
+每一个构件都不可或缺，且数量要相匹配，因此，具体、有序地生产组件非常重要。
 
-\subsection{三级标题}
+如何通过建立生产存储模型来指导生产以获得最大利润，许多学者都进行了探讨。
+经典生产存储成本模型\cite{王周宏2011运筹学基础} 是在确定需求量的基础上运用线性规划模型来对生产和成品库存进行研究，以获得最大利润。
+在此基础上，梁志杰等\cite{梁志杰2004联合生产存储问题的模拟退火算法}针对需求已知的情况下的联合控制系统进行分析，建立了确定系统联合生产补充周期和各产品的生产补充周期规划模型。
+Pinto等\cite{pinto2000planning}针对多个处理单元的问题，根据炼油厂生产实际，提出了一个非线性生产存储成本模型，并取得了良好效果。
+魏代俊\cite{魏代俊2006不允许缺货生产销售存储模型}针对不允许缺货情况下的生产、销售、存储行为进行分析，建立了确定最优生产周期的生产存储模型。
+黄红丽\cite{黄红丽2009订单型企业基于约束理论的生产作业计划优化研究}在分析了订货型生产方式特征与约束理论的基础上，提出采用关联矩阵来对生产作业计划进行优化。
+  İrfan等\cite{ertuugrul2009production}为了解决葡萄酒生产的生产计划问题，建立了一个辅助企业快速地确定生产产品与数量的混合整数规划模型，以获得最优生产存储成本。
+Cheng等\cite{wang2013integrated}针对ERP系统在实施过程中对于生产计划下达和控制上的不足，提出了在集成计划与控制的基础上的多目标生产计划优化模型，
+以优化企业的生产管理与控制。王军等\cite{王军2017基于卷烟生产计划优化}为解决卷烟生产过程中库存水平与总成本过高的问题，设计了基于递阶生产计划的分层优化框架，
+通过数 学建模与动态规划求解，验证了方案的合理性。 
 
-一级标题根据学校提供的Word模板要求，小三号黑体居中，章节号空一个汉字，1.5 倍行距，段前0行，段后0.5行
-并且每一章节单独起一页，章节号格式应使用中文汉字。
+对于具有季节性、周期性特征产品的研究，陈宪章等\cite{陈宪章2004冲击型负荷下的生产存储模型研究}研究发现，面对冲击性的需求，想要取得最佳效益，
+构建生产存储策略时应该同时考虑存储费用与启动费用。Panda 等\cite{panda2008optimal}讨论了易逝率因子是常数的单产品库存管理情况，并建立了一个时间段内的最优补货策略模型。
+陈菊红等\cite{陈菊红2010受资源限制且带有缺货惩罚的季节性产品供应链协调}针对季节性产品供应链中，制造商面对的边际成本与缺货惩罚问题，建立了基于退货策略的协调模型。
+Gurler等\cite{gurler2008analysis}假设易逝品服从一般分布的随机库存寿命，在忽略补货时间的情况下，得出平均成本率函数是拟凸的（s,S）策略函数。
+Shen 等\cite{shen2011modelling}认为对易腐农产品进行库存补充，需要两级供应链上的供应商和零售商共同承担预测与库存任务。
+Chen等\cite{chen2007net}建立了一个时间段内需求符合生命周期特征的变质性产品库存模型，并研究了允许缺货情形下的类似库存模型。
+李力\cite{李力2015多种易逝品的库存控制模型及动态定价}研究了不允许缺货以及存在公共产能约束情况下的库存控制模型，并考虑了企业的最优生产速度以及产品的动态定价问题。
+周凌等\cite{周凌2014基于柔性产能的季节性产品生产决策模型}在考虑季节性产品周期性特征的基础上，提出了基于需求变动的制造销售系统多元非线性生产模型。
+孙玉玲等\cite{孙玉玲2009考虑能力约束的易逝品生产策略}以收益最大化为目标，研究了在存在资金和产能约束的情况下的生产策略模型。
 
-二级标题为黑体四号字，居左，1.5倍行距，段前0.5行，段后0行。标题号后空一个汉字。
+结合存放问题，研究如何在保证供货量的情况下，降低自来水管道清理机器人的生产及存储成本，具有重要的理论价值。
 
-三级标题黑体小四号字，1.5倍行距，段前0.5行，段后0行，缩进两个汉字，标题号后空一个汉字。
+本课题主要解决如下几个问题：
+\begin{enumerate}
+  \item 工厂第一天的初始库存为0，第七天结束时库存也要求清零，采购的组件和组装出来的组件可在当天进入下一步工序，
+  请求解每周7天最优的生产计划和最低费用。
+  \item 工厂第一天的初始库存已在上周准备好，第七天结束时要留有下周一的库存，
+  采购的组件和组装出来的组件在第二天才能进入下一步工序，请求解每周7天最优的生产计划和最低费用。
+  \item 在第二个模型求解的基础上，要在210天里安排7次检修，任意两次检修之间至少间隔6天，检修当日停工，需提前完成当日订单，
+  检修后的第一天A、B、C生产总工时限制放宽10\%，随后逐日减少放宽2\%的比例，直至为0，请求解最佳检修时间和最低费用总和。
+  \item 在第二个模型求解的基础上，根据历史订单求解每周7天最优的需求数量、生产计划以及最低费用，要求日订单以95\%以上的概率保证正常交付，
+  且周订单以85\%以上的概率保证正常交付。
+\end{enumerate}
 
-所有标题样式由 \textbf{suepthesis.cls} 模板文件 \textbf{ctexset} 进行设置。
-
-\section{字体}
-
-正文字体默认使用小四号宋体，英文为小四号 Times New Romen，各段行首缩进两个汉字
-
-
-
-英文字体展示如下：
-
-TeX (/tɛx, tɛk/, see below), stylized within the system as TEX, is a typesetting system (or a "formatting system") which was designed and mostly written by Donald Knuth\cite{knuth1984texbook} and released in 1978. TeX is a popular means of typesetting complex mathematical formulae; it has been noted as one of the most sophisticated digital typographical systems.
-
-
-\subsection{调节字号}
-
-可以使用 命令来调节字号。
-
-\begin{tabular}{ll}
-  \verb|\chuhao | & \chuhao  初号字 English \\
-  \verb|\xiaochu| & \xiaochu 小初号 English \\
-  \verb|\yihao  | & \yihao  一号字 English \\
-  \verb|\xiaoyi | & \xiaoyi 小一号 English \\
-  \verb|\erhao  | & \erhao  二号字 English \\
-  \verb|\xiaoer | & \xiaoer 小二号 English \\
-  \verb|\sanhao | & \sanhao  三号字 English \\
-  \verb|\xiaosan| & \xiaosan 小三号 English \\
-  \verb|\sihao  | & \sihao  四号字 English \\
-  \verb|\xiaosi | & \xiaosi 小四号 English \\
-  \verb|\wuhao  | & \wuhao  五号字 English \\
-  \verb|\xiaowu | & \xiaowu 小五号 English \\
-  \verb|\liuhao  | & \liuhao  六号字 English \\
-  \verb|\xiaoliu | & \xiaoliu 小六号 English \\
-  \verb|\qihao  | & \qihao  七号字 English \\
-  \verb|\bahao | & \bahao 八号字 English \\
-
-\end{tabular}
-
-\subsection{调节字体}
-
-需要说明的是由于Linux或者macOS系统上不包含学校写作指导要求的字体，因此我们将Windows的字体放在了fonts目录下，
-由于这些字体具有版权，所以我们仍\textbf{强烈建议}您在Windows操作系统上编译最终版论文。
-
-中文可选字体以及选用指令如下：
-
-\begin{tabular}{l l}
-  \verb|\songti| & {\songti 宋体} \\
-  \verb|\heiti| & {\heiti 黑体}
-\end{tabular}
-
-我们在模板中通过调整\verb|\newCJKfontfamily|的AutoFakeBold参数来简单实现字体加粗，
-在正文中你可以使用习惯的\verb|\textbf|指令来加粗对应中文。
-如果你需要调整字体，也可以组合使用字体选择并加粗，比如\verb|\heiti\bfseries|
-
-\textbf{宋体加粗测试}，宋体不加粗测试。
-
-{\heiti\bfseries 黑体加粗测试。}{\heiti 黑体不加粗测试。}
-
-目前模板并没有按照一些其他模板写法中常见的，重定向加粗和倾斜效果到upright。
-
-
-\section{模板主要结构}
-
-本项目模板的主要结构, 如下表所示:
-% TODO 进一步完善
-
-\begin{table}[ht]
-  \centering
-  \begin{tabular}{r|l|l}
-    \hline\hline
-    \multicolumn{2}{l|}{main.tex } & 主文档，可以理解为文章入口。  \\ \hline
-                                            & abstact.tex    & 中/英文摘要内容    \\ \cline{2-3}
-                                            & acknowledgements.tex       & 致谢 \\ \cline{2-3}
-                                            & appendix.tex       & 附录 \\ \cline{2-3}
-                                            & conclusion.tex       & 结论 \\ \cline{2-3}
-                                            & ref.bib       & 参考文献库 \\ \cline{2-3}
-                                            & reference.tex       & 参考文献 \\ \cline{2-3}
-    \raisebox{1em}{content 目录 }            & chapters 目录   & 章节内容           \\ \hline
-    \multicolumn{2}{l|}{images 目录}         & 用于存放图片文件                                  \\ \hline
-    \multicolumn{2}{l|}{suepthesis.cls }    & 模板入口                                          \\ \hline\hline
-  \end{tabular}
-\end{table}
-
-我们不建议模板使用者更改原有模板的结构，
-但如果您确实需要，请务必先充分阅读本模板的使用说明并了解相应的\LaTeX{}模板设计知识。
-
-\textcolor{blue}{\zhlipsum 阅后删除蓝色文字。}
+结合存放问题，研究如何在保证供货量的情况下，降低自来水管道清理机器人的生产及存储成本，具有重要的理论价值。
