@@ -873,7 +873,7 @@
 
         \vspace{15mm}
 
-        \includegraphics[width=4.82cm, height=4.82cm]{logo} \par
+        \includegraphics[width=4.82cm, height=4.82cm]{logo_red} \par
 
         \vspace{15mm}
 
