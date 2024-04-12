@@ -744,7 +744,7 @@
   \begin{titlepage}
     \newgeometry{%
       top=3.57cm,bottom=2.54cm,
-      left=3.17cm,right=3.17cm
+      left=3.1cm,right=3.1cm
     }
     % 不计算页码。
     \pagenumbering{gobble}
@@ -773,7 +773,7 @@
   \begin{titlepage}
     \newgeometry{%
     top=3.57cm,bottom=2.54cm,
-    left=3.17cm,right=3.17cm
+    left=3.1cm,right=3.1cm
     }
     % 使用授权声明部分。
     \begin{center}
@@ -913,7 +913,8 @@
 
         \par
 
-        \vspace*{\fill}
+        % \vspace*{\fill}
+        \vspace{12mm}
 
         \centering
 
@@ -971,12 +972,12 @@
 
   \setstretch{1.74}
 
-  \begin{center}
-    \vspace*{-17bp}
-    \heiti\zihao{-2}\textbf{
-      \l__suepthesis_value_title_tl \l__suepthesis_value_subtitle_tl
-    }
-  \end{center}
+  % \begin{center}
+  %   \vspace*{-17bp}
+  %   \heiti\zihao{-2}\textbf{
+  %     \l__suepthesis_value_title_tl \l__suepthesis_value_subtitle_tl
+  %   }
+  % \end{center}
 
   \vspace*{2mm}
 
@@ -1075,8 +1076,8 @@
   \setlength{\bibnamesep}{0ex}
   \setlength{\bibinitsep}{0ex}
 
-  % 「本科生」设置单倍行距
-  \renewcommand{\baselinestretch}{1.2}
+  % 「本科生」设置1.25倍行距
+  \renewcommand{\baselinestretch}{1.25}
 
   % 设置参考文献顺序标签 `[1]` 与文献内容 `作者. 文献标题...` 的间距
   \setlength{\biblabelsep}{1.7mm}
