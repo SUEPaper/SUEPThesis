@@ -478,6 +478,7 @@
   }
 }
 
+% 第三级以下单独占行的标题顺序采用 A、B、C和 a、b、c两层，标题均空两格书写序数，后空一格写标题。
 \ctexset{
   secnumdepth = 3,
   subsubsection={
@@ -486,6 +487,8 @@
       \Alph{subsubsection}
     },
     format={\xiaosi \songti \raggedright},
+    aftername = \quad,
+    indent = 2\ccwd,
     nameformat = {},
     titleformat = {},
     fixskip=true,
@@ -1071,34 +1074,15 @@
 {
   % 设置参考文献字号为 5 号
   \renewcommand*{\bibfont}{\zihao{5}}
-  % 设置参考文献各个项目之间的垂直距离为 0
-  \setlength{\bibitemsep}{0ex}
-  \setlength{\bibnamesep}{0ex}
-  \setlength{\bibinitsep}{0ex}
-
+  % 设置参考文献各个项目之间的垂直距离为 1mm
+  \setlength{\bibitemsep}{1mm}
+  \setlength{\bibitemindent}{0em} % bibitemindent表示一条文献中第一行相对后面各行的缩进
+  \setlength{\bibhang}{0pt} % 著者-出版年制中 bibhang 表示的各行起始位置到页边的距离 
   % 「本科生」设置1.25倍行距
   \renewcommand{\baselinestretch}{1.25}
 
   % 设置参考文献顺序标签 `[1]` 与文献内容 `作者. 文献标题...` 的间距
-  \setlength{\biblabelsep}{1.7mm}
-
-  \bool_if:NF \l__suepthesis_style_bibliography_indent_bool {
-    % 设置参考文献后文缩进为 0（与 Word 模板保持一致）
-    % See: https://github.com/hushidong/biblatex-gb7714-2015
-    %      如何修参考文献表的缩进？
-    \cs_set:Npn \itemcmd {
-      \settowidth{\lengthid}{\mkgbnumlabel{\printfield{labelnumber}}}
-      %%这里是所做的调整，以下两句通过调整\lengthid来调整缩进
-      \setlength{\lengthid}{0pt}
-      \addtolength{\lengthid}{-\biblabelsep}
-      \setlength{\lengthlw}{\textwidth}
-      \addtolength{\lengthlw}{-\lengthid}
-      \addvspace{\bibitemsep}%恢复\bibitemsep的作用
-      \hangindent\lengthid
-      \leavevmode\mkgbnumlabel{\printfield{labelnumber}}%
-      \hspace{\biblabelsep}
-    }
-  }
+  \setlength{\biblabelsep}{2.5mm}
 
   % \__suepthesis_if_thesis_english:TF {
   %   \chapter{\c__suepthesis_label_reference_en_tl}
