@@ -428,6 +428,19 @@
   \RenewDocumentCommand \headrulewidth {} {0.6pt}
 }
 
+\fancypagestyle{supethesisabstract}{
+  \fancyhf{} 
+  \fancyhead[C]{
+    \xiaowu
+    \ziju{0.1}
+    \songti{\tl_use:N \l__suepthesis_value_title_tl \l__suepthesis_value_subtitle_tl}
+  }
+
+  % 页眉分割线稍微粗一些
+  \RenewDocumentCommand \headrulewidth {} {0.6pt}
+}
+
+
 % 一级标题格式：第*章  后空一格 黑体　小三号字　居中 1.5倍行距 段前0行 段后0.5行
 \ctexset{chapter={
     % number = {\arabicHeiti{ \arabic{chapter} }},
@@ -437,7 +450,6 @@
     titleformat = {},
     % aftername = \hspace{9bp},
     aftername = \quad,
-    pagestyle = suepthesis,
     beforeskip = 0pt,
     afterskip = 22.5pt,
     fixskip = true,
@@ -517,21 +529,21 @@
 {\hspace{.5em}\titlerule*{.}\contentspage}
 
 \RenewDocumentCommand \frontmatter {} {
-  \int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {3}
-  {
-    % 本科全英文专业论文，页码使用小罗马数字。
-    \pagenumbering{roman}
-  } {
-    \pagenumbering{Roman}
-  }
+  % \int_compare:nNnTF {\g__suepthesis_thesis_type_int} = {3}
+  % {
+  %   % 本科全英文专业论文，页码使用小罗马数字。
+  %   \pagenumbering{roman}
+  % } {
+  %   \pagenumbering{Roman}
+  % }
   % 这部分的章节标题不进行编号。
   \ctexset{
     chapter = {
       numbering = false,
+      pagestyle = supethesisabstract,
     }
   }
-  \pagestyle{suepthesis}
-  \fancyfoot[C]{\songti\xiaowu -\ \thepage\ -}
+  \pagestyle{supethesisabstract}
 }
 
 \RenewDocumentCommand \mainmatter {} {
@@ -539,6 +551,7 @@
   \ctexset{
     chapter = {
       numbering = true,
+      pagestyle = suepthesis,
     }
   }
   % 页码使用阿拉伯数字。
@@ -989,19 +1002,15 @@
   }
 
   % \__suepthesis_if_bachelor_thesis:T {
-    \ctexset{
-      chapter/titleformat = {\textmd}
-    }
+    % \ctexset{
+    %   chapter/titleformat = {\textmd}
+    % }
   % }
 
   {
     \__suepthesis_same_page:
-    \bool_if:NTF \l__suepthesis_add_abstract_to_toc_bool {
-      \chapter{\c__suepthesis_label_abstract_tl}
-    } {
-      \chapter*{\c__suepthesis_label_abstract_tl}
-      \currentpdfbookmark{\c__suepthesis_label_abstract_tl}{ch:abstract}
-    }
+    \chapter*{\c__suepthesis_label_abstract_tl}
+    \currentpdfbookmark{\c__suepthesis_label_abstract_tl}{ch:abstract}
   }
   \vspace*{1mm}
   \par
@@ -1011,8 +1020,8 @@
   \vspace{4ex}
   \noindent
 
-  % 本科生模板中，关键词为黑体加粗
-  \heiti{\textbf{\c__suepthesis_label_keywords_tl} \l__suepthesis_value_keywords_tl}\par
+  % 本科生模板中，关键词为宋体小四
+  \heiti{\textbf{\c__suepthesis_label_keywords_tl} \songti{\l__suepthesis_value_keywords_tl}}\par
   \newpage
 }
 
@@ -1036,18 +1045,16 @@
     chapter/numbering = false,
   }
 
-  \ctexset {
-    chapter/titleformat = {\heiti\xiaosan\centering\textbf}
-  }
+  % \ctexset {
+  %   chapter/titleformat = {\heiti\xiaosan\centering\textbf}
+  % }
 
   {
     \__suepthesis_same_page:
-    \bool_if:nTF {\l__suepthesis_add_abstract_en_to_toc_bool} {
-      \chapter{\c__suepthesis_label_abstract_en_tl}
-    } {
-      \chapter*{\c__suepthesis_label_abstract_en_tl}
-      \currentpdfbookmark{\c__suepthesis_label_abstract_en_tl}{ch:abstract:en}
-    }
+ 
+    \chapter*{\c__suepthesis_label_abstract_en_tl}
+    \currentpdfbookmark{\c__suepthesis_label_abstract_en_tl}{ch:abstract:en}
+
   }
 }
 {
