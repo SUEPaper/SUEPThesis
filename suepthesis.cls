@@ -299,6 +299,9 @@
 \RequirePackage{zhlipsum}
 \RequirePackage{longtable}
 
+\RequirePackage{tocloft}
+\RequirePackage{titlesec}
+
 % 默认情况下, \LaTeX{} 要求每页的文字至少占据 20%,否则该页就只单独放置一个浮动环境,
 % 而这通常不是我们想要的, 我们将这个要求降低到 5%.
 \renewcommand*{\textfraction}{0.05}
@@ -960,19 +963,20 @@
   {
 
     \renewcommand{\baselinestretch}{1.4}
-
-
     \tl_set:Nn \l__suepthesis_toc_title_tl {\c__suepthesis_label_toc_tl}
 
     % 自定义目录样式
     \cs_set:Npn \contentsname {
-      \fontsize{16pt}{\baselineskip}
+      \heiti
+      \xiaosi
+      % \fontsize{16pt}{\baselineskip}
       \l__suepthesis_unnumchapter_style_cs:n
         \l__suepthesis_title_font_cs:n
-          {\l__suepthesis_toc_title_tl}
-      \vspace{-8pt}
+        {\l__suepthesis_toc_title_tl}
+      % \vspace{-8pt}
     }
 
+    % \renewcommand{\contentsname}{}
     % 制作目录
     \tableofcontents
 
@@ -1099,16 +1103,20 @@
 }
 {}
 
+\newcommand{\appendixsection}[1]{
+  \refstepcounter{section}
+  \section*{附录 \arabic{section}： \hspace{0.5em} #1}
+  \addcontentsline{toc}{chapter}{<附录 \arabic{section} \hspace{0.5em} #1>}
+}
+
 \NewDocumentEnvironment {appendices} {}
 {
   % 附录节（section）级别
   \ctexset{
-    section/number = \c__suepthesis_label_appendix_prefix_tl\hspace{1ex}\chinese{section},
-    subsection/number = \chinese{section}. \arabic{subsection},
+    section/number = \arabic{subsection},
+    subsection/number = \arabic{subsection},
   }
   \chapter*{\c__suepthesis_label_appendix_tl}
-  \stepcounter{chapter}
-  \addcontentsline{toc}{chapter}{\c__suepthesis_label_appendix_tl}
 }
 {}
 
