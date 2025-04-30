@@ -1102,15 +1102,23 @@
 \NewDocumentEnvironment {appendices} {}
 {
   % 附录节（section）级别
+
+
+
   \ctexset{
-    section/number = \c__suepthesis_label_appendix_prefix_tl\hspace{1ex}\chinese{section},
+    section/number = \c__suepthesis_label_appendix_prefix_tl\arabic{section}：,
+    section/aftername = ,
     subsection/number = \chinese{section}. \arabic{subsection},
   }
   \chapter*{\c__suepthesis_label_appendix_tl}
   \stepcounter{chapter}
-  \addcontentsline{toc}{chapter}{\c__suepthesis_label_appendix_tl}
+   % 设置目录深度为0，使section不显示在目录中
+   \addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
 }
-{}
+{
+  % 恢复原来的目录深度
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+}
 
 \NewDocumentEnvironment {acknowledgements} {+b}
   {
