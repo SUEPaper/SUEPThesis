@@ -4,7 +4,7 @@ SUEPThesis 是面向上海电力大学本科毕业论文、硕士学位论文和
 
 本项目以仓库提供的学校撰写规范及示范文档为排版依据，支持学术型与专业型研究生论文。开始使用前，建议先编译对应示例，再阅读[使用手册](suepthesis-doc.pdf)并替换为自己的论文内容。手册可通过下文的构建命令生成。
 
-当前规范来源为 [resources/](resources/README.md) 中的四份原始 Word 文档；旧 PDF 的测量结果保留为历史记录。
+正文与声明规范来源为 [resources/](resources/README.md) 中的四份原始 Word 文档。
 
 ## 特性
 

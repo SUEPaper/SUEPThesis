@@ -545,21 +545,21 @@
          \str_if_eq:VnTF \g__suep_degree_type_tl {professional}
            {\__suep_graduate_cover_heading:nnnn {265.87}{26.04}{1}{专业学位
   \__suep_degree_name: 学位论文}
-            \__suep_graduate_cover_english:nnn {304.00}{15}{\text_uppercase:n {
+            \__suep_graduate_cover_english:nnn {302.45}{15}{\text_uppercase:n {
   \__suep_degree_en:
   \c_space_tl Thesis~for~Professional~Degree}}
             \__suep_graduate_cover_logo:n {108.24}
             \__suep_graduate_cover_title:nnnn {370.34}{485.18}{338.5}{0}
             \__suep_graduate_cover_fields:nnnnn {144.84}{515.18}{253.1}{230.75}{14.04}
-            \__suep_graduate_cover_date:n {712.00}}
-           {\__suep_graduate_cover_heading:nnnn {285.96}{36}{1}{\__suep_degree_name:\quad 学
-  \quad 位
-  \quad 论\quad 文}
-            \__suep_graduate_cover_english:nnn {323.62}{21.96}{Dissertation~for~
+            \__suep_graduate_cover_date:n {684.46}}
+           {\__suep_graduate_cover_heading:nnnn {285.96}{36}{1}
+              {\makebox[306bp][s]{\exp_args:Ne \tl_map_inline:nn
+                 {\__suep_degree_name: 学位论文}{##1\hfil}\unskip}}
+            \__suep_graduate_cover_english:nnn {321.29}{21.96}{Dissertation~for~
   \__suep_degree_en:
   's~Degree}
             \__suep_graduate_cover_logo:n {73.68}
-            \__suep_graduate_cover_title:nnnn {419.30}{517.82}{365}{1}
+            \__suep_graduate_cover_title:nnnn {419.30}{517.82}{365}{0}
             \__suep_graduate_cover_fields:nnnnn {124.2}{547.82}{242.8}{233.7}{14.04}
             \__suep_graduate_cover_date:n {751.24}}}
         {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}
@@ -567,7 +567,7 @@
             \__suep_graduate_cover_heading:nnnn {204.026}{24}{0}{上海电力大学}
             \__suep_graduate_cover_heading:nnnn {235.226}{24}{0}{专业学位
   \__suep_degree_name: 学位论文}
-            \__suep_graduate_cover_title:nnnn {360.50}{484.07}{280}{0}
+            \__suep_graduate_cover_title:nnnn {360.50}{484.07}{280}{1}
             \__suep_graduate_cover_fields:nnnnn {137.4}{514.07}{253.65}{223.4}{12}}
            {\__suep_graduate_cover_top:nnn {85.68}{117.878}{12}
             \__suep_graduate_cover_heading:nnnn {224.45}{24}{2}{上海电力大学
@@ -585,7 +585,9 @@
          {2}{\__suep_word_heiti:n {.6864}}}
       \__suep_punct_style:n {plain}\centering}{#4}}
 \cs_new_protected:Npn \__suep_graduate_cover_english:nnn #1#2#3
-  {\__suep_declaration_box:nnnnn {40bp}{#1bp}{\paperwidth-80bp}
+  {\__suep_declaration_box:nnnnn
+     {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{47.38bp}{40bp}}
+     {#1bp}{\paperwidth-80bp}
      {\rmfamily\bfseries\fontsize{#2bp}{28bp}\selectfont\centering}{#3}}
 \cs_new_protected:Npn \__suep_resolve_logo:
   {\tl_clear:N \l__suep_logo_file_tl
@@ -607,13 +609,13 @@
 \dim_new:N \l__suep_cover_title_y_dim
 \cs_new_protected:Npn \__suep_cover_title_content:
   {\__suep_full_title:\par
-   \__suep_if_doctor:T {\rmfamily\bfseries\__suep_info:n {titleEn}\par}}
+   \rmfamily\bfseries\__suep_info:n {titleEn}\par}
 \cs_new_protected:Npn \__suep_graduate_cover_title:nnnn #1#2#3#4
   {\hbox_set:Nn \l__suep_cover_title_box
      {\parbox[t]{447.9bp}{\setstretch{1}\songti\zihao{-4}
         \dim_set:Nn \parindent {0bp}\skip_set:Nn \parskip {0pt}
-        \fontsize{21.96bp}{32.64bp}\selectfont
-        \int_compare:nNnTF {#4}={1}{\__suep_word_heiti:n {.62777}}{\heiti}\centering
+        \fontsize{21.96bp}{\int_compare:nNnTF {#4}={1}{28.56bp}{32.64bp}}\selectfont
+        \heiti\centering
         \__suep_cover_title_content:}}
    \dim_set:Nn \l__suep_cover_title_y_dim
      {\dim_min:nn {#1bp}{#2bp-\box_dp:N \l__suep_cover_title_box}}
@@ -677,7 +679,8 @@
    \__suep_graduate_cover_field:nnnnnnn
      {\fp_compare:nNnTF {#5}={12}
         {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{123.6}{#1}}{#1}}
-     {\fp_eval:n {#2+142.5-\fp_compare:nNnTF {#5}={12}
+     {\fp_eval:n {#2+\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{114}{142.5}
+        -\fp_compare:nNnTF {#5}={12}
         {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{.54}{0}}{0}}}{#3}{#4}{#5}
      {\fp_compare:nNnTF {#5}>{12}{所属院系}{论文定稿日期}}
      {\fp_compare:nNnTF {#5}>{12}{\__suep_info:n {institute}}{\__suep_info:n {
@@ -708,9 +711,7 @@
    \__suep_declaration_box:nnnnn {#3bp}{#2bp}{#4bp}
      {\fontsize{#5bp}{28.5bp}\selectfont\centering}
      {\__suep_cover_check_lines:nnn {#6}{#4bp}{#7}#7}
-   \put(#3,-\fp_eval:n {#2+5.82+\str_if_eq:nnTF {#6}{学位类别}
-      {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{28.5}{0}}{0}
-      +\str_if_eq:eeTF {#6}{所属院系}
+   \put(#3,-\fp_eval:n {#2+5.82+\str_if_eq:eeTF {#6}{所属院系}
         {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{1.04}{0}}{0}}){\rule{#4bp}{
   .48bp}}}
 \cs_new_protected:Npn \__suep_bachelor_cover:
