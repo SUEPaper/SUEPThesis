@@ -13,7 +13,7 @@
 研究生专业学位使用 `degreeType=professional`。博士标题写法为 `\chapter{中文}[English]`，图表使用 `\SUEPCaption{中文}{English}`。
 示例摘要和两条示例文献用于排版演示，正式提交时需满足学校规定的字数和文献数量。
 
-独立复制项目时还须保留 `suepthesis-graduate.bst`。参考文献使用 `gbt7714` 与 BibTeX，`\SUEPBibliographyStyle` 同时固定顺序编码上标引用与学校要求的文献表样式。
+参考文献使用 `gbt7714` 与 BibTeX，`\SUEPBibliographyStyle` 统一选择 GB/T 7714—2015 顺序编码制和上标引用，与本科、硕士共用国标样式，兼容新旧版本宏包，无需额外的 BST 文件。
 
 学位标记设置在 `main.tex` 的 `\documentclass[...]`：本科 `type=bachelor`，硕士 `type=master`，博士 `type=doctor`；研究生另设 `degreeType=academic` 或 `professional`。请在正文开始前完成设置。
 

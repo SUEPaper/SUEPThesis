@@ -20,7 +20,6 @@ try {
             $exampleDir = Join-Path $repoRoot "templates/$($profiles[$profile].Directory)"
             Copy-Item -LiteralPath (Join-Path $repoRoot 'suepthesis.cls') -Destination $exampleDir
             Copy-Item -LiteralPath (Join-Path $repoRoot 'sueplogo.sty') -Destination $exampleDir
-            Copy-Item -LiteralPath (Join-Path $repoRoot 'suepthesis-graduate.bst') -Destination $exampleDir
             Push-Location $exampleDir
             try {
                 $job = [IO.Path]::GetFileNameWithoutExtension($profiles[$profile].Entry)

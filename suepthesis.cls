@@ -1026,9 +1026,7 @@
   {\cs_set:Npn \bibfont {\__suep_if_bachelor:TF
      {\setstretch{1}\fontsize{10.5bp}{19.5bp}\selectfont}{\zihao{-4}}}
    \cs_set_eq:NN \supercite \cite
-   \ExecuteBibliographyOptions{sorting=none,maxbibnames=3,minbibnames=3}
-   \cs_new_eq:NN \__suep_original_finentrypunct: \finentrypunct
-   \cs_set:Npn \finentrypunct {\__suep_if_bachelor:T {\__suep_original_finentrypunct:}}}
+   \ExecuteBibliographyOptions{sorting=none,maxbibnames=3,minbibnames=3}}
 \AddToHook{package/gbt7714/after}
   {\cs_set_eq:NN \supercite \cite
    \cs_set:Npn \bibfont {\setstretch{1}\songti
@@ -1043,11 +1041,9 @@
          \dim_set:Nn \labelsep {.4em}\dim_set:Nn \itemindent {2\ccwd+\labelwidth+\labelsep}
          \skip_set:Nn \itemsep {0bp}\skip_set:Nn \parsep {0bp}}}}
 \cs_new_protected:Npn \__suep_bibliography_style:
-  {\__suep_if_bachelor:TF
-     {\file_if_exist:nTF {gbt7714-2015-numeric.bst}
-        {\bibliographystyle{gbt7714-2015-numeric}}
-        {\bibliographystyle{gbt7714-numerical}}}
-     {\bibliographystyle{suepthesis-graduate}}
+  {\IfPackageAtLeastTF {gbt7714}{2026/05/03}
+     {\bibliographystyle{gbt7714-2015-numeric}}
+     {\bibliographystyle{gbt7714-numerical}}
    \citestyle{super}}
 \NewDocumentCommand \SUEPBibliographyStyle {}
   {\bool_if:NTF \g__suep_profile_locked_bool

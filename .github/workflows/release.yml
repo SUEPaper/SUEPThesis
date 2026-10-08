@@ -11,18 +11,69 @@ concurrency:
   group: release-${{ github.ref }}
   cancel-in-progress: false
 
+env:
+  RELEASE_TAG: ${{ github.ref_name }}
+
 jobs:
-  validate:
-    name: Validate release
-    uses: ./.github/workflows/validate.yml
-    with:
-      artifact-name: release-${{ github.run_id }}-${{ github.run_attempt }}
-      release-tag: ${{ github.ref_name }}
+  build:
+    name: Build and zip templates
+    runs-on: ubuntu-26.04
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install TeX Live 2026
+        uses: zauguin/install-texlive@v4
+        with:
+          texlive_version: 2026
+          packages: >
+            scheme-small collection-xetex collection-latexextra
+            collection-langchinese collection-fontsrecommended
+            unicode-math tex-gyre-math gbt7714 latexmk
+      - name: Build examples and handbook
+        run: ./scripts/build.ps1
+      - name: Zip user files and example templates
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:RELEASE_TAG -notmatch '^v[A-Za-z0-9][A-Za-z0-9._-]*$') { throw 'Invalid release tag.' }
+          $packageName = "SUEPThesis-$env:RELEASE_TAG"
+          $packageRoot = Join-Path 'tmp/release' $packageName
+          New-Item -ItemType Directory -Path $packageRoot -Force | Out-Null
+          $repoPath = (Get-Location).Path
+          $files = @(
+            'README.md', 'LICENSE', 'Makefile', 'scripts/build.ps1',
+            'suepthesis.dtx', 'suepthesis-logo.dtx', 'suepthesis.ins',
+            'suepthesis.cls', 'sueplogo.sty', 'suepthesis-doc.tex', 'suepthesis-doc.pdf'
+          )
+          $extensions = @('.tex', '.bib', '.cls', '.sty', '.md', '.png', '.jpg', '.jpeg', '.pdf', '.svg', '.doc', '.docx')
+          $files += Get-ChildItem -LiteralPath templates,resources -Recurse -File |
+            Where-Object { $_.Extension -in $extensions -or $_.Name -eq 'latexmkrc' } |
+            ForEach-Object { [IO.Path]::GetRelativePath($repoPath, $_.FullName) }
+          foreach ($file in $files) {
+            $destination = Join-Path $packageRoot $file
+            New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
+            Copy-Item -LiteralPath $file -Destination $destination
+          }
+          New-Item -ItemType Directory -Path dist -Force | Out-Null
+          Compress-Archive -LiteralPath $packageRoot -DestinationPath "dist/$packageName.zip"
+          Copy-Item -LiteralPath suepthesis-doc.pdf -Destination dist/suepthesis-doc.pdf
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            dist/SUEPThesis-*.zip
+            dist/suepthesis-doc.pdf
+          if-no-files-found: error
+          retention-days: 14
 
   publish:
-    name: Publish GitHub Release
-    needs: validate
-    runs-on: windows-2025
+    name: Upload GitHub Release attachments
+    needs: build
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
     permissions:
       contents: write
@@ -34,23 +85,12 @@ jobs:
         with:
           name: release-${{ github.run_id }}-${{ github.run_attempt }}
           path: dist
-      - name: Verify asset checksums
-        run: |
-          foreach ($line in Get-Content dist/SHA256SUMS.txt) {
-            if ($line -notmatch '^([a-f0-9]{64})  ([A-Za-z0-9._-]+)$') { throw 'Invalid checksum manifest.' }
-            $expected, $name = $Matches[1], $Matches[2]
-            $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath "dist/$name").Hash.ToLowerInvariant()
-            if ($actual -ne $expected) { throw "Checksum mismatch: $name" }
-          }
-      - name: Create release and upload assets
+      - name: Create release with ZIP and handbook
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-          RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          if ($env:RELEASE_TAG -notmatch '^v\d+\.\d+\.\d+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?$') { throw 'Invalid release tag.' }
-          $assets = @(Get-ChildItem -File dist | ForEach-Object FullName)
           $arguments = @('release', 'create', $env:RELEASE_TAG, '--verify-tag', '--generate-notes', '--title', "SUEPThesis $env:RELEASE_TAG")
           if ($env:RELEASE_TAG.Contains('-')) { $arguments += @('--prerelease', '--latest=false') }
-          & gh @arguments @assets
-          if ($LASTEXITCODE -ne 0) { throw 'GitHub Release publication failed. Check for an existing release before rerunning.' }
+          & gh @arguments "dist/SUEPThesis-$env:RELEASE_TAG.zip" dist/suepthesis-doc.pdf
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub Release publication failed.' }

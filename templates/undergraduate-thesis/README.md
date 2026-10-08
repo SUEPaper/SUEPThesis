@@ -6,7 +6,7 @@
 
 写章节只需 `\chapter{引言}` 和 `\section{研究背景}`。`\label` 用于需要引用的图表或公式，配合 `\ref`、`\eqref` 使用；它不是目录链接所需的补丁。示例不包含 LaTeX3 实现代码、Word 字距、原稿坐标或手工编号，通用字体、页眉、间距和版式统一由文档类处理。
 
-参考文献使用 `gbt7714`、BibTeX 和 `\SUEPBibliographyStyle`，修改 `references.bib` 并在正文中使用 `\cite`。示例仅提供一条演示文献，正式论文应填写实际引用的完整记录，满足学校要求的数量与类型。
+参考文献使用 `gbt7714`、BibTeX 和 `\SUEPBibliographyStyle`，按 GB/T 7714—2015 顺序编码制编排，与硕士、博士共用国标样式，兼容新旧版本宏包。修改 `references.bib` 并在正文中使用 `\cite`。示例仅提供一条演示文献，正式论文应填写实际引用的完整记录，满足学校要求的数量与类型。
 
 默认字体由文档类检测。无 Windows 字体的环境可使用 `\documentclass[type=bachelor,cjk-font=fandol,font=termes]{suepthesis}`。无需在正文中调用 `fontspec`；封面默认由 `sueplogo.sty` 绘制矢量校徽，独立复制时与 `suepthesis.cls` 一起保留。原 PNG 是可选资源，可通过 `cover/headerImage` 显式选择。
 

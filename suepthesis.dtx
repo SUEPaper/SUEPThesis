@@ -589,9 +589,9 @@
 %   \bibliography{references}
 % \end{bibprint}
 % \end{Code}
-% 上述接口选择顺序编码制。本科采用 GB/T 7714--2015，优先使用新版文件 \path{gbt7714-2015-numeric.bst}，旧版发行版则使用 \path{gbt7714-numerical.bst}。研究生使用随项目提供的 \path{suepthesis-graduate.bst}，它基于 gbt7714 v2.1.9 的顺序编码样式，按给定硕博示范调整姓名、题名、会议标识、专利与标准字段顺序、电子文献日期分隔和条目末尾标点；复制独立论文项目时须一并保留该文件。新版官方文档中不带年份的样式名可能代表更新的标准，不能仅为消除文件名差异就替换学校要求的版本。
+% 上述接口为本科、硕士和博士统一选择 GB/T 7714--2015 顺序编码制。gbt7714 v2.2.0 及更新版本使用带年份的 \path{gbt7714-2015-numeric.bst}，更早的宏包使用对应 2015 版国标的 \path{gbt7714-numerical.bst}。模板按宏包版本选择样式，避免新版宏包中的无年份样式默认转为其他版本国标。样式由 TeX 发行版中的 gbt7714 提供，无需复制额外的 BST 文件或升级到支持 2025 版国标的宏包。
 %
-% 三类写作示例均使用 \verb|\SUEPBibliographyStyle| 和上面的 bibprint 写法。本科使用 gbt7714 的顺序编码样式；研究生使用随项目提供的专用样式。
+% 三类写作示例均使用 \verb|\SUEPBibliographyStyle| 和上面的 bibprint 写法，共用 gbt7714 的国标顺序编码样式；字号、行距及缩进按各学位的版式要求设置。
 %
 % 不要同时加载 biblatex，也不要保留旧方案的数据载入和打印命令。上例文末的数据库参数对应同目录的 \path{references.bib}，不加扩展名。bibprint 环境负责学校格式的标题并抑制 natbib 的重复标题。
 %
@@ -616,8 +616,8 @@
 % }
 % \end{Code}
 % 本项目使用 journal 和 address 字段。迁移旧 BibLaTeX 数据库时，重点检查 journaltitle 与 location 等字段，不能假定换了宏包就会完整读取原数据。标题中的专名可用内层花括号保护大小写，如 \verb|{TFDES}|。页码范围用一个或两个英文短横线，最终格式由样式处理。
-% 研究生定制样式保留数据库中的英文姓名、已有缩写及标题大小写，以对齐给定示范，且不在条目末追加句点；本科默认样式仍使用 gbt7714 自己的设置。给定硕博参考的会议析出文献采用文章 A、论文集 C 的标识，二者用句点分隔。研究生样式按该示范处理 inproceedings；其著录外观与 gbt7714 的默认 2015 样式不同，不能把这份校内定制样式当作通用国标样式分发。
-% 标准编号填写 number，名称填写 title，输出时编号在名称前。专利的国家填写 address 或 location，号码填写 number，公开日期填写 date；输出依次为题名、P 标识、国家与专利号、日期，不推测缺省国家。电子文献的发布日期与访问日期分别填写 date 和 urldate，二者用句点分隔。
+% 姓名、题名大小写、文献类型标识、字段顺序和标点均由国标样式统一处理，不按学位改写，也不为模仿 Word 范本中的个别示例另设著录规则。数据库应填写真实、完整的文献信息。
+% 标准编号填写 number，名称填写 title。专利的国家填写 address 或 location，号码填写 number，公开日期填写 date。电子文献的发布日期与访问日期分别填写 date 和 urldate，访问地址填写 url。字段顺序和日期分隔均由国标样式处理。
 %
 % \begin{longtable}{P{.22\textwidth}P{.70\textwidth}}
 % \toprule 条目类型 & 需要重点核对的数据 \\\midrule\endhead
@@ -642,7 +642,7 @@
 %
 % 默认只列出引用过的记录。\verb|\nocite{*}| 可列出数据库中的全部记录；指定引用键的 nocite 列表则适合需要固定演示次序的测试样张。写作示例由正文中的真实引用决定文献次序，不使用固定编号的 nocite 列表。
 %
-% 本科文献字号为五号，研究生为小四。学校关于作者数量、顺序、标点、外文比例的要求仍须逐项核对，不能把宏包的任意默认输出当作学校的全部规定。特别是从原 BibLaTeX 方案迁移后，作者大小写与末尾标点也应复查。
+% 本科文献字号为五号，研究生为小四，著录规则统一采用国标。文献数量、类型和外文比例等内容要求仍须逐项核对。从旧版模板或原 BibLaTeX 方案迁移后，应清理文献中间文件，重新生成国标文献表。
 %
 % \section{从首次编译到修改后的更新}
 % \begin{Code}
@@ -674,15 +674,15 @@
 % \begin{publications}
 %   \begin{publicationlist}
 %     \item 毛峡, 丁玉宽. 图像的情感特征分析及其和谐感评价[J].
-%       电子学报, 2001, 29(12A): 1923-1927
-%     \item Ozgokmen T. M., Johns W. E., Peters H., et al.
+%       电子学报, 2001, 29(12A): 1923-1927.
+%     \item OZGOKMEN T M, JOHNS W E, PETERS H, et al.
 %       Turbulent Mixing in the Red Sea Outflow Plume from a High-Resoluting
 %       Nonhydrostatic Model[J]. Jounal of physical Oceangraphy,
-%       2003, 33(8): 1846-1869
+%       2003, 33(8): 1846-1869.
 %   \end{publicationlist}
 % \end{publications}
 % \end{Code}
-% 历史条目仅演示排版，写作时全部换成本人真实成果。publicationlist 管理编号、缩进和分页；作者、类型和标点按上一节的学校格式填写，末尾不加句点。不要手写 \texttt{[1]} 或用正文的 \verb|\bibliography| 打印成果，避免混用数据库和标题。四种研究生学位已验证；本科及盲审版本由 publications 整块省略。
+% 历史条目仅演示排版，写作时全部换成本人真实成果。publicationlist 管理编号、缩进和分页；作者、类型和标点按上一节的国标格式填写。不要手写 \texttt{[1]} 或用正文的 \verb|\bibliography| 打印成果，避免混用数据库和标题。四种研究生学位已验证；本科及盲审版本由 publications 整块省略。
 %
 % 在 research 中填写博士代表性项目的真实名称、时间、本人工作与成果，保持正文格式，与发表论文清单分别成页。环境只管理版式。
 %
@@ -880,10 +880,8 @@
 % \begin{Code}
 % xetex suepthesis.ins
 % ./scripts/build.ps1
-% ./scripts/check-source.ps1
-% ./scripts/check-build.ps1
 % \end{Code}
-% 源码检查使用 Python 标准库；可用 \texttt{-Python} 指定解释器路径。编译后应逐页检查 PDF，尤其是长标题、复杂表格与新加入的字体设置。
+% 构建脚本提取文档类与标识宏包，并编译全部论文示例和使用手册。编译后应逐页检查 PDF，尤其是长标题、复杂表格与新加入的字体设置。
 %
 % 类源码可以用 explcheck 检查。生成文件不作为手工维护入口；新增接口时应同时更新本手册、对应示例，并编译检查生成的 PDF。项目遵守仓库中的 LPPL 许可。
 %
@@ -912,7 +910,7 @@
 % \end{longtable}
 % 资料索引：\path{README.md} 是仓库入口，并列出项目致谢；\path{resources/README.md} 记录学校规范原件及其用途；\path{LICENSE} 记录项目许可。三个示例目录中的 main.tex 是最直接的可编译参考。
 %
-% 当前规范为 \path{resources/} 中的四份原始 Word 文档，说明见 \path{resources/README.md}。\path{scripts/check-build.ps1} 检查原件完整性、示例编译与两种引擎下的数学字体字号。更新规范时，应先阅读新原件并记录变化，再修改模板和原件摘要。
+% 当前规范为 \path{resources/} 中的四份原始 Word 文档，说明见 \path{resources/README.md}。更新规范时，应先阅读新原件并记录变化，再修改模板及相关说明，并重新编译示例和手册。
 
 % \chapter{代码实现}
 % \label{chap:implementation}
@@ -2006,9 +2004,7 @@
   {\cs_set:Npn \bibfont {\__suep_if_bachelor:TF
      {\setstretch{1}\fontsize{10.5bp}{19.5bp}\selectfont}{\zihao{-4}}}
    \cs_set_eq:NN \supercite \cite
-   \ExecuteBibliographyOptions{sorting=none,maxbibnames=3,minbibnames=3}
-   \cs_new_eq:NN \__suep_original_finentrypunct: \finentrypunct
-   \cs_set:Npn \finentrypunct {\__suep_if_bachelor:T {\__suep_original_finentrypunct:}}}
+   \ExecuteBibliographyOptions{sorting=none,maxbibnames=3,minbibnames=3}}
 \AddToHook{package/gbt7714/after}
   {\cs_set_eq:NN \supercite \cite
    \cs_set:Npn \bibfont {\setstretch{1}\songti
@@ -2023,11 +2019,9 @@
          \dim_set:Nn \labelsep {.4em}\dim_set:Nn \itemindent {2\ccwd+\labelwidth+\labelsep}
          \skip_set:Nn \itemsep {0bp}\skip_set:Nn \parsep {0bp}}}}
 \cs_new_protected:Npn \__suep_bibliography_style:
-  {\__suep_if_bachelor:TF
-     {\file_if_exist:nTF {gbt7714-2015-numeric.bst}
-        {\bibliographystyle{gbt7714-2015-numeric}}
-        {\bibliographystyle{gbt7714-numerical}}}
-     {\bibliographystyle{suepthesis-graduate}}
+  {\IfPackageAtLeastTF {gbt7714}{2026/05/03}
+     {\bibliographystyle{gbt7714-2015-numeric}}
+     {\bibliographystyle{gbt7714-numerical}}
    \citestyle{super}}
 \NewDocumentCommand \SUEPBibliographyStyle {}
   {\bool_if:NTF \g__suep_profile_locked_bool

@@ -1,32 +1,22 @@
 # SUEPThesis · 上海电力大学学位论文 LaTeX 模板
 
-SUEPThesis 是面向上海电力大学本科毕业论文、硕士学位论文和博士学位论文的 LaTeX 模板，采用 LaTeX3 开发，通过统一的文档类与配置接口管理论文信息和排版样式。
-
-本项目以仓库提供的学校撰写规范及示范文档为排版依据，支持学术型与专业型研究生论文。开始使用前，建议先编译对应示例，再阅读[使用手册](suepthesis-doc.pdf)并替换为自己的论文内容。手册可通过下文的构建命令生成。
-
-正文与声明规范来源为 [resources/](resources/README.md) 中的四份原始 Word 文档。
+SUEPThesis 是面向上海电力大学本科、硕士和博士论文的 LaTeX 模板，采用 LaTeX3 开发，支持学术学位与专业学位。排版依据见[学校原始文档](resources/README.md)，完整接口见[使用手册](suepthesis-doc.pdf)。
 
 ## 特性
 
-- 支持本科、学术硕士、专业硕士、学术博士和专业博士五种论文类型。
-- 内容与样式分离，使用 `\SUEPSetup` 集中填写封面、作者信息、关键词和目录选项。
-- 提供封面、声明、中英文摘要、目录、正文、参考文献、附录与致谢等论文结构。
-- 博士论文支持独立英文目录，以及中英文图题、表题。
-- 使用 `gbt7714` 与 BibTeX 处理参考文献，提供与学校要求配套的研究生文献表样式。
-- 支持盲审信息隐藏、单双面排版和研究生书脊文字页。
-- 提供字体选择、自动检测与回退机制，以及由 LaTeX/TikZ 直接绘制的矢量校徽与校标。
-- 本科、硕士和博士公式统一使用 `unicode-math` 与 TeX Gyre Termes Math，正文数学字体和字号一致。
-- 配套使用手册与可编译示例。
+- 通过 `\SUEPSetup` 统一配置论文信息、封面和目录。
+- 提供封面、声明、中英文摘要、目录、正文、参考文献、附录与致谢等完整结构。
+- 博士论文支持英文目录和中英文图表题注。
+- 使用 `gbt7714` 与 BibTeX，按 GB/T 7714—2015 顺序编码制排版参考文献。
+- 支持盲审、单双面排版、研究生书脊、字体自动检测及矢量校徽与校标。
 
 ## 快速开始
 
 ### 1. 准备环境
 
-使用  TeX Live 2026 或更新版本，推荐完整安装。源码统一采用 UTF-8 编码，推荐使用 **XeLaTeX + BibTeX**，由 `latexmk` 自动完成多轮编译。
+推荐完整安装 **TeX Live 2026 或更新版本**，使用 **XeLaTeX + BibTeX**，由 `latexmk` 自动完成编译。
 
-LuaLaTeX 已通过五种论文示例的编译及内容检查；学校示范的版式校准以 XeLaTeX 为依据。PDFLaTeX 不适用于本模板。
-
-### 2. 选择论文类型
+### 2. 选择示例
 
 | 论文类型 | 示例入口 | 文档类选项 |
 | --- | --- | --- |
@@ -36,11 +26,9 @@ LuaLaTeX 已通过五种论文示例的编译及内容检查；学校示范的�
 | 学术博士论文 | [学术博士示例](templates/doctoral-thesis/main.tex) | `type=doctor,degreeType=academic` |
 | 专业博士论文 | [专业博士示例](templates/doctoral-thesis/main-professional.tex) | `type=doctor,degreeType=professional` |
 
-硕士、博士目录中的两个入口分别填写学位及封面信息，共用摘要、正文、文献与图片。专业学位名称须按学院确认的信息填写。
+### 3. 编译
 
-### 3. 编译示例
-
-在 Windows PowerShell 中，从仓库根目录运行：
+Windows PowerShell 在仓库根目录运行：
 
 ```powershell
 ./scripts/build.ps1 -Target bachelor             # 本科
@@ -52,60 +40,37 @@ LuaLaTeX 已通过五种论文示例的编译及内容检查；学校示范的�
 ./scripts/build.ps1                              # 全部示例与手册
 ```
 
-macOS 或 Linux 可在仓库根目录运行：
+macOS 或 Linux 在仓库根目录运行：
 
 ```sh
 make all
 ```
 
-构建脚本会提取文档类，并将文档类、矢量标识宏包和研究生文献样式复制到示例目录。论文输出位于对应目录下的 `main.pdf` 或 `main-professional.pdf`；使用手册输出为根目录的 `suepthesis-doc.pdf`。
+构建会提取文档类和标识宏包，并复制到各示例目录。论文 PDF 位于对应示例目录，手册为根目录的 `suepthesis-doc.pdf`。
 
-### 4. 建立自己的论文项目
+### 4. 开始写作
 
-将对应示例目录完整复制为自己的论文项目，保留其中的宏包、正文插图和编译配置。若从源码仓库开始，先在仓库根目录运行：
+编译后，将对应示例目录完整复制为自己的论文项目。Release 下载包中的示例已包含 `suepthesis.cls`、`sueplogo.sty` 和预览 PDF，可直接复制使用。
 
-```sh
-xetex -interaction=nonstopmode -halt-on-error suepthesis.ins
-```
+- `main.tex` 或 `main-professional.tex`：填写论文信息、组织文档结构。
+- `abstract.tex`：中英文摘要。
+- `body.tex` 或 `chapters/`：正文。
+- `references.bib`：参考文献。
 
-把生成的 `suepthesis.cls` 和 `sueplogo.sty` 复制到自己的论文目录；研究生项目还需复制根目录的 `suepthesis-graduate.bst`。随后在含主文件的论文目录中运行：
+在论文目录运行：
 
 ```sh
 latexmk -xelatex main.tex
 ```
 
-专业学位入口改为 `main-professional.tex`。编辑器或在线环境同样应选择正确的主文件、XeLaTeX 引擎和 BibTeX 文献工具。
+专业学位使用 `main-professional.tex`。编辑器或在线环境选择相应主文件、XeLaTeX 和 BibTeX。
 
-`templates/` 中的案例可直接用于写作：填写个人信息，替换摘要、正文和文献即可。章、节使用普通 LaTeX 命令，目录、编号、字体和版式由文档类统一处理。示例不包含 LaTeX3 实现代码、逐字字距、手工分页或原稿坐标补丁。
+## 常用配置
 
-## 模板组成
-
-| 文件或目录 | 用途 |
-| --- | --- |
-| `suepthesis.dtx` | 使用说明、实现说明与文档类源码的统一维护入口 |
-| `suepthesis-logo.dtx` | 从学校 SVG 轮廓生成的 TikZ 标识宏包源码 |
-| `suepthesis.ins` | 从 `.dtx` 提取文档类和标识宏包 |
-| `sueplogo.sty` | 生成的矢量标识宏包，与文档类一起复制 |
-| `suepthesis.cls` | 生成的文档类，复制到论文项目中使用 |
-| `suepthesis-doc.tex` | 使用手册的排版入口 |
-| `suepthesis-graduate.bst` | 研究生参考文献样式 |
-| `templates/undergraduate-thesis/` | 本科写作示例与使用说明 |
-| `templates/graduate-thesis/` | 学术硕士、专业硕士示例 |
-| `templates/doctoral-thesis/` | 学术博士、专业博士示例 |
-| `scripts/` | 构建、检查与发布脚本 |
-| `resources/` | 学校提供的格式示范、封面及声明原始文档 |
-
-论文项目中，通常修改 `main.tex` 或 `main-professional.tex` 的信息配置、`abstract.tex` 的摘要、`body.tex` 或 `chapters/` 的正文，以及 `references.bib` 的文献数据库。生成的 `.cls` 文件无需手工修改。
-
-## 使用示例
-
-下面以学术硕士论文为例。编译时需保留 `sueplogo.sty` 和 `suepthesis-graduate.bst`。
+以学术硕士为例，在示例的导言区填写：
 
 ```latex
-% !TeX program = xelatex
-% !BIB program = bibtex
 \documentclass[type=master,degreeType=academic]{suepthesis}
-
 \SUEPSetup{
   cover = {date = 2026年6月},
   info = {
@@ -117,100 +82,52 @@ latexmk -xelatex main.tex
     institute = 电气工程学院,
     major = 电气工程,
     degree = 工学硕士,
-    classification = TM73,
-    classifiedLevel = 公开,
-    finalizationDate = 2026年6月1日,
     keywords = {电力系统,新能源,优化调度},
     keywordsEn = {Power systems,Renewable energy,Optimal scheduling}
   }
 }
-
-\usepackage{gbt7714}
-\SUEPBibliographyStyle
-
-\begin{document}
-\MakeCover
-\MakeOriginality
-\frontmatter
-\input{abstract.tex}
-\MakeTOC
-\mainmatter
-\input{body.tex}
-\backmatter
-\begin{bibprint}
-  \bibliography{references}
-\end{bibprint}
-\begin{acknowledgements}
-  感谢指导教师和同学的帮助。
-\end{acknowledgements}
-\end{document}
 ```
 
-`type`、`degreeType` 及其别名 `degree` 是文档类选项，应写在 `\documentclass[...]` 中。`info/degree` 表示封面上显示的学位名称，与学位类型选项不同。本科使用 `institution` 填写学院（部），并可填写 `grade` 和 `subtitle`。
+`type` 和 `degreeType` 是文档类选项；`info/degree` 是封面显示的学位名称。本科使用 `institution` 填写学院（部）。其余字段见各示例。
 
-博士论文的章、节和三级标题需提供英文译名，例如 `\chapter{绪论}[Introduction]`；图表统一使用 `\SUEPCaption{中文题目}{英文题目}`。模板据此生成英文目录和双语题注。完整结构与接口请查阅使用手册。
+- **博士双语标题**：标题使用 `\chapter{绪论}[Introduction]` 等形式，图表使用 `\SUEPCaption{中文题目}{英文题目}`。
+- **盲审**：设置 `blindPeerReview=true`，隐藏模板中的身份信息并省略声明、致谢和个人成果等页面；正文身份信息可用 `\SecretInfo{真实信息}[替代文本]` 或 `blindPeerReview` 环境处理。
+- **字体**：默认自动检测；中文可选 `cjk-font=windows|mac|fandol`，西文可选 `font=times|termes`。跨系统协作可使用 `cjk-font=fandol,font=termes`。
+- **单双面与书脊**：本科默认单面，研究生默认双面。设置 `twoside=false` 可切换为单面；研究生在文末调用 `\MakeSpine` 生成书脊文字页。
 
 ## 矢量校徽与校标
 
-**上海电力大学的校徽、校标、校名书法体的版权归上海电力大学所有。**
+模板通过 `sueplogo` 宏包以 TikZ 绘制学校 SVG 轮廓。默认封面自动使用本科校徽或研究生横向组合标识，也可通过 `cover/headerImage` 指定自定义图片。
 
-参考 fduthesis 的独立 Logo 宏包做法，`sueplogo` 直接使用原始 SVG 的曲线路径，由 TikZ 绘制。默认封面 `cover/headerImage=auto`：本科使用校徽，硕博使用校徽与中英文校名的横向组合，无需 PNG、校名字体、Inkscape 或 shell-escape。
-
-文档类已自动加载宏包，也可在普通 LaTeX 文档中单独加载：
+在普通 LaTeX 文档中可单独使用：
 
 ```latex
-\usepackage{sueplogo} % suepthesis 文档类下无需重复加载
+\usepackage{sueplogo}
 \suepemblem[width=3cm]
 \suepname[width=8cm]
-\suepemblem[width=3cm,color=black]
+\suepemblem[width=3cm,color=SUEPRed]
 ```
 
-`width` 控制宽度，保持原比例；`color=original` 保留 SVG 原色，其他 xcolor 颜色用于单色绘制。`SUEPRed` 为学校 VI 图示的校徽红 `#CC0000`（RGB 204,0,0），可通过 `color=SUEPRed` 使用。旧 PNG 或自定义 PDF 仍可通过 `\SUEPSetup{cover={headerImage=images/suep-logo.png}}` 显式指定，空值省略标识。
+校徽、校标及校名书法体版权归上海电力大学所有，原件与来源见 [上海电力大学VI 设计规范](https://www.shiep.edu.cn/vi/list.htm)。。
 
-轮廓原件和来源说明见 [resources/logo/](resources/logo/README.md)，学校参考资料见 [VI 设计规范](https://www.shiep.edu.cn/vi/list.htm)。维护 SVG 后运行 `python scripts/generate-logo.py` 更新 `suepthesis-logo.dtx`，再重新提取宏包；日常论文编译不需要 Python。
+## 文档与开发
 
-## 盲审、字体与装订
+- [使用手册](suepthesis-doc.pdf)：完整接口与排版说明。
+- [本科示例说明](templates/undergraduate-thesis/README.md)、[硕士示例说明](templates/graduate-thesis/README.md)、[博士示例说明](templates/doctoral-thesis/README.md)：各学位的填写提示。
+- [学校原始文档说明](resources/README.md)：规范来源与参考资料。
 
-文档类选项 `blindPeerReview=true` 可隐藏模板输出的姓名、学号、导师和 PDF 作者信息，并省略声明、致谢、个人成果及科研工作清单。正文中的身份信息可使用 `\SecretInfo{真实信息}[替代文本]` 或 `blindPeerReview` 环境处理；正文、图片和附件仍需作者自行核对。
+文档类及手册统一维护于 `suepthesis.dtx`，矢量标识源码位于 `suepthesis-logo.dtx`，通过 `suepthesis.ins` 提取为 `suepthesis.cls` 和 `sueplogo.sty`。修改后运行 `./scripts/build.ps1` 或 `make all`，编译示例和手册；版式改动需检查生成的 PDF。
 
-中文字体选项为 `cjk-font=auto|windows|mac|fandol`，西文字体选项为 `font=auto|times|termes`。默认自动检测可用字体；跨系统协作可选择 `cjk-font=fandol,font=termes`。字体变化可能影响字形与分页，正式提交时请核对院系规定。仓库不分发商业字体。
+欢迎提交 Issue 或 Pull Request。报告问题时请附论文类型、编译环境、最小示例和相关日志。CI 自动构建五份论文示例与手册；推送 `v*` 标签后，Release 提供完整模板 ZIP 和独立使用手册。
 
-本科默认单面排版，研究生默认双面排版并从奇数页开始各章。单面预览可设置 `twoside=false`。研究生在文末调用 `\MakeSpine` 可生成书脊文字页，供装订人员按实际厚度裁切。
+## 致谢与许可证
 
-## 文档与贡献
+感谢以下项目及其维护者：
 
-- [使用手册](suepthesis-doc.pdf)：完整接口、排版规则与使用说明。
-- [学校原始文档说明](resources/README.md)：规范来源与原件用途。
-- [本科示例说明](templates/undergraduate-thesis/README.md)、[硕士示例说明](templates/graduate-thesis/README.md)、[博士示例说明](templates/doctoral-thesis/README.md)：各学位的使用入口与填写提示。
+- [BIThesis](https://github.com/BITNP/BIThesis)：配置接口、LaTeX3 开发与示例组织的参考。
+- [fduthesis](https://github.com/stone-zeng/fduthesis)：字体配置、文档类与独立 Logo 宏包的参考。
+- [gbt7714](https://github.com/zepinglee/gbt7714-bibtex-style)：提供国标参考文献样式。
 
-欢迎通过仓库的问题反馈与合并请求提出改进意见、报告排版问题或贡献代码。反馈时请附上学位类型、编译引擎、TeX 发行版、可复现的最小示例和相关日志。
-
-开发时修改 `suepthesis.dtx`，重新提取文档类，并同步更新手册、示例与相关检查。Windows PowerShell 可运行：
-
-```powershell
-./scripts/check-source.ps1  # 源码、示例、版本及 Word 原件检查
-./scripts/build.ps1         # 编译全部示例和使用手册
-./scripts/check-build.ps1   # 示例与手册编译、数学字体字号与公式编号
-```
-
-源码检查与打包使用 Python 标准库；构建环境要求见上文“准备环境”。修改版式后请逐页检查生成的 PDF。
-
-## 重要提醒
-
-学校要求与学院提交说明应以作者收到的最新文件为准。本项目的示例用于演示或核对排版，摘要字数、文献数量、研究内容、成果清单和签名日期等须按实际情况填写。提交前请逐页检查最终 PDF，并保留源码与编译环境信息。
-
-## 特别感谢
-
-SUEPThesis 的开发参考了已有论文模板，并在开源文献样式的基础上适配学校要求。感谢以下项目及其维护者：
-
-- [BIThesis（北京理工大学论文模板）](https://github.com/BITNP/BIThesis)：为统一配置接口、LaTeX3 开发及示例和使用手册的组织提供了参考。
-- [fduthesis（复旦大学论文模板）](https://github.com/stone-zeng/fduthesis)：为字体组配置、文档类编写和源码文档组织提供了参考。
-- [gbt7714（国标 BibTeX 文献样式）](https://github.com/zepinglee/gbt7714-bibtex-style)：提供了本项目使用的参考文献工具；研究生文献样式基于其顺序编码样式调整。
-
-同时感谢学校论文撰写规范与示范文档的编写、整理者，这些资料为封面、正文及各类前后置页面的实现和版式校验提供了依据。
-
-以及所有参与本项目的开发者、贡献者与使用者。谢谢你们！
-
-## 许可证
+感谢学校规范与示范文档的编写者，以及所有开发者、贡献者与使用者。
 
 本项目遵循 [LaTeX 项目公共许可证（LPPL）](LICENSE) 1.3c 或更新版本。

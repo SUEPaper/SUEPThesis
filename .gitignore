@@ -293,11 +293,6 @@ suepthesis
 overleaf
 *.zip
 suepthesis.cls
-scripts/*
-!scripts/*.sh
-!scripts/*.zsh
-!scripts/*.ps1
-!scripts/*.py
 
 .DS_Store
 
@@ -317,9 +312,6 @@ reference/
 __pycache__/
 *.pyc
 *.pyo
-
-# Copies made from the canonical root bibliography style by build scripts
-/templates/*/suepthesis-graduate.bst
 
 # Generated from suepthesis-logo.dtx
 sueplogo.sty
