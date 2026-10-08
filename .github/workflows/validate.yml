@@ -1,0 +1,70 @@
+name: Build and package
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        type: string
+        required: true
+      release-tag:
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: [self-hosted, Windows, X64, sueptex]
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      PYTHONIOENCODING: utf-8
+      TEXMFCACHE: ${{ github.workspace }}/tmp/texmf-cache
+      TEXMFVAR: ${{ github.workspace }}/tmp/texmf-var
+      RELEASE_TAG: ${{ inputs.release-tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          clean: true
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Check sources and release version
+        run: ./scripts/check-source.ps1 -ReleaseTag $env:RELEASE_TAG
+      - name: Check TeX Live and fonts
+        run: ./scripts/check-ci-environment.ps1
+      - name: Check Word resources, examples and math fonts
+        run: ./scripts/check-build.ps1
+      - name: Lint generated LaTeX3 class
+        run: |
+          $checker = & kpsewhich -format=texmfscripts explcheck.lua
+          if ($LASTEXITCODE -ne 0 -or -not $checker) { throw 'Install the expltools TeX Live package.' }
+          & texlua $checker --warnings-are-errors suepthesis.cls
+          if ($LASTEXITCODE -ne 0) { throw 'LaTeX3 lint failed.' }
+      - name: Package verified outputs
+        run: python scripts/package-release.py --tag "$env:RELEASE_TAG" --commit "$env:GITHUB_SHA"
+      - name: Upload distributable files
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+      - name: Upload failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: diagnostics-${{ inputs.artifact-name }}
+          path: |
+            suepthesis.log
+            suepthesis-doc.log
+            templates/**/*.log
+            templates/**/*.blg
+            tmp/**/*.log
+            tmp/**/build-output.txt
+          if-no-files-found: warn
+          retention-days: 7

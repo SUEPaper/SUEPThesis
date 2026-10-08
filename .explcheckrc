@@ -1,0 +1,5 @@
+[defaults]
+# Public APIs of ctex/fontspec/caption/biblatex use their own calling syntax.
+# Compact key lists intentionally do not follow explcheck's brace whitespace style.
+ignored_issues = ["S204"]
+max_line_length = 180

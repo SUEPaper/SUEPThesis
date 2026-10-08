@@ -1,0 +1,60 @@
+% !TeX program = xelatex
+% !BIB program = bibtex
+% 博士必须给章、节、三级标题提供英文译名：\chapter{中文}[English]
+\documentclass[type=doctor,degreeType=academic]{suepthesis}
+\SUEPSetup{
+  cover = {date = 2026年6月},
+  info = {
+    title = 面向新能源的电力系统优化研究,
+    titleEn = {Optimization of Power Systems with Renewable Energy},
+    author = 张三,
+    studentId = 20260001,
+    supervisor = 李四教授,
+    institution = 电气工程学院,
+    institute = 电气工程学院,
+    major = 电气工程,
+    degree = 工学博士,
+    classification = TM73,
+    classifiedLevel = 公开,
+    finalizationDate = 2026年6月1日,
+    keywords = {电力系统,新能源,优化调度,储能},
+    keywordsEn = {Power systems,Renewable energy,Optimal scheduling,Energy storage},
+  }
+}
+\usepackage{gbt7714}
+\SUEPBibliographyStyle
+\begin{document}
+\MakeCover
+\MakeOriginality
+\frontmatter
+\input{abstract.tex}
+\MakeTOC
+\mainmatter
+\input{body.tex}
+\begin{conclusion}
+\section{结论}[Conclusions]
+本文完成了新能源电力系统优化模型的建立与分析，刻画了新能源出力、储能状态和功率平衡之间的关系。模型将设备运行约束纳入统一的优化问题，为不同运行条件下的调度分析提供了基础。
+\section{进一步工作的方向}[Directions for Future Work]
+后续工作可进一步考虑预测误差与多时间尺度协调，并通过不同场景下的运行数据检验模型的适用范围。
+\end{conclusion}
+\backmatter
+\begin{bibprint}
+  \bibliography{references}
+\end{bibprint}
+\begin{appendices}
+\chapter{模型参数}[Model Parameters]
+模型参数满足以下平衡关系。
+\begin{equation} x_1 + x_2 = 1 \end{equation}
+\end{appendices}
+\begin{acknowledgements}
+感谢指导教师和同学对本研究的帮助。
+\end{acknowledgements}
+\begin{publications}
+% 按实际成果填写；示例不虚构个人发表记录。
+\end{publications}
+\begin{research}
+% 按实际科研经历填写；填写方法见手册。
+\end{research}
+% 书脊单独交给装订人员；需要时取消下一行注释。
+% \MakeSpine
+\end{document}

@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  static:
+    name: Source checks
+    runs-on: windows-2025
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - run: ./scripts/check-source.ps1
+      - name: Explain fork PR coverage
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          'Fork PR: source checks only. Example builds require a maintainer-reviewed branch in this repository.' >> $env:GITHUB_STEP_SUMMARY
+
+  validate:
+    name: Build and package
+    needs: static
+    # Never execute an external fork on the persistent self-hosted machine.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    uses: ./.github/workflows/validate.yml
+    with:
+      artifact-name: ci-${{ github.run_id }}-${{ github.run_attempt }}

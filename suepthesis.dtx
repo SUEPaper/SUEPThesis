@@ -1,0 +1,2068 @@
+% \iffalse meta-comment
+% Copyright (C) 2026 SUEPThesis contributors. LPPL 1.3c or later.
+% See LICENSE. Typeset according to the supplied SUEP rules.
+%<*driver>
+\input{suepthesis-doc.tex}
+%<driver>\endinput
+%</driver>
+% \fi
+%
+% \begin{titlepage}
+% \centering\vspace*{28mm}
+% {\fontsize{34}{42}\selectfont\bfseries SUEPThesis\par}
+% \vspace{10mm}{\LARGE 上海电力大学学位论文模板\par}
+% \vspace{6mm}{\Large 使用手册与写作指南\par}
+% \vspace{18mm}\rule{.75\textwidth}{.6pt}\par\vspace{9mm}
+% 本科 · 学术型与专业型硕士 · 学术型与专业型博士\par
+% \vspace{8mm}从首次编译，到论文写作、盲审与提交\par
+% \vfill
+% LaTeX3 文档类\quad v0.1.0\par
+% 2026 年 10 月 8 日\par\vspace{8mm}
+% SUEPThesis contributors
+% \end{titlepage}
+% \frontmatter
+% \chapter*{阅读本手册}
+% \addcontentsline{toc}{chapter}{阅读本手册}
+% 本手册面向第一次使用模板的论文作者，也为维护文档类的开发者提供接口和验证说明。可以先完成第 1 章的编译流程，再按学位填写第 3 章的信息，并以第 4 章安排论文结构。已经熟悉 \LaTeX 的读者可直接查看配置表、博士双语标题和参考文献章节。算法排版见第~\ref{sec:algorithms}~节（第~\pageref{sec:algorithms}~页），包含 algorithm2e 的导言区配置、完整伪代码、编号与引用方法。
+%
+% 模板的当前规范依据是 \path{resources/} 中的四份学校原始 Word 文档：本科格式示范、封面、原创性及使用授权声明，以及硕博范本。格式说明同时存在于正文和文本框中。旧 PDF 的测量结果只作为历史记录；本手册的命令和文件名对应当前实现。
+%
+% 学校规范中的摘要字数、文献构成、研究成果真实性和签名要求，需要作者完成。示例是一份能演示结构的短论文，因此章节很短，研究生双面版本会出现较多空白背面。替换为真实内容后，正文将自然流动分页。
+%
+% 本手册本身使用独立的文档版式，便于阅读代码和表格；论文格式请看三个论文示例。使用说明与带注释的类源码统一维护在 \path{suepthesis.dtx}，本文最后的“代码实现”集中列出实现说明和实际代码；\path{suepthesis-doc.tex} 只保留文档驱动与排版设置。所有命令区分大小写。代码块中的中文说明和示例身份信息应按实际情况替换。
+% \tableofcontents
+% \mainmatter
+% \chapter{第一次编译}
+% \section{准备编译环境}
+% 使用 TeX Live 2026 或更新版本，推荐 XeLaTeX 与 BibTeX。编辑器只是编辑文本和调用编译工具的入口；即使不使用编辑器，也可以在终端生成同一份 PDF。
+%
+% 在终端检查下列命令是否可执行。若提示找不到命令，应先安装发行版或修正 PATH，然后重新打开终端。BibTeX 和 gbt7714 样式应来自完整的 TeX 发行版。
+% \begin{Code}
+% xelatex --version
+% bibtex --version
+% latexmk -v
+% \end{Code}
+% 源码采用 UTF-8 编码。PDFLaTeX 不能用于本模板。LuaLaTeX 已通过本科及四种硕博完整示例的编译、内容和页面边界检查，但两种引擎的中西文间距机制不同；学校示范的坐标校准与逐页对照仍以 XeLaTeX 为依据。正式写作建议沿用已验证的 XeLaTeX 路径。
+%
+% \section{选择自己的示例}
+% \begin{center}\begin{tabularx}{\textwidth}{lX}\toprule
+% 学位 & 示例目录\\\midrule
+% 本科 & \path{templates/undergraduate-thesis}\\
+% 硕士 & \path{templates/graduate-thesis}\\
+% 博士 & \path{templates/doctoral-thesis}\\\bottomrule
+% \end{tabularx}\end{center}
+% 三个目录分别含有主文件、摘要、正文、文献数据库和编译配置。本科目录还有校徽。先原样编译成功，再逐步替换内容，这样可以区分环境问题与内容问题。
+%
+% \section{在仓库中编译}
+% Windows PowerShell 从仓库根目录运行：
+% \begin{Code}
+% ./scripts/build.ps1 -Target bachelor
+% ./scripts/build.ps1 -Target master
+% ./scripts/build.ps1 -Target doctor
+% ./scripts/build.ps1 -Target doc
+% # 或一次生成三份示例与本手册
+% ./scripts/build.ps1
+% \end{Code}
+% 脚本提取文档类，复制到相应示例目录，再调用 latexmk。论文输出是各示例目录下的 \path{main.pdf}；手册输出是根目录的 \path{suepthesis-doc.pdf}。脚本报错时，先阅读输出中最早出现的错误。
+%
+% macOS 或 Linux 可在仓库根目录运行 \texttt{make all}；也可采用下面的手动流程。命令应在其对应目录执行，不要在仓库根目录直接编译示例内部的正文文件。
+%
+% \section{复制为独立论文项目}
+% 先在仓库根目录提取类文件，再把它复制到所选示例目录；将整个示例目录另存为自己的论文项目。学校原始 Word 文档保存在 \path{resources/}，独立论文项目无需携带这些规范原件。
+% \begin{Code}
+% # 仓库根目录
+% xetex -interaction=nonstopmode -halt-on-error suepthesis.ins
+% # 复制 suepthesis.cls 到自己的论文目录
+% # 切换到含 main.tex 的论文目录后运行
+% latexmk -xelatex main.tex
+% \end{Code}
+% 若不用 latexmk，首次完整编译采用：
+% \begin{Code}
+% xelatex main.tex
+% bibtex main
+% xelatex main.tex
+% xelatex main.tex
+% \end{Code}
+% BibTeX 的参数是作业名 \texttt{main}，不带 \texttt{.tex} 扩展名。第一次 XeLaTeX 写出目录和文献请求，BibTeX 生成文献表，后两次 XeLaTeX 更新交叉引用及页码。
+%
+% \section{编辑器和在线环境}
+% 在编辑器中打开 \path{main.tex} 并设置 XeLaTeX 编译；文献处理选择 BibTeX。也可以直接让编辑器调用项目自带配置的 latexmk。只打开 \path{body.tex} 并编译会缺少文档类和导言区。
+%
+% 如使用在线环境，应上传整个独立论文项目，设置主文件为 \path{main.tex}，并选择 XeLaTeX。在线环境的版本、字体和编译资源可能与本机不同；本仓库没有自动同步的在线模板。移动项目后先检查字体回退提示，再检查封面、目录和换页。
+%
+% \chapter{认识项目与写作流程}
+% \section{哪些文件需要修改}
+% \begin{longtable}{P{.29\textwidth}P{.63\textwidth}}
+% \toprule 文件 & 用途与操作\\\midrule\endhead
+% \path{main.tex} & 学位、个人信息、文献配置和整篇论文的顺序。\\
+% \path{abstract.tex} & 中文摘要和英文摘要；关键词在主文件配置。\\
+% \path{body.tex} & 示例正文。真实论文可拆成多个章节文件。\\
+% \path{references.bib} & 文献数据库，每条记录有唯一引用键。\\
+% \path{images/} & 本科校徽及作者自己的插图，可增加文件。\\
+% \path{latexmkrc} & XeLaTeX 自动编译配置，通常无需修改。\\
+% \path{suepthesis.cls} & 生成的文档类，随论文复制使用；不要直接维护。\\
+% \path{suepthesis.dtx} & 使用说明与带注释的类源码；开发时修改此文件。\\
+% \path{suepthesis.ins} & 从 dtx 提取 cls 的 DocStrip 入口。\\\bottomrule
+% \end{longtable}
+% 编译生成的 aux、bcf、bbl、toc、toe、log 等文件属于中间结果；其中 toe 是博士英文目录。分享可复现项目时，至少保留全部 tex、bib、cls、图片和编译配置。
+%
+% \section{按章节拆分正文}
+% \verb|\input| 在当前位置读入另一个文件，不会自行开始新页。章节文件中不再写文档类、导言区和 document 环境。例如：
+% \begin{Code}
+% % main.tex 的正文部分
+% \mainmatter
+% \input{chapters/introduction.tex}
+% \input{chapters/method.tex}
+% \input{chapters/experiments.tex}
+% \input{chapters/conclusion.tex}
+% \end{Code}
+% 使用相对于主文件的路径。文件名保持稳定，避免同一论文里混用大小写不同的路径。更换模板版本前备份项目，再替换类文件并完整编译。
+%
+% \section{建议的写作顺序}
+% 先填写封面信息并检查学位类别，再完成标题层级与章节顺序。接着逐章写作，插入图表和文献；最后整理摘要、结论、附录与成果清单。每次添加一组内容后编译一次，比积累很多错误后集中排查更容易定位。
+%
+% 空行表示新段落，源码中的普通单次换行通常只是空格。不要用连续的 \verb|\\| 或空格排段落、对齐标题、推移图表。编号由计数器生成，引用由标签生成，正文修改后无需手动重排数字。
+%
+% 特殊字符 \verb|%|、\verb|&|、\verb|_|、\verb|#| 在普通文字中需写成 \verb|\%|、\verb|\&|、\verb|\_|、\verb|\#|。百分号在源码中会注释掉其后整行，漏写转义可能使后面的右花括号消失。
+%
+% \section{最小排错文档}
+% 如果已有论文编译失败，可在同目录新建下面的独立文件，先验证类文件、中文字体和标题是否工作。它省略封面及参考文献，仅用于缩小故障范围；正式论文仍以三个完整示例为起点。
+% \begin{Code}
+% \documentclass[type=master,twoside=false]{suepthesis}
+% \SUEPSetup{info={
+%   title=最小编译示例,
+%   titleEn={Minimal Example},
+%   major=电气工程,
+%   keywords={电力,优化,调度,储能},
+%   keywordsEn={Power,Optimization,Dispatch,Storage}
+% }}
+% \begin{document}
+% \frontmatter
+% \begin{abstract}
+% 这是用于验证编译环境的中文摘要。
+% \end{abstract}
+% \begin{abstractEn}
+% This document checks the compilation environment.
+% \end{abstractEn}
+% \MakeTOC
+% \mainmatter
+% \chapter{绪论}[Introduction]
+% 这是正文。若本文件能编译，可逐段加回原论文内容。
+% \end{document}
+% \end{Code}
+% 保存为 \path{check.tex} 后运行 \texttt{latexmk -xelatex check.tex}。每次恢复一部分原论文内容并重编译，直到找到触发错误的代码；不要同时改动字体、文献系统和正文结构。
+%
+% \chapter{学位选项与信息配置}
+% \section{文档类中的学位选项}
+% 在主文件第一行选择学位类型和学位类别，作者与论文信息通过后面的 \verb|\SUEPSetup| 填写：
+% \begin{Code}
+% \documentclass[type=master,degreeType=academic,twoside=auto]{suepthesis}
+% \SUEPSetup{info={author=张三,degree=工学硕士}}
+% \end{Code}
+% \begin{longtable}{P{.24\textwidth}P{.32\textwidth}P{.34\textwidth}}
+% \toprule 选项 & 可选值 / 默认值 & 行为\\\midrule\endhead
+% \texttt{type} & bachelor、master、doctor；默认 master & 选择本科、硕士或博士版式。\\
+% \texttt{degreeType} & academic、professional；默认 academic & 研究生学术学位或专业学位。\\
+% \texttt{degree} & 同 degreeType & degreeType 的兼容别名。\\
+% \texttt{twoside} & auto、true、false；默认 auto & auto 为本科单面、研究生双面。\\
+% \texttt{blindPeerReview} & true、false；默认 false & 模板级盲审信息隐藏。\\
+% \texttt{cjk-font} & auto、windows、mac、fandol；默认 auto & 中文字体组，只能在文档类选项设置。\\
+% \texttt{font} & auto、times、termes；默认 auto & 西文字体组，只能在文档类选项设置。\\\bottomrule
+% \end{longtable}
+% type 的三个值依次对应本科、硕士和博士。学术型选 academic，专业型选 professional；专业学位名称还需通过 \path{info/degree} 填写。
+%
+% \texttt{degreeType} 是学位类别配置；\path{info/degree} 是封面文字。二者的含义不同：前者决定封面结构与“专业名称”字段，后者显示例如“工学硕士”或学院确认的专业学位名称。
+%
+% \subsection{五种学位组合}
+% \begin{center}\begin{tabularx}{\textwidth}{lXX}\toprule
+% 论文类型 & \texttt{type} & \texttt{degreeType}\\\midrule
+% 本科毕业论文 & bachelor & 不区分，可省略\\
+% 学术学位硕士 & master & academic\\
+% 专业学位硕士 & master & professional\\
+% 学术学位博士 & doctor & academic\\
+% 专业学位博士 & doctor & professional\\\bottomrule
+% \end{tabularx}\end{center}
+% 例如，专业学位博士可以写成：
+% \begin{Code}
+% \documentclass[type=doctor,degreeType=professional]{suepthesis}
+% \SUEPSetup{
+%   info = {degree = 工程博士, major = 电气工程}
+% }
+% \end{Code}
+% 这里的学位名称仅作示例，应使用学院确认的名称。本科不区分学术型和专业型，degreeType 不改变本科版式。
+%
+% 硕士与博士示例目录各有两个入口：\path{main.tex} 为学术学位，\path{main-professional.tex} 为专业学位，输出 PDF 与入口同名。两者共用摘要、正文、文献及图片，个人信息在对应入口中填写。从仓库根目录运行 \texttt{./scripts/build.ps1 -Target master-professional} 或 \texttt{doctor-professional} 可分别构建专业硕士或专业博士示例；不指定目标时会构建全部五种论文示例与本手册。
+%
+% \subsection{文档类与信息设置的分工}
+% \texttt{type} 和 \texttt{degreeType} 仅接受文档类选项写法。在 \verb|\SUEPSetup| 中使用这两个键会报未知键错误。切换论文类型时，修改主文件的 \verb|\documentclass[...]| 并重新编译。
+%
+% 文档类选项决定封面、页面、章节与目录、摘要目录默认值、图表格式及自动单双面选择。\verb|\SUEPSetup| 用于论文信息、封面和目录等设置；显式设置的 \path{TOC/abstract} 与 \path{TOC/abstractEn} 优先于默认值。\texttt{twoside} 与 \texttt{blindPeerReview} 也可在导言区通过此命令调整，正文开始后不能修改。
+%
+% 文档类选项 \texttt{degree} 是 \texttt{degreeType} 的兼容别名；\path{info/degree} 是“工学硕士”等封面文字。配置路径和写法请使用这里给出的示例。
+%
+% \section{研究生配置示例}
+% \begin{Code}
+% \documentclass[type=master,degreeType=academic]{suepthesis}
+% \SUEPSetup{
+%   cover = {date = 2026年6月},
+%   info = {
+%     title = 面向新能源的电力系统优化研究,
+%     titleEn = {Optimization of Power Systems},
+%     author = 张三,
+%     studentId = 20260001,
+%     supervisor = 李四教授,
+%     institute = 电气工程学院,
+%     major = 电气工程,
+%     degree = 工学硕士,
+%     classification = TM73,
+%     classifiedLevel = 公开,
+%     finalizationDate = 2026年6月1日,
+%     keywords = {电力系统,新能源,优化调度,储能},
+%     keywordsEn = {Power systems,Renewable energy,
+%       Optimal scheduling,Energy storage}
+%   }
+% }
+% \end{Code}
+% 逗号分隔键值，值本身含逗号时应加花括号。多次调用 \verb|\SUEPSetup| 会覆盖指定字段，未提及字段保留原值。建议把配置集中放在导言区，避免正文中改变封面信息。
+%
+% \section{本科配置差异}
+% 本科使用 institution 填学院（部），使用 major 填专业，grade 填年级。题目有两个固定下划线位置；较长题目应按语义拆成 title 与 subtitle，而不是把换行命令放入一行。
+% \begin{Code}
+% \SUEPSetup{
+%   cover = {date = 2026年6月1日,
+%     headerImage = images/suep-logo.png},
+%   info = {
+%     title = 新能源电力系统,
+%     subtitle = 优化方法研究,
+%     institution = 电气工程学院,
+%     major = 电气工程,
+%     grade = 2022级
+%   }
+% }
+% \end{Code}
+% 上例是增量配置，仍应填写英文题目、姓名、学号、导师与关键词。title 与 subtitle 在页眉和元数据中连续拼接；如语义需要标点，应在字段中自行写入。
+%
+% \subsection{较长题目与封面字段}
+% 研究生中文题目自动换行；博士还在封面题目区排入英文题目。普通题目保留学校示范位置，较长题目在保持字号及信息栏位置的前提下适当向上调整。题目区与下方信息栏保持间隔，超出整个可用区域时停止编译并提示缩短题目，不会静默生成相互重叠的文字。英文标题中的较长术语应使用正常的词间空格，让排版程序找到断行位置。
+%
+% 本科题目仍使用两个固定的下划线位置，应按语义拆入 title 与 subtitle。封面姓名、学号、导师、专业等字段有固定宽度；内容过长时会提示对应字段名，应填写较短的正式名称。学术型研究生的学科专业预留两行，可显式分行；专业型的专业名称使用一行，不占用下方学位类别的位置：
+% \begin{Code}
+% % 学术型研究生的两行学科专业
+% \SUEPSetup{info={major={电气工程\\电力系统及其自动化}}}
+% \end{Code}
+% 书脊文字页采用 23cm 的单行长度，包含题目、姓名、学号和单位；超出时停止编译。书脊的成品宽度取决于实际装订厚度，应由装订人员裁切，不能把 A4 文字样张当作固定书厚的成品尺寸。
+%
+% \clearpage
+% \section{信息字段查阅表}
+% \begin{longtable}{P{.28\textwidth}P{.64\textwidth}}
+% \toprule info 中的字段 & 说明\\\midrule\endhead
+% \texttt{title} & 中文题目，必填；本科封面第一行。\\
+% \texttt{subtitle} & 本科封面第二行，可空；与 title 合成完整题目。\\
+% \texttt{titleEn} & 英文题目，必填；用于英文摘要及博士封面。\\
+% \texttt{author} & 姓名；盲审显示“匿名”。\\
+% \texttt{studentId} & 学号，以文字填写，保留前导零；盲审匿名。\\
+% \texttt{supervisor} & 导师姓名及需显示的职称；盲审匿名。\\
+% \texttt{institution} & 本科学院（部）。\\
+% \texttt{institute} & 研究生所属院系。两个字段不是自动别名。\\
+% \texttt{major} & 专业或学科专业，必填；研究生可用换行分开一级、二级学科。\\
+% \texttt{grade} & 本科年级，例如 2022级。\\
+% \texttt{degree} & 实际学位名称，用于研究生封面及扉页。\\
+% \texttt{classification} & 研究生分类号，按论文实际填写。\\
+% \texttt{classifiedLevel} & 密级，默认“公开”。不自动代替授权书勾选。\\
+% \texttt{finalizationDate} & 研究生扉页论文定稿日期。\\
+% \texttt{keywords} & 中文关键词列表。\\
+% \texttt{keywordsEn} & 对应英文关键词列表。\\\bottomrule
+% \end{longtable}
+% 封面日期 \path{cover/date} 默认使用编译当天的年和月。定稿时应显式设置，保证以后重新编译不会改变日期。\path{cover/headerImage} 控制封面标识：本科使用方形校徽，硕博使用横版校名标识；默认路径如前所示，各示例目录已放置对应图片。
+% 本科写作示例默认填写电子封面。若需要保留可手写的封面空栏，设置 \texttt{cover/blankFields=true}。该选项只控制封面，正文页眉和 PDF 标题仍使用 info 中的论文题目。随本科项目提供黑色校徽、红色校徽和横版校名标识；方形校徽使用 \path{logo_red.png} 或 \path{logo_black.png}，横版 \path{suep_logo.png} 不宜拉伸成方形校徽。
+%
+% \chapter{论文结构与分页}
+% \section{三个排版阶段}
+% \verb|\frontmatter| 开始摘要和目录，内部页码为大写罗马数字；本科此部分不显示页码。\verb|\mainmatter| 开始正文，将阿拉伯页码重置为 1。\verb|\backmatter| 进入未编号的后置内容，页码继续，不重新从 1 开始。
+%
+% 双面研究生论文的封面、扉页、原创性声明和授权书各自保留空白背面。中文摘要从物理奇数页开始，正文章首页也在奇数页。正文补出的偶数页仍保留规定页眉和页码。本科默认单面；改成双面后补页为空白页。
+%
+% \section{本科顺序}
+% \begin{Code}
+% \begin{document}
+% \MakeCover
+% \MakeOriginality
+% \frontmatter
+% \input{abstract.tex}
+% \MakeTOC
+% \mainmatter
+% \input{body.tex}
+% \chapter{结论与展望}
+% % 结论正文
+% \backmatter
+% \begin{acknowledgements}
+% % 致谢正文
+% \end{acknowledgements}
+% \begin{bibprint}
+% \bibliography{references}
+% \end{bibprint}
+% \begin{appendices}
+% \chapter{补充数据}
+% % 附录正文
+% \end{appendices}
+% \end{document}
+% \end{Code}
+% 本科与硕博使用相同的自动目录机制：普通 \verb|\chapter|、\verb|\section| 等标题写入目录条目，\verb|\MakeTOC| 读取并排版，同时生成跳转链接。使用 latexmk 或至少编译两次更新标题与页码，无需手工给目录条目补链接。
+% 三类写作示例均使用自动目录、自然段落和自动编号，正文不含 LaTeX3 实现代码或原稿坐标补丁。\verb|\label| 只用于实际交叉引用；目录链接无需额外添加章节 label。
+% 本科目录默认不纳入摘要和目录自身；若院系要求摘要进入目录，在导言区写：
+% \begin{Code}
+% \SUEPSetup{TOC={abstract=true,abstractEn=true}}
+% \end{Code}
+% 正文开始显示带短横线的页码，例如“- 1 -”。
+% 本科目录的一级条目仅在条目前增加 6bp，不叠加条目后的额外间距。附录目录条目采用半角 \texttt{<附录 1 标题>} 格式，左括号与“参考文献”的首字左对齐。正文仍显示“附录 1：标题”；较长的标题可用 \verb|\chapter[目录短标题]{正文完整标题}|。
+%
+% \section{硕士与博士顺序}
+% \begin{Code}
+% \begin{document}
+% \MakeCover
+% \MakeOriginality
+% \frontmatter
+% \input{abstract.tex}
+% \MakeTOC
+% \mainmatter
+% \input{body.tex}
+% \begin{conclusion}
+% \section{结论}[Conclusions]
+% % 结论正文
+% \section{进一步工作的方向}[Directions for Future Work]
+% % 后续工作
+% \end{conclusion}
+% \backmatter
+% \begin{bibprint}
+% \bibliography{references}
+% \end{bibprint}
+% \begin{appendices}
+% \chapter{补充数据}[Supplementary Data]
+% % 附录正文
+% \end{appendices}
+% \begin{acknowledgements}致谢正文。\end{acknowledgements}
+% \begin{publications}成果清单。\end{publications}
+% \begin{research}博士科研工作。\end{research}
+% \end{document}
+% \end{Code}
+% 硕士与本科会忽略 research 环境中的内容；publications 只用于研究生。博士自动生成英文目录，无需再调用第二次 \verb|\MakeTOC|。上面结构代码需与主文件中的文档类、配置和 gbt7714 导言区配合使用。
+%
+% \section{前言、符号表与星号标题}
+% \texttt{symbols} 环境生成“主要符号对照表”，可放在前置部分、目录之后，内容由作者提供。学校示范没有要求的额外部分应先向学院核实再增加。前置部分可写 \verb|\chapter{前言}[Preface]|，博士英文目录中的前言不会出现正文的 Chapter 编号。
+%
+% \verb|\chapter*{标题}| 不生成章号，也不会自动加入中文目录。博士星号标题若提供尾部英文译名，会加入英文目录。为避免中英文目录范围不一致，致谢、文献、符号表等优先使用专用环境；自定义星号内容需自行安排目录条目。
+%
+% \chapter{摘要、标题与交叉引用}
+% \section{中英文摘要}
+% \begin{Code}
+% \begin{abstract}
+% 本文围绕……开展研究。首先……，随后……。
+% 研究结果表明……。
+% \end{abstract}
+% \begin{abstractEn}
+% This study investigates ... . The results indicate ... .
+% \end{abstractEn}
+% \end{Code}
+% 不要在环境内重复写“摘要”、ABSTRACT 或关键词标签。模板读取配置并自动输出题目、标题及关键词。中文摘要本科 300--500 字，硕士 500--1000 字，博士 1000--2000 字；中英文应对应。
+%
+% 本科中文摘要小四宋体，基线间距约 23.4 pt；英文正文小四、固定 25 pt。研究生摘要正文四号，中文基线间距约 22.68 pt，英文约 20.16 pt。正文保留约 19.5 pt 的既有基线间距；Word 的 1.25 倍行距包含字体行框，不是简单将字号乘以 1.25。
+%
+% 硕博 Word 原件的正文文字规定左右边距为 2.6 cm，但部分分节页面设置为左右 3 cm。本模板保留既有左右 3 cm 的默认版心。若学院要求按文字规定执行，可在导言区使用 \verb|\geometry{left=2.6cm,right=2.6cm}| 调整。资料来源切换不表示既有分页已经重新校准。
+%
+% 关键词本科 3--5 个，硕博 4--6 个。输入支持中英文逗号或分号，模板统一输出本科分号、研究生逗号，并检查中英文数量。研究生英文关键词按示范转为小写；专名和缩写需作者检查，必要时使用 \verb|\NoCaseChange{AC}| 保护大小写。
+%
+% \section{正文三级标题}
+% \begin{Code}
+% \chapter{绪论}[Introduction]
+% \label{ch:introduction}
+% \section{研究背景与意义}[Background and Motivation]
+% \label{sec:background}
+% \subsection{研究问题}[Research Questions]
+% \end{Code}
+% 博士的编号章、节和小节必须提供尾部英文译名；缺少或留空会报错。硕士与本科可保留这些译名，便于以后迁移，但不会生成英文目录。三级以外的标题没有自动英文目录接口，本模板的默认编号和目录深度到 subsection。
+%
+% 传统短标题仍可使用：
+% \begin{Code}
+% \chapter[目录短标题]{正文中较长的完整标题}[English Title]
+% \end{Code}
+% 前面的可选参数用于中文目录与页眉的短标题；后面的参数是博士英文目录译名。英文目录长标题应自行精炼并检查换行，不能省略译名来规避排版问题。
+%
+% \section{标签与引用}
+% 标签应有语义且全篇唯一。章节可以使用 \texttt{ch:introduction}，图、表、公式分别使用 \texttt{fig:system}、\texttt{tab:data} 和 \texttt{eq:model}。
+% 章标签放在标题后，图表标签放在标题命令后，公式标签放在 equation 或 align 中对应的一行。
+% \begin{Code}
+% 第\ref{ch:introduction}章介绍研究背景。
+% 图\ref{fig:system}给出系统结构。
+% 表\ref{tab:data}列出输入参数。
+% 式\eqref{eq:model}定义目标函数。
+% \end{Code}
+% 出现双问号通常表示标签尚未写出、拼写不一致或编译次数不足。先确认标签存在，再让 latexmk 完成编译。不要把双问号直接改成数字，否则后续插入章节时编号会失效。
+%
+% \chapter{图表、公式与代码}
+% \section{插入图片}
+% 推荐线图使用矢量 PDF，照片使用 PNG 或 JPEG。图片文件放在项目内，通过相对路径引用。模板已载入 graphicx，无需重复载入并传入冲突选项。
+% \begin{Code}
+% \begin{figure}[htbp]
+%   \centering
+%   \includegraphics[width=.78\linewidth]{images/system.pdf}
+%   \SUEPCaption{系统结构}{System architecture}
+%   \label{fig:system}
+% \end{figure}
+% \end{Code}
+% 图题在图片之后。博士必须使用双语标题命令，第二个参数不能为空；本科与硕士也可使用同一接口，但仅显示中文。图会依据页面剩余空间浮动，\texttt{[htbp]} 是位置建议。优先调整图片尺寸和附近文字，不要用大量强制换页把浮动体钉在源码位置。
+%
+% \section{三线表}
+% 表题放在表格之前，表格建议采用三线表。使用 booktabs 的横线命令；避免过密的竖线与装饰。本科表头使用五号宋体加粗居中，如下面示例；标签位于双语标题之后，可正确得到主表编号。
+% tabular 与 longtable 中的正文自动使用五号宋体，研究生表内英文使用 Times New Roman，按参考表格实际字号约 10.45 bp、基线间距约 18.72 bp 排版。研究生 booktabs 横线默认粗 0.48 bp，规则线前后不额外增加间距。表格内的局部字号设置仍会覆盖默认值；不应为压缩宽表而随意缩小字体。
+% \begin{Code}
+% \begin{table}[htbp]
+%   \centering
+%   \SUEPCaption{设备参数}{Equipment parameters}
+%   \label{tab:data}
+%   \begin{tabular}{ccc}
+%     \toprule
+%     \bfseries 参数 & \bfseries 含义 & \bfseries 单位 \\
+%     \midrule
+%     $P$ & 有功功率 & MW \\
+%     $E$ & 储能容量 & MWh \\
+%     \bottomrule
+%   \end{tabular}
+% \end{table}
+% \end{Code}
+% 长单元格可以使用 \verb|p{宽度}| 列；多页表应使用 longtable 并安排续表表头，不能包在 table 浮动体内。
+%
+% \subsection{跨页表与续表}
+% 参考第 14 页要求续页重复原表编号，在编号与可选表名后注明“（续）”，并重复表头与单位声明。longtable 会自然分页：\verb|\endfirsthead| 之前是首页表头，\verb|\endhead| 之前是后续各页表头。\verb|\SUEPContinuedCaption{中文表名}{English title}| 只用于 longtable 的续页表头，保留原编号，不另写表目录条目；本科与硕士显示中文，博士另显示同号英文标题及 continued 标记。不要手动增加或回退 table 计数器。
+%
+% \begin{Code}
+% \begin{longtable}{p{.22\textwidth}p{.25\textwidth}p{.38\textwidth}}
+%   \SUEPCaption{设备运行记录}{Equipment operating records}
+%   \label{tab:operating-records}\\
+%   \toprule
+%   设备 & 有功功率/MW & 运行状态\\
+%   \midrule
+%   \endfirsthead
+%   \SUEPContinuedCaption{设备运行记录}{Equipment operating records}\\
+%   \toprule
+%   设备 & 有功功率/MW & 运行状态\\
+%   \midrule
+%   \endhead
+%   \bottomrule
+%   \endfoot
+%   \bottomrule
+%   \endlastfoot
+%   \input{data/operating-records.tex}
+% \end{longtable}
+% 表\ref{tab:operating-records}汇总设备运行记录。
+% \end{Code}
+% 上述示例把数据放在 \path{data/operating-records.tex}，文件只包含逐行数据，不重复题注或 longtable 环境。例如：
+% \begin{Code}
+% 机组甲 & 10 & 正常运行\\
+% 机组乙 & 20 & 计划检修\\
+% 储能站 & 5 & 放电运行\\
+% \end{Code}
+% 增加数据行后将自动转页。每一页都会重复列名与 MW 单位，最后一页之后再恢复正文；单个单元格仍不能跨页，过长的文字应拆分为独立记录。longtable 需要多次编译来稳定列宽与分页，使用 latexmk 可自动完成。默认题注宽度由 longtable 的 \verb|\LTcapwidth| 控制，长表名可在导言区用 \verb|\setlength{\LTcapwidth}{\textwidth}| 调整。此示例已按五种学位配置编译并检查续页、编号和字体。
+%
+% \subsection{参考实例与替换}
+% 硕博示例中的 \path{images/nonlinear-state.png} 保留历史样张的科学图形和数学标签；物流表和三次响应公式使用可编辑代码排版。当前规范来源为 \path{resources/} 中的原始 Word 文档，更新插图时应从对应原件导出并核对清晰度。
+%
+% 示例中的图表使用浮动环境、相对于版心的宽度和自然分页，公式采用普通数学语法。图表和公式的编号按当前章自动生成，不复制参考中混用章号的示例编号。博士的中英文图表题注共用一个编号，使用一次题注调用，两行间距约 19.48 bp；表格正文随后自然排版。
+%
+% \section{公式与长公式}
+% 行内公式使用 \verb|$P_t$|，独立公式使用 equation。所有论文类型统一载入 unicode-math，不另行加载 amsmath 或 amssymb。unicode-math 自身会自动加载 amsmath 作为依赖，提供 equation、align 等环境。公式编号按章生成，例如 2-1；不需要手写 \verb|\tag{2-1}|。
+% 本科写作示例的相对产气速率公式使用普通下标和分式语法，编号由 equation 环境自动生成。符号释义使用下文的 \texttt{equationnotes} 环境；正文通过 \verb|\eqref| 引用公式。研究生示例同样使用普通公式，不需要复制 MathType 的字距、分式线宽或对象偏移。
+% 本科、硕士和博士均使用 TeX Gyre Termes Math 配套数学字体，以保持公式与正文 Times 字体的风格一致。向量用 \verb|\symbfit{x}| 表示粗斜体，矩阵用 \verb|\symbf{A}| 表示粗正体。不要另行加载 newtxmath、mathptmx 或 bm；它们与这套数学配置重叠。
+% 三类论文的正文公式字号一致：主体约 11.9 bp，上下标约 6.94 bp，二级上下标约 4.96 bp，沿用硕博配置；加号和等号使用当前西文正文字体。研究生编号采用五号全角括号，显示公式的右括号按参考悬挂到右边界之外，行内的 \verb|\eqref| 保持正常字宽，不作悬挂。
+% \begin{Code}
+% \begin{equation}
+%   \label{eq:model}
+%   \min_{\symbfit{x}} f(\symbfit{x})
+%   \qquad \text{subject to } \symbf{A}\symbfit{x}=\symbfit{b}
+% \end{equation}
+% \end{Code}
+% 多行共用一个编号时可以用 aligned：
+% \begin{Code}
+% \begin{equation}
+%   \begin{aligned}
+%     f(x) &= a x^2 + b x + c, \\
+%     g(x) &= d x + e.
+%   \end{aligned}
+%   \label{eq:aligned}
+% \end{equation}
+% \end{Code}
+% \verb|&| 标记对齐位置。若每行需要各自编号，使用 align，并在不需编号的行末使用 \verb|\notag|。正文中的公式引用用 \verb|\eqref| 自动加括号。函数名使用 \verb|\sin|、\verb|\min| 等命令，解释性文字放入 \verb|\text{...}|。
+%
+% \subsection{公式后的符号释义}
+% 研究生参考第 14 页要求“式中：”独立一行、左缩进两个汉字符，符号按先左后右、先上后下的顺序分行解释；破折号上下对齐，释文续行与首行释文对齐。\texttt{equationnotes} 环境按正文小四字号与行距排版，使用 \verb|\item[$符号$]| 编写每一项。正文内容可以自然跨页，不用 tabular 把整段释义锁成一个不可分页的盒子。
+% \begin{Code}
+% \begin{equation}\label{eq:storage}
+%   E_t=E_{t-1}+\eta P_t\Delta t
+% \end{equation}
+% \begin{equationnotes}[3em]
+%   \item[$E_t$] 时刻 $t$ 的储能量，单位为 MWh；
+%   \item[$E_{t-1}$] 上一时刻的储能量，单位为 MWh；
+%   \item[$\eta$] 充电效率，无量纲；
+%   \item[$P_t$] 时段 $t$ 的充电功率，单位为 MW。
+%     调度模型通过设备允许的功率范围约束充电过程，并在不同运行场景下
+%     保持相同的单位和符号约定，以便比较各时段的功率分配和储能状态；
+%   \item[$\Delta t$] 时段长度，单位为 h。
+% \end{equationnotes}
+% 式\eqref{eq:storage}给出储能状态的更新关系。
+% \end{Code}
+% 可选参数 \texttt{[3em]} 是符号列宽度，默认 \texttt{2em}，应按最长符号调整。释义中的物理量、变量用数学斜体，MW、MWh、h 等单位使用正文正体；不要把单位也放进变量数学模式。环境结束后恢复正常正文缩进与行距，符号释义不占用新的公式编号。该代码已在本科和四种研究生配置下验证；本科使用时也采用同样的正文释义布局。
+%
+% \section{算法与伪代码}
+% \label{sec:algorithms}
+% 本节基于\href{https://tug.ctan.org/macros/latex/contrib/algorithm2e/doc/algorithm2e.pdf}{algorithm2e 官方手册}（v5.2，第 2、7、9、10 节）编写；配置和峰值计算示例已在本项目三类学位中直接编译验证。完整选项可以用 \texttt{texdoc algorithm2e} 在本机查看。
+% \subsection{选择宏包并设置编号}
+% 算法适合描述输入、输出和计算步骤，源代码适合展示具体程序实现。本项目使用 algorithm2e 排版算法，统一管理浮动体、标题、编号、伪代码语句和行号。模板不自动加载它，不使用算法的论文无需额外依赖。所提供的学校规范未单独规定算法格式，下面是写作配置建议，学院另有要求时应据此调整。
+%
+% 在论文主文件的导言区（文档类之后、正文之前）加入：
+% \begin{Code}
+% \usepackage[ruled,vlined,linesnumbered,algochapter]{algorithm2e}
+% \SetAlgorithmName{算法}{算法}{算法目录}
+% \SetKwInput{KwIn}{输入}
+% \SetKwInput{KwOut}{输出}
+% \SetAlgoCaptionSeparator{\quad}
+% \ExplSyntaxOn
+% \cs_set:Npn \thealgocf {\thechapter-\arabic{algocf}}
+% \ExplSyntaxOff
+% \end{Code}
+% \texttt{algochapter} 选项使算法计数器在每章重新开始；上述编号定义使第 2 章的第一个算法显示为 2-1。algorithm2e 的计数器名为 algocf，算法拥有独立编号，不占用图、表或公式编号。不要再加载 algorithm、algorithmic 或 algpseudocode，以免同名环境冲突或混用不兼容的语句命令。
+%
+% \subsection{完整伪代码示例}
+% 下面的示例计算一组时段负荷的峰值。放在正文的某一章中即可编译，不需要外部程序或 shell-escape。
+% \begin{Code}
+% \begin{algorithm}[htbp]
+%   \SUEPCaption{时段负荷峰值计算}{Peak load calculation}
+%   \label{alg:peak}
+%   \KwIn{负荷序列 $p_1,\ldots,p_T$，$T\geq 1$}
+%   \KwOut{峰值 $p_{\max}$}
+%   $p_{\max}\gets p_1$\;
+%   \For{$t=2,\ldots,T$}{
+%     \If{$p_t>p_{\max}$}{
+%       $p_{\max}\gets p_t$\nllabel{line:peak-update}\;
+%     }
+%   }
+%   \Return{$p_{\max}$}\;
+% \end{algorithm}
+% 算法\ref{alg:peak}给出峰值计算过程，
+% 第\ref{line:peak-update}行更新当前峰值。
+% \end{Code}
+% \texttt{linesnumbered} 选项开启行号，\texttt{vlined} 用竖线表示语句块范围。每条普通语句以 \verb|\;| 结束；循环和条件语句通过花括号包围其内容，不使用 EndFor 或 EndIf 命令。\verb|\tcp{说明}| 添加单行注释，\verb|\tcp*[r]{说明}| 添加行末注释。长注释应改成算法前后的解释文字。数学变量放在数学模式中，中文说明放在普通文本中。
+%
+% \subsection{标题、引用与博士双语标题}
+% 算法标题放在步骤之前，算法标签紧跟标题命令。使用 \verb|\ref{alg:peak}| 引用算法编号。步骤行号使用 \verb|\nllabel|，放在该行的结束命令之前，引用写法见上例末行。首次编译出现双问号时，再编译一次或使用 latexmk。
+%
+% 在 algorithm2e 提供的 algorithm 环境中，\verb|\SUEPCaption{中文}{English}| 对本科与硕士显示中文标题，对博士显示中文和以 Algorithm 开头的英文标题，两行共享同一算法编号。算法双语标题是本示例为保持风格一致所作的选择，不是从学校图表规定推导出的强制要求；仅需中文算法标题时，三种论文均可使用普通 \verb|\caption{中文标题}|。博士图和表仍须使用双语题注。本接口适配 algorithm2e，不应用于其他宏包提供的同名环境。
+%
+% \subsection{浮动位置、长算法与常见问题}
+% \texttt{[htbp]} 允许算法在当前位置、页顶、页底或浮动页排版。算法稍后出现通常是当前页空间不足；先精简步骤或调整附近正文，不要普遍使用 \texttt{[H]} 强制定位。algorithm 是不能自动跨页的浮动体。长算法优先拆成有独立含义的子过程；确需跨页时，应采用专门的续排方案并核对编号、续题和引用，不能仅靠缩小字号塞入一页。
+%
+% 出现“algorithm 环境未定义”时检查是否加载 algorithm2e；出现 State 未定义时，通常是混用了 algpseudocode 的语法，应改为普通语句并用 \verb|\;| 结束。若步骤挤在同一行，检查是否漏写行结束命令。中文标题与算法目录名称由 \verb|\SetAlgorithmName| 设置。无需算法目录时不必添加额外目录页；如学院要求，可调用 \verb|\listofalgorithms|，并另行核对目录位置和样式。
+%
+% \section{定理与源代码}
+% 模板不预设定理环境，以免强加学科格式。需要时可在导言区载入相应宏包，自己定义命题或证明环境，并核对学院要求。
+%
+% 源代码可以使用 listings 或其他专门工具。本模板示例不要求外部执行权限；若另外选择依赖外部程序的代码高亮方案，应一并记录编译条件。短命令在普通正文中可使用 \verb|\texttt|，含大量特殊字符的示例可使用 verbatim 环境。长代码更适合放在附录，并在正文解释关键步骤。
+%
+% \chapter{参考文献与成果清单}
+% \section{gbt7714 与编译流程}
+% 本项目采用 gbt7714 宏包与 BibTeX。gbt7714 内部加载 natbib，负责正文引用；BST 样式将 \path{references.bib} 中的数据转换为文献表。本文教程参考作者维护的
+% \href{https://mirrors.ctan.org/biblio/bibtex/contrib/gbt7714/gbt7714-doc.pdf}{gbt7714 官方手册}
+% （在线版 v3.1.1，2026-09-27，第 2--6 节）与
+% \href{https://github.com/zepinglee/gbt7714-bibtex-style}{官方源代码仓库}。
+% 本机验证版本为 v2.1.9；下面的项目接口同时处理新旧样式名称。
+%
+% \begin{Code}
+% % 主文件导言区
+% \usepackage{gbt7714}
+% \SUEPBibliographyStyle
+%
+% % 正文
+% 相关研究见文献\cite{gao1987}。
+%
+% % 文末
+% \begin{bibprint}
+%   \bibliography{references}
+% \end{bibprint}
+% \end{Code}
+% 上述接口选择顺序编码制。本科采用 GB/T 7714--2015，优先使用新版文件 \path{gbt7714-2015-numeric.bst}，旧版发行版则使用 \path{gbt7714-numerical.bst}。研究生使用随项目提供的 \path{suepthesis-graduate.bst}，它基于 gbt7714 v2.1.9 的顺序编码样式，按给定硕博示范调整姓名、题名、会议标识、专利与标准字段顺序、电子文献日期分隔和条目末尾标点；复制独立论文项目时须一并保留该文件。新版官方文档中不带年份的样式名可能代表更新的标准，不能仅为消除文件名差异就替换学校要求的版本。
+%
+% 三类写作示例均使用 \verb|\SUEPBibliographyStyle| 和上面的 bibprint 写法。本科使用 gbt7714 的顺序编码样式；研究生使用随项目提供的专用样式。
+%
+% 不要同时加载 biblatex，也不要保留旧方案的数据载入和打印命令。上例文末的数据库参数对应同目录的 \path{references.bib}，不加扩展名。bibprint 环境负责学校格式的标题并抑制 natbib 的重复标题。
+%
+% \section{填写数据库：中文期刊与英文专著}
+% 以下为两条独立的 BibTeX 记录，可保存到 \path{references.bib}。引用键应唯一、稳定；中文作者也使用 and 分隔。
+% \begin{Code}
+% @article{gao1987,
+%   author  = {高景德 and 王祥珩},
+%   title   = {交流电机的多回路理论},
+%   journal = {清华大学学报},
+%   year    = {1987},
+%   volume  = {27},
+%   number  = {1},
+%   pages   = {1-8},
+% }
+% @book{knuth,
+%   author    = {Knuth, Donald E.},
+%   title     = {The {TeX}book},
+%   address   = {Reading},
+%   publisher = {Addison-Wesley},
+%   year      = {1984},
+% }
+% \end{Code}
+% 本项目使用 journal 和 address 字段。迁移旧 BibLaTeX 数据库时，重点检查 journaltitle 与 location 等字段，不能假定换了宏包就会完整读取原数据。标题中的专名可用内层花括号保护大小写，如 \verb|{TFDES}|。页码范围用一个或两个英文短横线，最终格式由样式处理。
+% 研究生定制样式保留数据库中的英文姓名、已有缩写及标题大小写，以对齐给定示范，且不在条目末追加句点；本科默认样式仍使用 gbt7714 自己的设置。给定硕博参考的会议析出文献采用文章 A、论文集 C 的标识，二者用句点分隔。研究生样式按该示范处理 inproceedings；其著录外观与 gbt7714 的默认 2015 样式不同，不能把这份校内定制样式当作通用国标样式分发。
+% 标准编号填写 number，名称填写 title，输出时编号在名称前。专利的国家填写 address 或 location，号码填写 number，公开日期填写 date；输出依次为题名、P 标识、国家与专利号、日期，不推测缺省国家。电子文献的发布日期与访问日期分别填写 date 和 urldate，二者用句点分隔。
+%
+% \begin{longtable}{P{.22\textwidth}P{.70\textwidth}}
+% \toprule 条目类型 & 需要重点核对的数据 \\\midrule\endhead
+% article & 作者、题名、期刊、年份、卷期、起止页码。\\
+% book & 作者、书名、出版地、出版社、年份，必要时版次。\\
+% inproceedings & 论文作者、题名、论文集名 booktitle、编者、出版信息和页码。\\
+% phdthesis / mastersthesis & 作者、题名、学位授予单位 school、所在地 address 与年份。\\
+% patent / standard & 责任者、名称、编号 number、日期及相应出版信息。\\
+% online & 作者或机构、网页题名、url、访问日期 urldate，发布日期可查时填写。\\
+% \bottomrule
+% \end{longtable}
+% 只有数据真实、完整，自动生成的文献表才有意义。不要根据标题猜测 DOI、作者、年份或页码。历史测试样张中保留的重复记录与原有拼写仅用于参考 PDF 对照，不作为写作示例的文献。
+%
+% \section{正文引用、排序与文献表}
+% \begin{Code}
+% 单篇引用\cite{gao1987}。
+% 同一位置引用多篇\cite{gao1987,knuth}。
+% 提及作者时可写：\citet{gao1987}提出……
+% 本模板兼容原有写法\supercite{gao1987}。
+% \end{Code}
+% 在本项目顺序编码样式下，cite 生成方括号上标，supercite 是兼容接口。文献按首次引用顺序编号；修改正文顺序后应重新运行 BibTeX。不要手写编号或手工重排生成的 bbl 文件。
+%
+% 默认只列出引用过的记录。\verb|\nocite{*}| 可列出数据库中的全部记录；指定引用键的 nocite 列表则适合需要固定演示次序的测试样张。写作示例由正文中的真实引用决定文献次序，不使用固定编号的 nocite 列表。
+%
+% 本科文献字号为五号，研究生为小四。学校关于作者数量、顺序、标点、外文比例的要求仍须逐项核对，不能把宏包的任意默认输出当作学校的全部规定。特别是从原 BibLaTeX 方案迁移后，作者大小写与末尾标点也应复查。
+%
+% \section{从首次编译到修改后的更新}
+% \begin{Code}
+% xelatex main.tex
+% bibtex main
+% xelatex main.tex
+% xelatex main.tex
+% \end{Code}
+% 第一步写出引用请求到 aux；BibTeX 读取 aux、bib 与 bst，生成 bbl；后续两次 XeLaTeX 将文献表、引用和目录页码写入最终 PDF。通常直接运行 \verb|latexmk -xelatex main.tex| 即可完成这些步骤。
+%
+% \begin{longtable}{P{.28\textwidth}P{.64\textwidth}}
+% \toprule 现象 & 处理方法 \\\midrule\endhead
+% 引用显示问号 & 核对引用键是否存在、大小写是否一致，再运行完整编译链。\\
+% 找不到 bst & 检查 gbt7714 安装及样式版本，保留模板的版本兼容接口。\\
+% 文献表为空 & 检查是否引用了条目、bibliography 路径和 BibTeX 的 blg 日志。\\
+% 提示缺少 biblatex & 迁移后遗留了旧 bbl；清除本项目的生成文件后重新编译。\\
+% 作者或期刊缺失 & 检查条目字段及 BibTeX 警告，不要直接编辑 bbl。\\
+% 标题重复 & 使用本示例的 bibprint 包装，不要额外手写参考文献章标题。\\
+% \bottomrule
+% \end{longtable}
+% 迁移前备份源文件。在项目目录中清理旧 aux、bbl、bcf、run.xml 和 latexmk 缓存时，应逐个确认是生成文件；保留 tex、bib、图片和配置。编辑器应选择 BibTeX，而非旧的 Biber 工具链。
+%
+% \section{成果清单与文献数量}
+% publications 环境用于攻读研究生学位期间的学术论文。可以按学校文献格式手工列出真实成果；若需从独立数据库生成成果清单，应采用专门的多文献表方案并另行验证，避免将成果混进正文参考文献。research 环境仅输出博士科研工作。盲审模式整体省略这两个环境。
+%
+% \subsection{完整成果清单}
+% 在 publications 中使用 publicationlist 排列成果，每个 \verb|\item| 自动生成方括号序号。条目采用小四正文与约 19.5bp 基线，首行缩进两个汉字符、续行顶格，与研究生文献列表一致；编号独立于正文文献，不在 aux 中写入新的引用记录。每个清单从 1 开始，可用多个清单分类排列成果。
+% \begin{Code}
+% \begin{publications}
+%   \begin{publicationlist}
+%     \item 毛峡, 丁玉宽. 图像的情感特征分析及其和谐感评价[J].
+%       电子学报, 2001, 29(12A): 1923-1927
+%     \item Ozgokmen T. M., Johns W. E., Peters H., et al.
+%       Turbulent Mixing in the Red Sea Outflow Plume from a High-Resoluting
+%       Nonhydrostatic Model[J]. Jounal of physical Oceangraphy,
+%       2003, 33(8): 1846-1869
+%   \end{publicationlist}
+% \end{publications}
+% \end{Code}
+% 历史条目仅演示排版，写作时全部换成本人真实成果。publicationlist 管理编号、缩进和分页；作者、类型和标点按上一节的学校格式填写，末尾不加句点。不要手写 \texttt{[1]} 或用正文的 \verb|\bibliography| 打印成果，避免混用数据库和标题。四种研究生学位已验证；本科及盲审版本由 publications 整块省略。
+%
+% 在 research 中填写博士代表性项目的真实名称、时间、本人工作与成果，保持正文格式，与发表论文清单分别成页。环境只管理版式。
+%
+% 硕士参考文献一般不少于 30 篇、博士不少于 80 篇；给定硕博文件要求期刊不少于 80\%、国外不少于 30\%，以近五年为主。本科规范要求主要文献 10 篇以上、外文至少 2 篇、期刊不少于 4 篇；本科示范另要求其中 5 篇与任务书不同。请按学院对“篇数”和类别的实际认定核对。两个示例条目只演示编译，不满足这些内容条件。
+%
+% \chapter{附录、盲审与装订}
+% \section{附录结构}
+% \begin{Code}
+% \begin{appendices}
+%   \chapter{模型参数}[Model Parameters]
+%   \label{app:parameters}
+%   % 补充推导、数据、程序等
+%   \chapter{补充实验}[Additional Experiments]
+% \end{appendices}
+% \end{Code}
+% 研究生附录为 A、B 等字母，图表公式编号为 A-1 等；本科先输出总标题“附录”，再按“附录 1：模型参数”排列，各项正文五号，图表公式编号为 1-1 等。不要在标题参数中再手写“附录 A”，否则会重复。
+%
+% 附录中可以有不编号的补充标题。星号章标题不会消耗附录编号；需要目录条目时应明确添加。appendices 是一个整体环境，通常把所有附录放在同一个环境里，避免反复重置计数器。
+%
+% \section{生成盲审稿}
+% \begin{Code}
+% \documentclass[type=doctor,blindPeerReview=true]{suepthesis}
+% \end{Code}
+% 此选项把模板中的姓名、学号、导师和 PDF 作者信息替换为“匿名”，省略声明、致谢、成果清单与博士科研工作。它不会扫描并自动删除正文、图片和数据库中的身份线索。
+% \begin{Code}
+% 本研究在\SecretInfo{某某实验室}[所在实验室]完成。
+% \begin{blindPeerReview}
+% % 此块仅在非盲审版本输出
+% 个人经历或其他需隐藏的说明。
+% \end{blindPeerReview}
+% \end{Code}
+% 省略 \verb|\SecretInfo| 的可选替代文本时默认输出“匿名”。blindPeerReview 环境中不要放必须参与计算或交叉引用的核心结果，因为盲审版本会跳过整块内容；同样不宜在该捕获正文的环境里直接放 verbatim。
+%
+% 切换盲审选项后完整编译，检查 PDF 属性中的作者字段、正文搜索结果、图片说明、附件与文件名。非盲审稿和盲审稿分别保存，避免提交时选错文件。
+%
+% \section{签名、单双面与书脊}
+% 声明中的签名与日期留白用于实际签署；密级信息不会替代授权书中的保密勾选。声明文本以原始 Word 文档为依据。硕博两份声明独立排版，正文小四宋体；原创性声明签名在右侧，授权书保密选项分列显示。不要在正文中用字号或空行覆盖这些固定声明页。
+% 论文结构中的空白背面有装订用途，正式双面稿不应只为减少页数而删除。
+%
+% \verb|twoside=false| 适用于单面预览；需要最终双面稿时恢复默认或设为 true，再检查章首页和页码。单面 PDF 与双面 PDF 页数不同是正常现象。
+% \begin{Code}
+% % 研究生论文文末，需要时启用
+% \MakeSpine
+% \end{Code}
+% 书脊包含题目、作者、学号、上海电力大学，顺时针旋转 90 度，单独生成一页。该页不是按书厚生成的成品裁切稿，应交装订人员按实际论文厚度处理，并从正文提交文件中按要求分离。
+%
+% \chapter{字体、规范与版式核对}
+% \section{跨平台字体选择}
+% \label{sec:fonts}
+% 中文与西文字体组分别选择。字体按实际可用性检测，不通过操作系统名称猜测是否安装了字体。选项必须放在 \verb|\documentclass| 中；加载文档类后不能通过 \verb|\SUEPSetup| 切换。
+%
+% \subsection{本项目实际使用的字体}
+% 下表按 SUEPThesis 的实际排版用途列出字体。Windows 列对应目前学校示范的校准字体；macOS 与开放字库列是可编译的替代方案，不代表三者字形相同。
+% \begingroup\small
+% \begin{longtable}{P{.16\textwidth}P{.16\textwidth}P{.24\textwidth}P{.32\textwidth}}
+% \caption{中文字体及当前项目用途}\label{tab:cjk-fonts}\\
+% \toprule 用途 / 字族 & Windows 示范字体 & macOS 候选字体 & 开放字体文件\\\midrule\endhead
+% 正文、摘要、目录、研究生节标题 / 宋体 & \texttt{SimSun} & Songti SC Light；STSongti-SC-Light；Songti SC & \path{FandolSong-Regular.otf}；粗体 \path{FandolSong-Bold.otf}\\
+% 章标题、本科节标题 / 黑体 & \texttt{SimHei} & Heiti SC Medium；STHeitiSC-Medium；Heiti SC；PingFang SC & \path{FandolHei-Regular.otf}；粗体 \path{FandolHei-Bold.otf}\\
+% 本科封面校名等楷体区域 / 楷体 & \texttt{KaiTi} & Kaiti SC；STKaitiSC-Regular & \path{FandolKai-Regular.otf}\\
+% 仿宋字族、中文等宽 / 仿宋 & \texttt{FangSong} & \texttt{STFangsong} & \path{FandolFang-Regular.otf}\\
+% 本科封面“本科毕业设计（论文）” / 华文仿宋 & \texttt{STFangsong}，缺少时用 FangSong & \texttt{STFangsong} & \path{FandolFang-Regular.otf}\\\bottomrule
+% \end{longtable}
+% \endgroup
+% 华文仿宋与中易仿宋分别列出：封面论文类型优先使用 STFangsong，而普通仿宋字族使用 FangSong。\texttt{windows} 模式要求宋、黑、楷、仿宋四种字体；华文仿宋缺失会提示替代。若要完整复现当前本科示范，应同时安装 STFangsong。研究生宋体粗体沿用参考 Word/PDF 的局部合成描边，Fandol 宋、黑体则使用独立粗体文件。
+%
+% \begin{longtable}{P{.23\textwidth}P{.30\textwidth}P{.37\textwidth}}
+% \caption{西文及数学字体}\label{tab:latin-fonts}\\
+% \toprule 用途 & 当前字体 & 替代与说明\\\midrule\endhead
+% 西文正文、英文摘要、英文目录及数字 & Times New Roman & 缺少时使用 TeX Gyre Termes；需要常规、粗体、斜体、粗斜体四种字形。\\
+% 西文无衬线字族 & TeX Gyre Heros & 所有字体组选项均使用此开放字库。\\
+% 西文等宽字族 & Latin Modern Mono & 所有字体组选项均使用此开放字库。\\
+% 本科、硕士与博士数学公式 & TeX Gyre Termes Math & 统一使用 unicode-math；字体与字号一致，加号、等号使用当前西文正文字体。\\\bottomrule
+% \end{longtable}
+% 西文 Times 字体不会随 \texttt{cjk-font=mac} 改成 macOS 中文字体，也不会随 \texttt{cjk-font=fandol} 自动改变；应同时设置 \texttt{font}。本科校徽及研究生图形校名由图片提供，不需要额外安装书法字体。Adobe、方正、思源等字库未纳入当前预设，当前规范与版式校准尚未针对这些字库验证；增加预设时需检查宋、黑、楷、仿宋及封面用字，不能只替换正文宋体。
+%
+% \subsection{选择字体组与缺字库处理}
+% \begin{longtable}{P{.23\textwidth}P{.67\textwidth}}
+% \toprule 选项 & 行为\\\midrule\endhead
+% \texttt{cjk-font=auto} & 默认。每种字族依次检查 Windows 名称、macOS 名称、Fandol 文件。缺少学校示范字体时提示回退。\\
+% \texttt{cjk-font=windows} & 要求 SimSun、SimHei、KaiTi、FangSong；缺少任何一种即报错。可用于已合法安装这些字体的任意系统。\\
+% \texttt{cjk-font=mac} & 要求 Songti SC、Heiti SC（或 PingFang SC）、Kaiti SC、STFangsong；兼容相应 PostScript 名称。缺失即报错。\\
+% \texttt{cjk-font=fandol} & 使用 TeX 发行版的 Fandol 宋、黑、楷、仿宋；通过 OTF 文件名加载，不依赖系统字体。\\
+% \texttt{font=auto} & 优先 Times New Roman，缺少时提示并使用 TeX Gyre Termes。\\
+% \texttt{font=times} & 要求 Times New Roman，缺失即报错。\\
+% \texttt{font=termes} & 使用 TeX Gyre Termes；三类论文的数学字体均使用 TeX Gyre Termes Math。\\\bottomrule
+% \end{longtable}
+% Windows 正式排版可显式检查示范字体；macOS 可选择本机字体；Linux、在线环境及跨机器协作可选择开放字体：
+% \begin{Code}
+% \documentclass[type=master,cjk-font=windows,font=times]{suepthesis}
+% % macOS（需要已启用或下载对应字体）
+% \documentclass[type=master,cjk-font=mac,font=auto]{suepthesis}
+% % 在各系统使用同一套开放字体
+% \documentclass[type=master,cjk-font=fandol,font=termes]{suepthesis}
+% \end{Code}
+% 上述三行是互斥的选择，主文件只保留一行。手册本身固定使用 Fandol 与 TeX Gyre，以便在不含商业字体的环境中编译。日志会记录实际选择的 song、hei、kai、fang、cover、latin 字体，可搜索 \texttt{Selected} 核对。本科封面论文类型优先使用 STFangsong；在 auto/windows 中缺少它会提示并使用当前仿宋。fandol 模式始终使用 Fandol 仿宋。
+%
+% 字体在文档类加载时初始化，默认优先选择学校示范字体。中文使用 \texttt{cjk-font} 选择字体组，西文使用 \texttt{font} 选择 Times New Roman 或 TeX Gyre Termes；选项值以本手册为准。
+%
+% 统一开放字体能减少不同系统间的排版差异，但 macOS 华文字体、Fandol 与学校示范的中易字体不是同一字形，换页可能改变。正式提交应核对院系要求并在规定字体环境中重编译。仓库不分发商业字体；已有合法授权的字体可安装到本机，也可在导言区用 fontspec/CTeX 接口加载自己的字体文件，同时配置模板使用的命名字族，详见实现部分。
+%
+% \section{校徽与校名图片}
+% \label{sec:logo}
+% 本科使用圆形校徽，研究生封面使用横向校名图。现有示例分别携带对应的 \path{images/suep-logo.png}，无需安装校名字体。默认 \path{cover/headerImage=auto} 先查找 \path{images/suep-logo.pdf}，再查找 PNG；随后本科查找 \path{suep-emblem.pdf} 或 PNG，研究生查找 \path{suep-name.pdf} 或 PNG。文件也可放在 TeX 搜索路径中。请勿将两种比例的图片混用。
+% \begin{Code}
+% \SUEPSetup{cover={headerImage=images/official-emblem.pdf}}
+% % 明确省略图片（例如单独测试正文时）
+% \SUEPSetup{cover={headerImage={}}}
+% \end{Code}
+% 指定图片应带扩展名，可以使用 PDF、PNG 或 JPEG；路径相对于主文件，并注意大小写。调用 \verb|\MakeCover| 时若默认或指定图片不存在，模板报错并提示路径，避免静默缺图。空值才表示有意省略。图片按原有封面区域等比例缩放，不改变学校示范的位置。
+%
+% 上海电力大学目前提供的是位图，直接包进 PDF 不会增加矢量细节。本模板先使用已有高分辨率校徽与校名图；拿到官方矢量 PDF 后可通过 \path{cover/headerImage} 指定文件，或替换默认路径下的图片，无需修改类源码。若要另建 TikZ 标识包，需要准确的上海电力大学轮廓资料，并核对视觉标识的使用要求。
+%
+% \section{各学位的主要差异}
+% \begin{longtable}{P{.22\textwidth}P{.33\textwidth}P{.35\textwidth}}
+% \toprule 项目 & 本科 & 硕博\\\midrule\endhead
+% 正文边距 & 左 31.7、右 25、上/下 25.4 mm & 左/右 30、上 30、下 25 mm\\
+% 默认装订 & 单面 & 双面，章从奇数页开始\\
+% 前置页码 & 隐藏 & 大写罗马数字\\
+% 正文页码 & 小五，带短横线 & 五号，纯数字\\
+% 正文 & 小四宋体，基线约 19.5 pt & 小四宋体，基线约 19.5 pt\\
+% 中文摘要 & 小四，基线约 23.4 pt & 四号，基线约 22.68 pt\\
+% 英文摘要 & 小四，固定 25 pt & 四号，基线约 20.16 pt\\
+% 一级标题 & 小三黑体 & 三号黑体\\
+% 英文目录与图表题 & 不输出 & 仅博士输出\\
+% 附录 & 数字分项，五号正文 & 字母分章\\\bottomrule
+% \end{longtable}
+% 模板没有提供随意改字号、页边距的通用风格开关。若院系给出新的书面要求，应更新规范对照并有针对性修改文档类，再进行完整检查，而不是在正文随处插入格式覆盖。
+%
+% \section{规范存在歧义时}
+% 规范原件及其用途见 \path{resources/README.md}。例如硕博附录示例使用字母，而一处说明写数字；本模板采用示例的字母编号。硕博说明提到中英文扉页，但展示页是中文扉页内含博士英文题目；本实现按展示结构生成。
+%
+% Word 的“1.25 倍行距”包括字体行框，不能把它当成字号乘以 1.25。模板保留历史校准的基线设置；更换规范来源不代表逐页版式已经重新验收。核对原始 Word 文档时，应检查字号、边距、行距和页眉位置，并阅读文本框中的格式说明。
+%
+% \chapter{常见问题与排查}
+% \section{编译失败时先看哪里}
+% 打开 \path{main.log}，从第一条以感叹号开始的错误或明确的 Package Error 找起。后续错误可能只是连锁反应。记录命令、引擎版本和最小能复现的源码片段，通常比只提供最后一行“编译失败”更有帮助。
+% \begin{longtable}{P{.33\textwidth}P{.59\textwidth}}
+% \toprule 现象 & 检查与处理\\\midrule\endhead
+% 找不到 suepthesis.cls & 在仓库提取类文件，并复制到主文件所在目录。\\
+% 提示改用 XeLaTeX/LuaLaTeX & 编译器仍是 PDFLaTeX；修改项目的引擎设置。\\
+% 找不到图片 & 检查相对于 main.tex 的路径、扩展名与大小写。\\
+% 博士标题要求英文译名 & 在编号章、节、小节后补上 [English]。\\
+% 博士图表要求双语题注 & 使用 SUEPCaption，并提供非空英文参数。\\
+% Required information is empty & 检查 title、titleEn、major 是否空值。\\
+% 引用显示问号或引用键 & 检查 label / cite 键，运行 BibTeX 和后续 XeLaTeX。\\
+% 文献表空白 & 检查是否引用了条目、数据库路径及 BibTeX 日志。\\
+% 中文字体回退 & 检查字体安装及日志，换到规定字体环境重编译。\\
+% 目录页码未更新 & 让 latexmk 完成重编译；必要时清理中间文件。\\
+% Overfull hbox & 定位行号，检查长标题、不可断长词、表格列宽和图片宽度。\\\bottomrule
+% \end{longtable}
+%
+% \section{清理和重新编译}
+% 在论文目录运行 \texttt{latexmk -c main.tex} 可清理常见中间文件并保留 PDF。博士英文目录文件 \path{main.toe} 属于本模板扩展的辅助文件，若仍有旧条目，可单独删除它再完整编译。不要删除自己的 tex、bib 或图片。
+%
+% 文献编译失败时查看 \path{main.blg}。如果提示缺少样式文件，应检查 gbt7714 安装及样式版本；从旧方案迁移后应清理遗留的文献中间文件。更新前备份论文项目，更新后不要继续使用旧的文献中间结果。
+%
+% \section{长标题和大图表}
+% 本科封面题目是两行固定栏位，可用 subtitle 分行；过长的学院、导师信息应采用学院认可的简写或明确的排版方案。研究生封面可自然换行，但特别长的题目仍需检查整页高度。
+%
+% 宽表应先精简列标题、折行并调整列宽，避免整体缩小导致字号不符。图片文字应在最终页面尺寸下清晰可读。
+%
+% \chapter{提交与维护}
+% \section{提交前逐项核对}
+% \begin{enumerate}
+% \item 确认学位类型、学术/专业选项、专业和实际授予学位名称。
+% \item 核对题目、姓名、学号、导师、院系及日期，检查长字段没有越界。
+% \item 核对中英文摘要、关键词对应和字数；删去全部示例说明文字。
+% \item 检查目录深度、博士英文译名、正文页码和双面空白背面。
+% \item 查看每张图表、长公式及其引用，确认无问号、重复编号或文字遮挡。
+% \item 检查文献条目的真实性、完整性和数量构成，补齐成果与附录。
+% \item 盲审稿检查身份信息；正式稿完成要求的签名、日期和授权勾选。
+% \item 归档最终 PDF、全部源码、图片、bib、cls 和编译环境信息。
+% \end{enumerate}
+%
+% \section{开发者如何修改模板}
+% 使用说明、实现说明和文档类逻辑集中在 \path{suepthesis.dtx}，使用 expl3 的变量、条件、键值和命令定义。字体、章节、题注、文献等功能通过其宏包公开接口配置。不要同时手工编辑仓库和示例目录中的多份 cls，否则下次提取会覆盖这些改动。
+% \begin{Code}
+% xetex suepthesis.ins
+% ./scripts/build.ps1
+% ./scripts/check-source.ps1
+% ./scripts/check-build.ps1
+% \end{Code}
+% 源码检查使用 Python 标准库；可用 \texttt{-Python} 指定解释器路径。编译后应逐页检查 PDF，尤其是长标题、复杂表格与新加入的字体设置。
+%
+% 类源码可以用 explcheck 检查。生成文件不作为手工维护入口；新增接口时应同时更新本手册、对应示例，并编译检查生成的 PDF。项目遵守仓库中的 LPPL 许可。
+%
+% \appendix
+% \chapter{接口速查与资料索引}
+% \begin{longtable}{P{.32\textwidth}P{.60\textwidth}}
+% \toprule 命令或环境 & 用途\\\midrule\endhead
+% \verb|\SUEPSetup{...}| & 导言区配置信息、封面和目录选项。\\
+% \verb|\MakeCover| & 本科封面；研究生封面和扉页。\\
+% \verb|\MakeOriginality| & 生成原创性声明及授权声明；盲审省略。\\
+% \texttt{abstract / abstractEn} & 中英文摘要及自动关键词。\\
+% \verb|\MakeTOC| & 中文目录；博士另加英文目录。\\
+% \verb|\SUEPCaption{中}{英}| & 统一图表题注接口，博士双语。\\
+% \verb|\SUEPContinuedCaption|\newline\verb|{中}{英}| & longtable 续页题注，保留编号及重复表名。\\
+% \texttt{symbols} & 主要符号对照表。\\
+% \texttt{equationnotes} & 公式后的符号释义，破折号与续行释文对齐。\\
+% \texttt{conclusion} & 本科不编号的结论；研究生编号的“结论与展望”章，含英文目录标题。\\
+% \texttt{bibprint} & 参考文献标题及排版；内部调用 bibliography。\\
+% \texttt{appendices} & 全部附录的容器，内部使用 chapter。\\
+% \texttt{acknowledgements} & 致谢，盲审省略。\\
+% \texttt{publications} & 研究生成果清单，本科及盲审省略。\\
+% \texttt{research} & 博士科研工作，其他学位及盲审省略。\\
+% \verb|\SecretInfo{原文}[替代]| & 正文局部身份信息替换。\\
+% \texttt{blindPeerReview} & 环境内文本仅在非盲审版本显示。\\
+% \verb|\MakeSpine| & 研究生书脊文字单独页。\\\bottomrule
+% \end{longtable}
+% 资料索引：\path{README.md} 是仓库入口，并列出项目致谢；\path{resources/README.md} 记录学校规范原件及其用途；\path{LICENSE} 记录项目许可。三个示例目录中的 main.tex 是最直接的可编译参考。
+%
+% 当前规范为 \path{resources/} 中的四份原始 Word 文档，说明见 \path{resources/README.md}。\path{scripts/check-build.ps1} 检查原件完整性、示例编译与两种引擎下的数学字体字号。更新规范时，应先阅读新原件并记录变化，再修改模板和原件摘要。
+
+% \chapter{代码实现}
+% \label{chap:implementation}
+% 本章集中呈现实现说明与实际源码。维护时修改本文件，然后通过 DocStrip 提取类文件；文档中的代码与生成的类来自同一份源文件。代码行号连续，所有说明性段落不会进入类文件。
+%
+% \section{引擎、消息与状态}
+% 载入 expl3 与 l3keys2e，拒绝 PDFLaTeX。全局变量保存学位、单双面、盲审及信息；局部变量用于封面和排版过程。
+%    \begin{macrocode}
+%<*cls>
+\RequirePackage{expl3,l3keys2e}
+\ProvidesExplClass{suepthesis}{2026-10-07}{0.1.0}{SUEP degree thesis class}
+\msg_new:nnn {suepthesis}{engine}{Use~XeLaTeX~or~LuaLaTeX.}
+\msg_new:nnn {suepthesis}{translation}{Doctoral~heading~'#1'~needs~an~English~translation.}
+\msg_new:nnn {suepthesis}{caption}{Doctoral~figures/tables~need~\string\SUEPCaption\{Chinese
+  \}\{
+  English\}.}
+\msg_new:nnn {suepthesis}{continued-caption}{Use~\string\SUEPContinuedCaption~only~inside~
+  longtable.
+  }
+\msg_new:nnn {suepthesis}{font}{
+  Font~'#1'~unavailable;~using~a~substitute.~Check~Selected~font~messages~in~the~log.}
+\msg_new:nnn {suepthesis}{required}{Required~information~'#1'~is~empty.}
+\msg_new:nnn {suepthesis}{keywords}{Expected~#1~keywords,~received~#2.}
+\msg_new:nnn {suepthesis}{keyword-pair}{Chinese~and~English~keyword~counts~differ.}
+\msg_new:nnn {suepthesis}{profile-locked}{Option~'#1'~must~be~set~before~begin\{document\}.}
+\msg_new:nnn {suepthesis}{cover-title-overflow}
+  {The~thesis~title~exceeds~the~available~cover~area.~Shorten~the~title~or~adjust~its~
+  wording.}
+\msg_new:nnn {suepthesis}{cover-field-overflow}
+  {Cover~field~'#1'~exceeds~its~single-line~area.~Use~a~shorter~official~form.}
+\msg_new:nnn {suepthesis}{spine-overflow}
+  {The~spine~text~exceeds~23cm.~Shorten~the~thesis~title~before~printing.}
+\sys_if_engine_pdftex:T {\msg_fatal:nn {suepthesis}{engine}}
+\tl_new:N \g__suep_type_tl
+\tl_new:N \g__suep_degree_type_tl
+\tl_new:N \g__suep_sides_tl
+\bool_new:N \g__suep_profile_dirty_bool
+\bool_new:N \g__suep_profile_locked_bool
+\bool_new:N \g__suep_abstract_toc_explicit_bool
+\bool_new:N \g__suep_abstract_en_toc_explicit_bool
+\bool_new:N \g__suep_bibliography_requested_bool
+\bool_new:N \g__suep_twoside_bool
+\bool_new:N \g__suep_blind_bool
+\bool_new:N \g__suep_main_bool
+\bool_new:N \g__suep_appendix_bool
+\bool_new:N \l__suep_bicaption_bool
+\bool_new:N \l__suep_display_tag_bool
+\bool_new:N \l__suep_cover_bool
+\tl_new:N \l__suep_cover_data_offset_tl
+\tl_new:N \l__suep_cover_value_offset_tl
+\bool_new:N \g__suep_cover_blank_bool
+\bool_new:N \g__suep_abstract_toc_bool
+\bool_new:N \g__suep_abstract_en_toc_bool
+\prop_new:N \g__suep_info_prop
+\tl_new:N \g__suep_date_tl
+\tl_new:N \g__suep_logo_tl
+\tl_new:N \l__suep_logo_file_tl
+\tl_new:N \g__suep_cjk_fontset_tl
+\tl_new:N \g__suep_latin_fontset_tl
+\tl_new:N \g__suep_song_font_tl
+\tl_new:N \g__suep_hei_font_tl
+\tl_new:N \g__suep_kai_font_tl
+\tl_new:N \g__suep_fang_font_tl
+\tl_new:N \g__suep_cover_font_tl
+\tl_new:N \g__suep_latin_font_tl
+%    \end{macrocode}
+%
+% \section{文档类选项与依赖}
+% 类选项在加载 ctexbook 前解析。单双面决定 openright/openany；字体组选项由模板接管，因此基础类使用 fontset=none。
+%    \begin{macrocode}
+\keys_define:nn {suepthesis/option}
+  {
+    cjk-font .choices:nn = {auto,windows,mac,fandol}
+      {\tl_gset:NV \g__suep_cjk_fontset_tl \l_keys_choice_str},
+    cjk-font .initial:n = auto,
+    font .choices:nn = {auto,times,termes}
+      {\tl_gset:NV \g__suep_latin_fontset_tl \l_keys_choice_str},
+    font .initial:n = auto,
+    type .choices:nn = {bachelor,master,doctor}
+      {\tl_gset:NV \g__suep_type_tl \l_keys_choice_str},
+    type .initial:n = master,
+    degreeType .choices:nn = {academic,professional}
+      {\tl_gset:NV \g__suep_degree_type_tl \l_keys_choice_str},
+    degreeType .initial:n = academic,
+    degree .meta:n = {degreeType=#1},
+    twoside .choices:nn = {auto,true,false}
+      {\tl_gset:NV \g__suep_sides_tl \l_keys_choice_str},
+    twoside .initial:n = auto, twoside .default:n = true,
+    blindPeerReview .bool_gset:N = \g__suep_blind_bool,
+    blindPeerReview .initial:n = false,
+  }
+\ProcessKeysOptions{suepthesis/option}
+\prg_new_conditional:Npnn \__suep_if_bachelor: {p,T,F,TF}
+  {\str_if_eq:eeTF {\g__suep_type_tl}{bachelor}{\prg_return_true:}{\prg_return_false:}}
+\prg_new_conditional:Npnn \__suep_if_doctor: {T,TF}
+  {\str_if_eq:eeTF {\g__suep_type_tl}{doctor}{\prg_return_true:}{\prg_return_false:}}
+\str_if_eq:VnTF \g__suep_sides_tl {auto}
+  {\__suep_if_bachelor:F {\bool_gset_true:N \g__suep_twoside_bool}}
+  {\str_if_eq:VnT \g__suep_sides_tl {true}{\bool_gset_true:N \g__suep_twoside_bool}}
+\bool_if:NTF \g__suep_twoside_bool
+  {\PassOptionsToClass{twoside,openright}{ctexbook}}
+  {\PassOptionsToClass{oneside,openany}{ctexbook}}
+\LoadClass[a4paper,zihao=-4,fontset=none,linespread=1]{ctexbook}
+\RequirePackage{geometry,fancyhdr,titletoc,graphicx,booktabs,array,longtable
+  }
+\RequirePackage{caption,setspace,xcolor}
+\RequirePackage[unicode,bookmarksnumbered,hidelinks]{hyperref}
+\hypersetup{hypertexnames=false}
+\pdfstringdefDisableCommands{\cs_set:Npn \quad {~}}
+%    \end{macrocode}
+%
+% \section{字体解析与字族绑定}
+% 参见第~\ref{sec:fonts}~节。auto 按候选顺序逐字族选择；显式预设缺字体就停止。Fandol 通过文件名加载并使用真实粗体。Windows 下研究生宋体的局部合成粗体保留参考 PDF 测量值。命名字族 zhsong、zhhei、zhkai、zhfs、suepcover、suepgradbold、suepgradsubbold 都需要同步配置；仅调用 setCJKmainfont 不会覆盖这些字族。
+%    \begin{macrocode}
+\msg_new:nnn {suepthesis}{font-required}
+  {Font~'#1'~is~required~by~the~selected~font~preset.~Install~it~or~choose~
+  auto/fandol/termes.}
+\msg_new:nnn {suepthesis}{font-selected}{Selected~#1~font:~#2.}
+\msg_new:nnn {suepthesis}{logo-missing}
+  {
+  Cover~logo~'#1'~not~found.~Set~cover/headerImage~to~an~existing~PDF/PNG/JPEG~file,~or~
+  empty~to~omit~it.
+  }
+\cs_new_protected:Npn \__suep_first_font:Nn #1#2
+  {\tl_gclear:N #1
+   \clist_map_inline:nn {#2}
+     {\IfFontExistsTF{##1}
+        {\tl_gset:Nn #1 {##1}\clist_map_break:}{}}}
+\cs_new_protected:Npn \__suep_select_cjk:Nnnn #1#2#3#4
+  {\str_case:Vn \g__suep_cjk_fontset_tl
+     {{auto}{\tl_set:Nn \l_tmpa_tl {#2,#3,#4}
+        \__suep_first_font:Nn #1 {#2,#3,#4}
+        \tl_if_eq:NnF #1 {#2}{\msg_warning:nnn {suepthesis}{font}{#2}}}
+      {windows}{\tl_set:Nn \l_tmpa_tl {#2}\__suep_first_font:Nn #1 {#2}}
+      {mac}{\tl_set:Nn \l_tmpa_tl {#3}\__suep_first_font:Nn #1 {#3}}
+      {fandol}{\tl_set:Nn \l_tmpa_tl {#4}\__suep_first_font:Nn #1 {#4}}}
+   \tl_if_empty:NT #1
+     {\msg_fatal:nne {suepthesis}{font-required}{\tl_use:N \l_tmpa_tl}}}
+\__suep_select_cjk:Nnnn \g__suep_song_font_tl
+  {SimSun}{Songti~SC~Light,STSongti-SC-Light,Songti~SC}{FandolSong-Regular.otf}
+\__suep_select_cjk:Nnnn \g__suep_hei_font_tl
+  {SimHei}{Heiti~SC~Medium,STHeitiSC-Medium,Heiti~SC,PingFang~SC}{FandolHei-Regular.otf}
+\__suep_select_cjk:Nnnn \g__suep_kai_font_tl
+  {KaiTi}{Kaiti~SC,STKaitiSC-Regular}{FandolKai-Regular.otf}
+\__suep_select_cjk:Nnnn \g__suep_fang_font_tl
+  {FangSong}{STFangsong}{FandolFang-Regular.otf}
+\str_if_eq:VnTF \g__suep_cjk_fontset_tl {fandol}
+  {\tl_gset_eq:NN \g__suep_cover_font_tl \g__suep_fang_font_tl}
+  {\__suep_first_font:Nn \g__suep_cover_font_tl {STFangsong}
+   \tl_if_empty:NT \g__suep_cover_font_tl
+     {\tl_gset_eq:NN \g__suep_cover_font_tl \g__suep_fang_font_tl
+      \msg_warning:nnn {suepthesis}{font}{STFangsong}}}
+\tl_if_eq:NnTF \g__suep_song_font_tl {FandolSong-Regular.otf}
+  {\setCJKmainfont{FandolSong-Regular.otf}
+     [BoldFont=FandolSong-Bold.otf,ItalicFont=FandolSong-Regular.otf,
+      BoldItalicFont=FandolSong-Bold.otf]
+   \setCJKfamilyfont{zhsong}{FandolSong-Regular.otf}
+     [BoldFont=FandolSong-Bold.otf,ItalicFont=FandolSong-Regular.otf,
+      BoldItalicFont=FandolSong-Bold.otf]
+   \setCJKfamilyfont{suepgradbold}{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]
+   \setCJKfamilyfont{suepgradsubbold}{FandolSong-Regular.otf}[BoldFont=FandolSong-Bold.otf]}
+  {\setCJKmainfont{\g__suep_song_font_tl}[AutoFakeBold=2.5]
+   \setCJKfamilyfont{zhsong}{\g__suep_song_font_tl}[AutoFakeBold=2.5]
+   \setCJKfamilyfont{suepgradbold}{\g__suep_song_font_tl}[AutoFakeBold=2.849316]
+   \setCJKfamilyfont{suepgradsubbold}{\g__suep_song_font_tl}[AutoFakeBold=2.859493]}
+\tl_if_eq:NnTF \g__suep_hei_font_tl {FandolHei-Regular.otf}
+  {\setCJKsansfont{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+   \setCJKfamilyfont{zhhei}{FandolHei-Regular.otf}[BoldFont=FandolHei-Bold.otf]
+   \cs_new_eq:NN \__suep_heading_latin: \rmfamily}
+  {\sys_if_engine_luatex:TF
+     {\setCJKsansfont{\g__suep_hei_font_tl}[BoldFont=\g__suep_hei_font_tl]
+      \setCJKfamilyfont{zhhei}{\g__suep_hei_font_tl}[BoldFont=\g__suep_hei_font_tl]}
+     {\setCJKsansfont{\g__suep_hei_font_tl}\setCJKfamilyfont{zhhei}{\g__suep_hei_font_tl}}
+   \newfontfamily\__suep_heading_latin:{\g__suep_hei_font_tl}}
+\setCJKfamilyfont{zhkai}{\g__suep_kai_font_tl}[AutoFakeBold=2.5]
+\setCJKfamilyfont{zhfs}{\g__suep_fang_font_tl}
+\setCJKmonofont{\g__suep_fang_font_tl}
+\setCJKfamilyfont{suepcover}{\g__suep_cover_font_tl}[AutoFakeBold=2.5]
+\NewDocumentCommand \songti {}{\CJKfamily{zhsong}}
+\NewDocumentCommand \heiti {}{\CJKfamily{zhhei}}
+\NewDocumentCommand \kaiti {}{\CJKfamily{zhkai}}
+\NewDocumentCommand \fangsong {}{\CJKfamily{zhfs}}
+\cs_new_protected:Npn \__suep_graduate_song_bold:
+  {\bfseries\CJKfamily{suepgradbold}}
+\cs_new_protected:Npn \__suep_graduate_subsection_font:
+  {\bfseries\CJKfamily{suepgradsubbold}}
+\cs_new_protected:Npn \__suep_word_heiti:n #1
+  {\heiti\sys_if_engine_xetex:T
+     {\exp_args:Ne \addCJKfontfeatures
+        {FakeBold=\fp_eval:n {100 * #1 / \use:c {f@size}}}}}
+\cs_new_protected:Npn \__suep_bachelor_abstract_heiti:
+  {\heiti\sys_if_engine_xetex:T {\addCJKfontfeatures{FakeBold=2.84647}}}
+\str_case:Vn \g__suep_latin_fontset_tl
+  {{auto}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman,TeX~Gyre~Termes}
+     \tl_if_eq:NnF \g__suep_latin_font_tl {Times~New~Roman}
+       {\msg_warning:nnn {suepthesis}{font}{Times~New~Roman}}}
+   {times}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman}}
+   {termes}{\tl_gset:Nn \g__suep_latin_font_tl {TeX~Gyre~Termes}}}
+\tl_if_empty:NT \g__suep_latin_font_tl
+  {\msg_fatal:nnn {suepthesis}{font-required}{Times~New~Roman}}
+\setmainfont{\g__suep_latin_font_tl}
+\RequirePackage{unicode-math}
+\setmathfont{TeX~Gyre~Termes~Math}
+\setmathfont[range={"002B,"003D}]{\g__suep_latin_font_tl}
+\DeclareMathSizes{12.045}{11.944625}{6.966025}{4.977}
+\setsansfont{TeX~Gyre~Heros}\setmonofont{Latin~Modern~Mono}
+\clist_map_inline:nn {song,hei,kai,fang,cover,latin}
+  {\msg_info:nnee {suepthesis}{font-selected}{#1}{\tl_use:c {g__suep_#1_font_tl}}}
+%    \end{macrocode}
+%
+% \section{中西文字符与标点}
+% XeTeX 与 LuaTeX 通过各自公开接口处理标点宽度及字符分类；声明页需要的标点宽度局限在相应区域。
+%    \begin{macrocode}
+\sys_if_engine_xetex:T
+  {\xeCJKDeclarePunctStyle{suepword}{fixed-punct-width=.666667em}
+   \clist_map_inline:nn {9.36,11.64,12.84,13.92}
+     {\xeCJKDeclarePunctStyle{suepstatement#1}
+       {fixed-punct-width=#1bp,mixed-punct-width=#1bp,
+        bound-punct-width=14.04bp,enabled-global-setting=false,
+        enabled-hanging=false,enabled-kerning=false,margin-minimum=0bp}}}
+\cs_new_protected:Npn \__suep_punct_style:n #1
+  {\sys_if_engine_xetex:T {\punctstyle{#1}}
+   \sys_if_engine_luatex:T {\ctexset{punct=#1}}}
+\sys_if_engine_luatex:T
+  {\ltjdefcharrange{10}{"2019}\ltjdefcharrange{11}{"00B7}
+   \ltjsetparameter{jacharrange={+10,+11}}}
+\cs_new_protected:Npn \__suep_latin_char:n #1
+  {\sys_if_engine_xetex:T {\xeCJKDeclareCharClass{Default}{#1}}
+   \sys_if_engine_luatex:T
+     {\str_case:nn {#1}
+        {{"2019}{\ltjsetparameter{jacharrange={-10}}}
+         {"00B7}{\ltjsetparameter{jacharrange={-11}}}}}}
+\cs_new_protected:Npn \__suep_symbol_font: {\fontspec{\g__suep_song_font_tl}}
+%    \end{macrocode}
+%
+% \section{论文信息与设置接口}
+% 信息存入属性表；封面与目录分别使用独立键空间。SUEPSetup 只覆盖提供的值；学位类型与字体组选项只在类加载时接受。
+%    \begin{macrocode}
+\clist_map_inline:nn
+  {title,subtitle,titleEn,author,studentId,supervisor,externalSupervisor,
+   institution,institute,major,grade,degree,classification,classifiedLevel,finalizationDate,
+  keywords,keywordsEn
+  }
+  {\keys_define:nn {suepthesis/info}
+    {#1 .code:n = {\prop_gput:Nnn \g__suep_info_prop {#1}{##1}},#1 .initial:n = {}}}
+\prop_gput:Nnn \g__suep_info_prop {classifiedLevel}{公开}
+\keys_define:nn {suepthesis/cover}
+  {
+    date .tl_gset:N = \g__suep_date_tl,
+    date .initial:n = {\int_use:N \c_sys_year_int 年\int_use:N \c_sys_month_int 月},
+    headerImage .tl_gset:N = \g__suep_logo_tl,
+    headerImage .initial:n = auto,
+    blankFields .bool_gset:N = \g__suep_cover_blank_bool,
+    blankFields .initial:n = false,
+  }
+\keys_define:nn {suepthesis/TOC}
+  {abstract .choices:nn = {true,false}
+     {\bool_gset_true:N \g__suep_abstract_toc_explicit_bool
+      \str_if_eq:VnTF \l_keys_choice_str {true}
+        {\bool_gset_true:N \g__suep_abstract_toc_bool}{\bool_gset_false:N
+  \g__suep_abstract_toc_bool
+  }},
+   abstractEn .choices:nn = {true,false}
+     {\bool_gset_true:N \g__suep_abstract_en_toc_explicit_bool
+      \str_if_eq:VnTF \l_keys_choice_str {true}
+        {\bool_gset_true:N \g__suep_abstract_en_toc_bool}{\bool_gset_false:N
+  \g__suep_abstract_en_toc_bool}}}
+\cs_new_protected:Npn \__suep_setup_option:nn #1#2
+  {\bool_if:NTF \g__suep_profile_locked_bool
+     {\msg_error:nnn {suepthesis}{profile-locked}{#1}}
+     {\keys_set:nn {suepthesis/option}{#1=#2}\bool_gset_true:N \g__suep_profile_dirty_bool}}
+\keys_define:nn {suepthesis}
+  {twoside .code:n = {\__suep_setup_option:nn {twoside}{#1}},twoside .default:n = true,
+   blindPeerReview .code:n = {\__suep_setup_option:nn {blindPeerReview}{#1}},
+   blindPeerReview .default:n = true,
+   info .meta:nn = {suepthesis/info}{#1},cover .meta:nn = {suepthesis/cover}{#1},
+   TOC .meta:nn = {suepthesis/TOC}{#1}}
+\NewDocumentCommand \SUEPSetup {m}
+  {\keys_set:nn {suepthesis}{#1}
+   \bool_if:NT \g__suep_profile_dirty_bool {\__suep_apply_profile:}}
+\cs_new:Npn \__suep_info:n #1 {\prop_item:Nn \g__suep_info_prop {#1}}
+\cs_new:Npn \__suep_identity:n #1
+  {\bool_if:NTF \g__suep_blind_bool {匿名}{\__suep_info:n {#1}}}
+\NewDocumentCommand \SecretInfo {m o}
+  {\bool_if:NTF \g__suep_blind_bool {\IfNoValueTF{#2}{匿名}{#2}}{#1}}
+\NewDocumentEnvironment {blindPeerReview}{+b}{\bool_if:NF \g__suep_blind_bool {#1}}{}
+\cs_new:Npn \__suep_degree_name: {\__suep_if_doctor:TF {博士}{硕士}}
+\cs_new:Npn \__suep_degree_en: {\__suep_if_doctor:TF {Doctor}{Master}}
+\cs_new:Npn \__suep_full_title: {\__suep_info:n {title}\__suep_info:n {subtitle}}
+\cs_new:Npn \__suep_university_header: {上海电力大学\__suep_degree_name: 学位论文}
+% Retain the historical 19.5bp body baseline at 12bp text size.
+%    \end{macrocode}
+%
+% \section{正文、页眉与标题目录}
+% 正文基线保留既有校准值。当前规范来源为 resources/ 的原始 Word 文档。页眉、页脚和章节格式按学位分支设置；英文目录使用独立条目类型，避免 titletoc 记录的格式影响中文目录。
+%    \begin{macrocode}
+\cs_new_protected:Npn \__suep_body_font:
+  {\normalfont\songti\zihao{-4}
+   \__suep_if_bachelor:T {\__suep_punct_style:n {plain}}
+   \setstretch{1.3541667}
+   \dim_set:Nn \parindent {2\ccwd}\skip_set:Nn \parskip {0pt}}
+\cs_new_protected:Npn \__suep_bachelor_header:
+  {\fancyhead[L]{\hspace{115.632bp}\raisebox{-4.36bp}{\songti\zihao{-5}\__suep_full_title:}}
+   \cs_set:Npn \headrule
+     {\vskip4.027bp\hrule height .75bp width 432bp\vskip-4.777bp}}
+\fancypagestyle{suepthesis}
+  {\fancyhf{}
+   \__suep_if_bachelor:TF
+     {\__suep_bachelor_header:
+      \fancyfoot[C]{\hspace*{-19.08bp}\raisebox{4.381bp}
+        {\normalfont\zihao{-5}-\hspace{4.56bp}\thepage\hspace{4.5bp}-}}
+      \cs_set:Npn \headrulewidth {0.6pt}}
+     {\fancyhead[C]{\raisebox{\int_if_odd:nTF {\value{page}}{.094bp}{1.57bp}}{\songti
+  \int_if_odd:nTF
+   {\value{page}}
+          {\zihao{5}\leftmark}{\zihao{-5}\__suep_university_header:}}}
+      \fancyfoot[C]{\normalfont\zihao{5}\thepage}
+      \cs_set:Npn \headrule {\hrule height 1bp width \headwidth\vskip 1bp
+        \hrule height 1bp width \headwidth\vskip -3bp}}}
+\fancypagestyle{suepfront}
+  {\fancyhf{}\__suep_if_bachelor:TF {\__suep_bachelor_header:}
+     {\fancyhead[C]{\songti\zihao{-5}\__suep_full_title:}\cs_set:Npn \headrulewidth {0.6pt}}
+  }
+\fancypagestyle{suepabstract}[suepthesis]
+  {\fancyhfoffset[L]{14.12bp}\fancyhfoffset[R]{14.28bp}}
+\cs_set_protected:Npn \chaptermark #1
+  {\markboth{\bool_if:NT \g__suep_main_bool
+      {\bool_if:NTF \g__suep_appendix_bool {附录~\thechapter}{第~\thechapter~章}\hspace{.5em
+  }}#1}{}}
+\RenewDocumentCommand \cleardoublepage {}
+  {\clearpage\bool_if:NT \g__suep_twoside_bool
+    {\int_if_odd:nF {\value{page}}{\hbox:n {}\__suep_if_bachelor:T {\thispagestyle{empty}}
+  \newpage}}
+  }
+\tl_if_eq:NnTF \g__suep_song_font_tl {SimSun}
+  {\newfontfamily\__suep_toc_latin:{SimSun}[AutoFakeBold=2.5]}
+  {\cs_new_eq:NN \__suep_toc_latin: \rmfamily}
+\cs_new_protected:Npn \__suep_sectioning:
+  {
+\ctexset
+  {chapter={name={第,章},number=\arabic{chapter},numberformat=\bfseries,aftername=\quad,
+     format=\zihao{3}\__suep_word_heiti:n {.45617}\centering
+  ,beforeskip=70.416bp,afterskip=41.86bp,fixskip=true,pagestyle=suepthesis,afterindent=true}
+  ,
+   section={format=\__suep_graduate_song_bold:\zihao{-3}\raggedright,
+     aftername=\quad,beforeskip=19.5bp,afterskip=17.57bp,fixskip=true,afterindent=true},
+   subsection={format=\__suep_graduate_subsection_font:\zihao{4}\raggedright,indent=2\ccwd,
+     aftername=\quad,beforeskip=9.75bp,afterskip=0bp,fixskip=false,afterindent=true}
+  ,secnumdepth=2,tocdepth=2}
+\__suep_if_bachelor:T
+  {\ctexset{chapter={number=\chinese{chapter},numberformat={},format=\setstretch{1.625}
+  \heiti\zihao{
+  -3}\centering
+       \skip_set:Nn \rightskip {4bp~plus~1fil},
+       aftername=\hspace{7.56bp},beforeskip=8.6bp,afterskip=20.57bp},
+     section={format=\setstretch{1.625}\__suep_heading_latin:\heiti\fontsize{14.04bp}{
+  16.848bp}
+  \selectfont\raggedright,
+       aftername=\hspace{7.02bp},beforeskip=11.7bp,afterskip=0pt,fixskip=false},
+     subsection={format=\setstretch{1.625}\__suep_heading_latin:\heiti\zihao{-4}\raggedright
+  ,
+       indent=20.04bp,aftername=\hspace{6bp},beforeskip=11.7bp,afterskip=0pt,fixskip=false}}
+  }
+\titlecontents{chapter}[24.16bp]{\songti\zihao{-4}}{\thecontentslabel\quad}{}{\titlerule
+  *[4.02bp]{·}
+  \contentspage}
+\titlecontents{section}[33.04bp]{\songti\zihao{-4}}{\thecontentslabel\quad}{}{\titlerule
+  *[4.02bp]{·}
+  \contentspage}
+\titlecontents{subsection}[42.04bp]{\songti\zihao{-4}}{\thecontentslabel\quad}{}{\titlerule
+  *[4.02bp]
+  {·}\contentspage}
+\__suep_if_bachelor:T
+  {\titlecontents{chapter}[0bp]
+     {\addvspace{6bp}\setstretch{1.516667}\__suep_toc_latin:\songti\bfseries\zihao{-4}}
+     {\thecontentslabel\quad}{}{\titlerule*[6bp]{.}\contentspage}
+   \titlecontents{section}[10.56bp]
+     {\setstretch{1.516667}\__suep_toc_latin:\songti\zihao{-4}}
+     {\thecontentslabel\quad}{}{\titlerule*[6bp]{.}\contentspage}
+   \titlecontents{subsection}[21bp]
+     {\setstretch{1.516667}\__suep_toc_latin:\songti\zihao{-4}}
+     {\thecontentslabel\quad}{}{\titlerule*[6bp]{.}\contentspage}}
+\__suep_if_bachelor:TF
+  {\cs_set:Npn \contentsname {目\quad\quad 录}}
+  {\cs_set:Npn \contentsname {目\quad 录}}
+% Separate entry types prevent titletoc's recorded format changes leaking into .toc.
+\clist_map_inline:nn {chapter,section,subsection}
+  {\cs_set_eq:cc {ttll@suep##1}{ttll@##1}
+   \cs_set_eq:cc {toclevel@suep##1}{toclevel@##1}}
+\titlecontents{suepchapter}[0bp]{\rmfamily\zihao{-4}}
+  {\thecontentslabel\quad}{}{\titlerule*[6bp]{.}\contentspage}
+\titlecontents{suepsection}[12bp]{\rmfamily\zihao{-4}}
+  {\thecontentslabel\quad}{}{\titlerule*[6bp]{.}\contentspage}
+\titlecontents{suepsubsection}[24bp]{\rmfamily\zihao{-4}}
+  {\thecontentslabel\quad}{}{\titlerule*[6bp]{.}\contentspage}
+\__suep_if_bachelor:T {\cs_set:Npn \contentsname {目录}}
+  }
+%    \end{macrocode}
+%
+% \section{公式、表格与题注}
+% 按章编号；公式释义使用列表对齐续行。博士普通浮动体要求双语题注；longtable 的续页题注必须先执行 noalign，因此单独包装。
+%    \begin{macrocode}
+\cs_set:Npn \thefigure {\thechapter-\arabic{figure}}
+\cs_set:Npn \thetable {\thechapter-\arabic{table}}
+\cs_set:Npn \theequation {\thechapter-\arabic{equation}}
+\dim_new:N \l__suep_equation_symbol_width_dim
+\NewDocumentEnvironment {equationnotes}{O{2em}}
+  {\par\nobreak\__suep_body_font:
+   \dim_set:Nn \l__suep_equation_symbol_width_dim {#1}
+   \noindent\skip_horizontal:n {2\ccwd}式中：\par\nobreak
+   \list{}
+     {\dim_set:Nn \labelwidth {\l__suep_equation_symbol_width_dim+2\ccwd}
+      \dim_set:Nn \labelsep {0pt}
+      \dim_set:Nn \leftmargin {2\ccwd+\labelwidth}
+      \dim_set:Nn \rightmargin {0pt}
+      \dim_set:Nn \itemindent {0pt}\dim_set:Nn \listparindent {0pt}
+      \skip_set:Nn \topsep {0pt}\skip_set:Nn \partopsep {0pt}
+      \skip_set:Nn \itemsep {0pt}\skip_set:Nn \parsep {0pt}
+      \int_set:cn {@beginparpenalty}{10000}
+      \cs_set_protected:Npn \makelabel ##1
+        {\hbox_to_wd:nn {\l__suep_equation_symbol_width_dim}
+           {##1\skip_horizontal:n {0pt~plus~1fil}}——}}}
+  {\endlist\use:c {@endpefalse}}
+\cs_set_protected:cpn {maketag@@@} #1
+  {\hbox:n {\use:c {m@th}\normalfont\zihao{5}#1}}
+\__suep_if_bachelor:F
+  {\cs_set_protected:cpn {tagform@} #1
+     {\use:c {maketag@@@}{\songti （\ignorespaces #1\unskip\use:c {@@italiccorr}）
+        \bool_if:NT \l__suep_display_tag_bool {\skip_horizontal:n {-5.173bp}}}}
+   \AddToHook{cmd/make@display@tag/before}{\bool_set_true:N \l__suep_display_tag_bool}
+   \AddToHook{cmd/make@display@tag/after}{\bool_set_false:N \l__suep_display_tag_bool}
+   \AddToHook{cmd/endmathdisplay@a/before}{\bool_set_true:N \l__suep_display_tag_bool}
+   \AddToHook{cmd/endmathdisplay@a/after}{\bool_set_false:N \l__suep_display_tag_bool}}
+\DeclareCaptionFont{suep}{\setstretch{1.3541667}\songti
+  \__suep_if_bachelor:TF {\__suep_toc_latin:\fontsize{10.56bp}{12.672bp}\selectfont}{\zihao{
+  5}}}
+\DeclareCaptionLabelSeparator{suep}{\quad}
+\captionsetup{font=suep,labelsep=suep,justification=centering,singlelinecheck=false,
+  skip=9.75bp}
+\captionsetup[table]{position=top}\captionsetup[figure]{position=bottom}
+\__suep_if_bachelor:F {\captionsetup[table]{skip=0bp}}
+\__suep_if_bachelor:F {\captionsetup[figure]{skip=10.9092bp}}
+\cs_new_protected:Npn \__suep_table_style:
+  {\__suep_if_bachelor:TF {\songti\zihao{5}}
+     {\setstretch{1}\songti\fontsize{10.45bp}{18.72bp}\selectfont
+      \dim_set:Nn \heavyrulewidth {.48bp}\dim_set:Nn \lightrulewidth {.48bp}
+      \dim_set:Nn \aboverulesep {0bp}\dim_set:Nn \belowrulesep {0bp}}}
+\AddToHook{env/tabular/begin}{\bool_if:NF \l__suep_cover_bool {\__suep_table_style:}}
+\AddToHook{env/longtable/begin}{\__suep_table_style:}
+\cs_new_protected:Npn \__suep_apply_profile:
+  {\bool_gset_false:N \g__suep_twoside_bool
+   \str_if_eq:VnTF \g__suep_sides_tl {auto}
+     {\__suep_if_bachelor:F {\bool_gset_true:N \g__suep_twoside_bool}}
+     {\str_if_eq:VnT \g__suep_sides_tl {true}{\bool_gset_true:N \g__suep_twoside_bool}}
+   \bool_if:NTF \g__suep_twoside_bool
+     {\geometry{twoside=true}\use:c {@openrighttrue}}
+     {\geometry{twoside=false}\use:c {@openrightfalse}}
+\__suep_if_bachelor:TF
+  {\geometry{
+  left=3.17cm,right=2.5cm,top=2.54cm,bottom=2.54cm,headheight=15.5pt,headsep=19.5pt,
+  footskip=25pt}}
+  {\geometry{left=3cm,right=3cm,top=3cm,bottom=2.5cm,
+     headheight=15bp,headsep={\dim_eval:n {1cm-15bp}},footskip=0.5cm}
+% Reference p.13 continuation: first Song glyph top 93.53bp at a 3cm top margin.
+   \skip_set:Nn \topskip {18.7986bp}}
+   \bool_if:NF \g__suep_abstract_toc_explicit_bool
+     {\bool_gset:Nn \g__suep_abstract_toc_bool {!\__suep_if_bachelor_p:}}
+   \bool_if:NF \g__suep_abstract_en_toc_explicit_bool
+     {\bool_gset:Nn \g__suep_abstract_en_toc_bool {!\__suep_if_bachelor_p:}}
+   \__suep_sectioning:
+   \__suep_if_bachelor:TF
+     {\skip_set:Nn \intextsep {19.5bp}\skip_set:Nn \textfloatsep {19.5bp}}
+     {\skip_set:Nn \intextsep {9.75bp}\skip_set:Nn \textfloatsep {9.75bp}}
+   \bool_gset_false:N \g__suep_profile_dirty_bool}
+\cs_new_eq:NN \__suep_caption: \caption
+\AddToHook{begindocument/end}
+  {\cs_set_eq:NN \__suep_caption: \caption
+   \RenewDocumentCommand \caption {s o m}
+     {\__suep_if_doctor:T
+        {\exp_args:Nnv \clist_if_in:nnT {figure,table}{@captype}
+           {\bool_if:NF \l__suep_bicaption_bool {\msg_error:nn {suepthesis}{caption}}}}
+      \IfBooleanTF{#1}{\__suep_caption:*{#3}}
+        {\IfNoValueTF{#2}{\__suep_caption:{#3}}{\__suep_caption:[#2]{#3}}}}}
+\NewDocumentCommand \SUEPCaption {m m}
+  {\__suep_if_doctor:T {\tl_if_blank:nT {#2}{\msg_error:nnn {suepthesis}{required}{English~
+  caption}}
+  }
+   \bool_set_true:N \l__suep_bicaption_bool
+   \__suep_if_doctor:TF
+     {\str_if_eq:eeTF {\use:c {@captype}}{algocf}
+        {\caption[#1]{#1\protect\\Algorithm~\thealgocf\quad #2}}
+        {\caption[#1]{#1\protect\\[1.63bp]\str_if_eq:eeTF {\use:c {@captype}}{figure}
+           {Fig.~\thefigure}{Tab.~\thetable}\quad #2}}}
+     {\caption{#1}}
+   \bool_set_false:N \l__suep_bicaption_bool}
+% Longtable requires its caption's noalign before any assignments. It also
+% replaces caption locally, so the ordinary float wrapper cannot guard it.
+\NewDocumentCommand \SUEPContinuedCaption {m m}
+  {\msg_error:nn {suepthesis}{continued-caption}}
+\cs_new:Npn \__suep_longtable_caption:nnnn #1#2#3#4
+  {\noalign{\__suep_if_doctor:T
+     {\tl_if_blank:nT {#3}{\msg_error:nnn {suepthesis}{required}{English~caption}}}}
+   \__suep_lt_caption:[#1]{#2\__suep_if_doctor:T
+     {\protect\\[1.63bp]Tab.~\thetable\quad #3#4}}}
+\AddToHook{env/longtable/begin}
+  {\cs_set_eq:Nc \__suep_lt_caption: {LT@caption}
+   \cs_set:cpn {LT@caption}
+     {\noalign{\__suep_if_doctor:T {\msg_error:nn {suepthesis}{caption}}}
+      \__suep_lt_caption:}
+   \cs_set:Npn \SUEPCaption #1#2
+     {\__suep_longtable_caption:nnnn {#1}{#1}{#2}{}}
+   \cs_set:Npn \SUEPContinuedCaption #1#2
+     {\__suep_longtable_caption:nnnn {}{#1（续）}{#2}{~(continued)}}}
+%    \end{macrocode}
+%
+% \section{双语标题与前后置页}
+% 保留中文编号与短标题，博士英文译名写入英文目录。frontmatter、mainmatter 与 backmatter 控制页码及状态。
+%    \begin{macrocode}
+% Translation follows the long heading: \chapter{中文}[English].
+\clist_map_inline:nn {chapter,section,subsection}
+  {\cs_new_eq:cc {__suep_original_#1}{#1}
+   \exp_args:Nc \RenewDocumentCommand {#1}{s o m o}
+     {\bool_if:nTF {\g__suep_appendix_bool && \__suep_if_bachelor_p: && \str_if_eq_p:nn {#1}
+  {chapter
+  } && ! ##1}
+        {\int_compare:nNnT {\value{chapter}}>{0}{\clearpage}
+         \refstepcounter{chapter}\__suep_original_section*{附录~\arabic{chapter}：##3}
+         \phantomsection
+         \IfNoValueTF{##2}
+           {\addcontentsline{toc}{chapter}{<附录~\arabic{chapter}\protect\quad ##3>}}
+           {\addcontentsline{toc}{chapter}{<附录~\arabic{chapter}\protect\quad ##2>}}}
+        {\IfBooleanTF{##1}{\use:c {__suep_original_#1}*{##3}}
+        {\IfNoValueTF{##2}{\use:c {__suep_original_#1}{##3}}{\use:c {__suep_original_#1}
+  [##2]{##3}}}
+      \__suep_if_doctor:T
+        {\IfNoValueTF{##4}
+           {\IfBooleanF{##1}{\msg_error:nnn {suepthesis}{translation}{##3}}}
+           {\tl_if_blank:nT {##4}{\msg_error:nnn {suepthesis}{translation}{##3}}
+            \bool_if:nTF {##1 || ( ! \g__suep_main_bool && \str_if_eq_p:nn {#1}{chapter} )}
+             {\addcontentsline{toe}{suep#1}{##4}}
+             {\addcontentsline{toe}{suep#1}{\protect\numberline
+               {\str_if_eq:nnT {#1}{chapter}
+                  {\bool_if:NTF \g__suep_appendix_bool {Appendix~}{Chapter~}}
+                \use:c {the#1}}##4}}}}}}}
+\cs_new_protected:Npn \__suep_unnumbered:nn #1#2
+% Fixed heading line box avoids inheriting the bibliography/abstract line spacing.
+% Reference pp.18/20/22 share a title grid; pp.24/26 start 1.92bp earlier.
+  {\group_begin:\__suep_if_bachelor:F
+     {\ctexset{chapter={beforeskip=39.39bp,afterskip=41.15bp,
+        format=\setstretch{1}\fontsize{16bp}{26bp}\selectfont\__suep_word_heiti:n {.45617}
+  \centering
+  }}
+      \str_if_eq:nnT {#2}{References} {\ctexset{chapter/afterskip=43.756bp}}
+      \clist_if_in:nnT {Publications,Research~Projects}{#2}
+        {\ctexset{chapter/beforeskip=37.283bp}}}
+   \__suep_original_chapter*{#1}\group_end:
+% The local chapter group also restores everypar: reinstall its indentation hook.
+   \__suep_if_bachelor:F {\use:c {@afterindenttrue}\use:c {@afterheading}}
+   \markboth{#1}{}\phantomsection\addcontentsline{toc}{chapter}{#1}
+   \__suep_if_doctor:T {\addcontentsline{toe}{suepchapter}{#2}}}
+\RenewDocumentCommand \frontmatter {}
+  {\cleardoublepage\bool_gset_false:N \g__suep_main_bool\use:c {@mainmatterfalse}
+   \pagenumbering{Roman}\__suep_body_font:
+   \__suep_if_bachelor:TF {\pagestyle{suepfront}\ctexset{chapter/pagestyle=suepfront}}{
+  \pagestyle{
+  suepthesis}}}
+\RenewDocumentCommand \mainmatter {}
+  {\cleardoublepage\bool_gset_true:N \g__suep_main_bool\use:c {@mainmattertrue}
+   \pagenumbering{arabic}\pagestyle{suepthesis}\ctexset{chapter/pagestyle=suepthesis}
+  \__suep_body_font:}
+\RenewDocumentCommand \backmatter {}
+  {\cleardoublepage\bool_gset_false:N \g__suep_main_bool\use:c {@mainmatterfalse}}
+\cs_new_protected:Npn \__suep_single_side_end:
+  {\clearpage\bool_if:NT \g__suep_twoside_bool
+     {\int_if_odd:nF {\value{page}}{\hbox:n {}\thispagestyle{empty}\newpage}}}
+%    \end{macrocode}
+%
+% \section{封面、图片与长字段}
+% 参见第~\ref{sec:logo}~节。四种研究生组合保留参考固定区域；先测量题目及字段，再放入封面。MakeCover 先解析图片，缺图在输出页面前报错。显式空值表示省略；保留等比例缩放。
+%    \begin{macrocode}
+\cs_new_protected:Npn \__suep_graduate_cover:n #1
+  {\clearpage\thispagestyle{empty}
+   \AddToHookNext{shipout/foreground}
+     {\group_begin:\dim_set:Nn \unitlength {1bp}
+      \int_compare:nNnTF {#1}={1}
+        {\__suep_graduate_cover_top:nnn {84.24}{101.558}{12}
+         \str_if_eq:VnTF \g__suep_degree_type_tl {professional}
+           {\__suep_graduate_cover_heading:nnnn {265.87}{26.04}{1}{专业学位
+  \__suep_degree_name: 学位论文}
+            \__suep_graduate_cover_english:nnn {304.00}{15}{\text_uppercase:n {
+  \__suep_degree_en:
+  \c_space_tl Thesis~for~Professional~Degree}}
+            \__suep_graduate_cover_logo:n {108.24}
+            \__suep_graduate_cover_title:nnnn {370.34}{485.18}{338.5}{0}
+            \__suep_graduate_cover_fields:nnnnn {144.84}{515.18}{253.1}{230.75}{14.04}
+            \__suep_graduate_cover_date:n {712.00}}
+           {\__suep_graduate_cover_heading:nnnn {285.96}{36}{1}{\__suep_degree_name:\quad 学
+  \quad 位
+  \quad 论\quad 文}
+            \__suep_graduate_cover_english:nnn {323.62}{21.96}{Dissertation~for~
+  \__suep_degree_en:
+  's~Degree}
+            \__suep_graduate_cover_logo:n {73.68}
+            \__suep_graduate_cover_title:nnnn {419.30}{517.82}{365}{1}
+            \__suep_graduate_cover_fields:nnnnn {124.2}{547.82}{242.8}{233.7}{14.04}
+            \__suep_graduate_cover_date:n {751.24}}}
+        {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}
+           {\__suep_graduate_cover_top:nnn {81.36}{111.284}{10.44}
+            \__suep_graduate_cover_heading:nnnn {204.026}{24}{0}{上海电力大学}
+            \__suep_graduate_cover_heading:nnnn {235.226}{24}{0}{专业学位
+  \__suep_degree_name: 学位论文}
+            \__suep_graduate_cover_title:nnnn {360.50}{484.07}{280}{0}
+            \__suep_graduate_cover_fields:nnnnn {137.4}{514.07}{253.65}{223.4}{12}}
+           {\__suep_graduate_cover_top:nnn {85.68}{117.878}{12}
+            \__suep_graduate_cover_heading:nnnn {224.45}{24}{2}{上海电力大学
+  \__suep_degree_name: 学位论文}
+            \__suep_graduate_cover_title:nnnn {354.02}{534.11}{280}{0}
+            \__suep_graduate_cover_fields:nnnnn {148.44}{564.11}{250.2}{202}{12}}}
+      \group_end:}
+   \hbox:n {}\__suep_single_side_end:}
+% The four cover profiles retain the reference's fixed regions; data stays editable.
+\cs_new_protected:Npn \__suep_graduate_cover_heading:nnnn #1#2#3#4
+  {\__suep_declaration_box:nnnnn {0bp}{#1bp}{\paperwidth}
+     {\fontsize{#2bp}{40bp}\selectfont
+      \int_case:nn {#3}
+        {{0}{\__suep_graduate_song_bold:}
+         {1}{\heiti}
+         {2}{\__suep_word_heiti:n {.6864}}}
+      \__suep_punct_style:n {plain}\centering}{#4}}
+\cs_new_protected:Npn \__suep_graduate_cover_english:nnn #1#2#3
+  {\__suep_declaration_box:nnnnn {40bp}{#1bp}{\paperwidth-80bp}
+     {\rmfamily\bfseries\fontsize{#2bp}{28bp}\selectfont\centering}{#3}}
+\cs_new_protected:Npn \__suep_resolve_logo:
+  {\tl_clear:N \l__suep_logo_file_tl
+   \tl_if_blank:VF \g__suep_logo_tl
+     {\str_if_eq:VnTF \g__suep_logo_tl {auto}
+        {\__suep_if_bachelor:TF
+           {\clist_set:Nn \l_tmpa_clist
+              {images/suep-logo.pdf,images/suep-logo.png,suep-emblem.pdf,suep-emblem.png}}
+           {\clist_set:Nn \l_tmpa_clist
+              {images/suep-logo.pdf,images/suep-logo.png,suep-name.pdf,suep-name.png}}
+         \clist_map_inline:Nn \l_tmpa_clist
+           {\file_if_exist:nT {##1}
+              {\tl_set:Nn \l__suep_logo_file_tl {##1}\clist_map_break:}}}
+        {\file_if_exist:VT \g__suep_logo_tl
+           {\tl_set_eq:NN \l__suep_logo_file_tl \g__suep_logo_tl}}
+      \tl_if_empty:NT \l__suep_logo_file_tl
+        {\msg_fatal:nne {suepthesis}{logo-missing}{\tl_use:N \g__suep_logo_tl}}}}
+\cs_new_protected:Npn \__suep_graduate_cover_logo:n #1
+  {\tl_if_empty:NF \l__suep_logo_file_tl
+     {\put(#1,-209.4){\includegraphics[width=154.8bp,height=36.84bp,keepaspectratio]{
+  \l__suep_logo_file_tl}}}}
+\box_new:N \l__suep_cover_title_box
+\dim_new:N \l__suep_cover_title_y_dim
+\cs_new_protected:Npn \__suep_cover_title_content:
+  {\__suep_full_title:\par
+   \__suep_if_doctor:T {\rmfamily\bfseries\__suep_info:n {titleEn}\par}}
+\cs_new_protected:Npn \__suep_graduate_cover_title:nnnn #1#2#3#4
+  {\hbox_set:Nn \l__suep_cover_title_box
+     {\parbox[t]{447.9bp}{\setstretch{1}\songti\zihao{-4}
+        \dim_set:Nn \parindent {0bp}\skip_set:Nn \parskip {0pt}
+        \fontsize{21.96bp}{32.64bp}\selectfont
+        \int_compare:nNnTF {#4}={1}{\__suep_word_heiti:n {.62777}}{\heiti}\centering
+        \__suep_cover_title_content:}}
+   \dim_set:Nn \l__suep_cover_title_y_dim
+     {\dim_min:nn {#1bp}{#2bp-\box_dp:N \l__suep_cover_title_box}}
+   \dim_compare:nNnT {\l__suep_cover_title_y_dim}<{#3bp}
+     {\msg_fatal:nn {suepthesis}{cover-title-overflow}}
+   \put(56.19,-\dim_to_decimal_in_bp:n {\l__suep_cover_title_y_dim})
+     {\box_use_drop:N \l__suep_cover_title_box}}
+\cs_new_protected:Npn \__suep_graduate_cover_date:n #1
+  {\__suep_declaration_box:nnnnn
+     {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{261.14bp}{242.8bp}}{#1bp}{158bp
+  }
+     {\fontsize{14.04bp}{20bp}\selectfont\centering}{\g__suep_date_tl}}
+\cs_new_protected:Npn \__suep_graduate_cover_top:nnn #1#2#3
+  {\fp_compare:nNnTF {#3}<{12}
+     {\tl_set:Nn \l_tmpa_tl {22.87}\tl_set:Nn \l_tmpb_tl {251.28}
+      \tl_set:Nn \l__suep_cover_data_offset_tl {47.24}\tl_set:Nn
+  \l__suep_cover_value_offset_tl {
+  278.24}}
+     {\tl_set:Nn \l_tmpa_tl {24.48}\tl_set:Nn \l_tmpb_tl {274.92}
+      \tl_set:Nn \l__suep_cover_data_offset_tl {54}\tl_set:Nn \l__suep_cover_value_offset_tl
+   {304.92
+  }}
+   \__suep_declaration_box:nnnnn {#1bp}{#2bp}{60bp}
+     {\fontsize{#3bp}{\l_tmpa_tl bp}\selectfont}
+     {分\hspace{.5em}类\hspace{.5em}号\par 单位代号}
+   \__suep_declaration_box:nnnnn {\fp_eval:n {#1+\l_tmpb_tl}bp}{#2bp}{60bp}
+     {\fontsize{#3bp}{\l_tmpa_tl bp}\selectfont}
+     {密\hspace{.5em}级\par 学\hspace{.5em}号}
+   \__suep_declaration_box:nnnnn {\fp_eval:n {#1+\l__suep_cover_data_offset_tl}bp}{#2bp}{
+  96bp}
+     {\fontsize{12bp}{\l_tmpa_tl bp}\selectfont\centering}
+     {\__suep_cover_check_lines:nnn {classification}{96bp}{\__suep_info:n {classification}}
+      \mode_leave_vertical:\hbox:n {}\__suep_info:n {classification}\par 10256}
+   \__suep_declaration_box:nnnnn {\fp_eval:n {#1+\l__suep_cover_value_offset_tl}bp}{#2bp}{
+  96bp}
+     {\fontsize{12bp}{\l_tmpa_tl bp}\selectfont\centering}
+     {\__suep_cover_check_lines:nnn {classifiedLevel}{96bp}{\__suep_info:n {classifiedLevel}
+  }
+      \__suep_cover_check_lines:nnn {studentId}{96bp}{\__suep_identity:n {studentId}}
+      \mode_leave_vertical:\hbox:n {}\__suep_info:n {classifiedLevel}\par
+      \mode_leave_vertical:\hbox:n {}\__suep_identity:n {studentId}}
+   \clist_map_inline:nn {0,1}
+     {\put(\fp_eval:n {#1+\l__suep_cover_data_offset_tl},-\fp_eval:n {#2+1.392+##1*
+  \l_tmpa_tl}){
+  \rule{96bp}{.6bp}}
+      \put(\fp_eval:n {#1+\l__suep_cover_value_offset_tl},-\fp_eval:n {#2+1.392+##1*
+  \l_tmpa_tl}){
+  \rule{96bp}{.6bp}}}}
+\cs_new_protected:Npn \__suep_graduate_cover_fields:nnnnn #1#2#3#4#5
+  {\__suep_graduate_cover_field:nnnnnnn {#1}{#2}{#3}{#4}{#5}{学位申请人}{\__suep_identity:n
+  {author}}
+   \__suep_graduate_cover_field:nnnnnnn {#1}{\fp_eval:n {#2+28.5}}{#3}{#4}{#5}{指导教师}{
+  \__suep_identity:n {supervisor}}
+   \__suep_graduate_cover_field:nnnnnnn {#1}{\fp_eval:n {#2+57}}{#3}{#4}{#5}
+     {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{专业名称}{学科专业}}{
+  \__suep_info:n {major}}
+   \__suep_graduate_cover_field:nnnnnnn {#1}
+     {\fp_eval:n {#2+\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{85.5}{114}}}{#3}
+  {#4}{#5}
+  {学位类别}{\__suep_info:n {degree}}
+   \__suep_graduate_cover_field:nnnnnnn
+     {\fp_compare:nNnTF {#5}={12}
+        {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{123.6}{#1}}{#1}}
+     {\fp_eval:n {#2+142.5-\fp_compare:nNnTF {#5}={12}
+        {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{.54}{0}}{0}}}{#3}{#4}{#5}
+     {\fp_compare:nNnTF {#5}>{12}{所属院系}{论文定稿日期}}
+     {\fp_compare:nNnTF {#5}>{12}{\__suep_info:n {institute}}{\__suep_info:n {
+  finalizationDate}}}
+   \str_if_eq:VnF \g__suep_degree_type_tl {professional}
+     {\put(#3,-\fp_eval:n {#2+85.5+5.82}){\rule{#4bp}{.48bp}}}}
+\seq_new:N \l__suep_cover_field_lines_seq
+\cs_new_protected:Npn \__suep_cover_check_lines:nnn #1#2#3
+  {\tl_set:Ne \l_tmpa_tl {#3}
+   \seq_set_split:NnV \l__suep_cover_field_lines_seq {\\}\l_tmpa_tl
+   \int_set:Nn \l_tmpa_int {1}
+   \str_if_eq:eeT {#1}{学科专业}{\int_set:Nn \l_tmpa_int {2}}
+   \int_compare:nNnT {\seq_count:N \l__suep_cover_field_lines_seq}>{\l_tmpa_int}
+     {\msg_fatal:nne {suepthesis}{cover-field-overflow}{#1}}
+   \seq_map_inline:Nn \l__suep_cover_field_lines_seq
+     {\hbox_set:Nn \l_tmpa_box {##1}
+      \dim_compare:nNnT {\box_wd:N \l_tmpa_box}>{#2}
+        {\msg_fatal:nne {suepthesis}{cover-field-overflow}{#1}}}}
+\cs_new_protected:Npn \__suep_graduate_cover_field:nnnnnnn #1#2#3#4#5#6#7
+  {\tl_set:Nn \l_tmpb_tl {5.4}
+   \fp_compare:nNnT {#5}={12}
+     {\str_if_eq:VnT \g__suep_degree_type_tl {professional}{\tl_set:Nn \l_tmpb_tl {9.93}}}
+   \__suep_declaration_box:nnnnn {#1bp}{#2bp}{\fp_eval:n {#3-#1-\l_tmpb_tl}bp}
+     {\heiti\fontsize{#5bp}{28.5bp}\selectfont\__suep_punct_style:n {plain}}
+     {\tl_set:Ne \l_tmpa_tl {#6：}
+      \makebox[\fp_eval:n {#3-#1-\l_tmpb_tl}bp][s]
+        {\exp_args:NV \tl_map_inline:nn \l_tmpa_tl {##1\hfil}\unskip}}
+   \__suep_declaration_box:nnnnn {#3bp}{#2bp}{#4bp}
+     {\fontsize{#5bp}{28.5bp}\selectfont\centering}
+     {\__suep_cover_check_lines:nnn {#6}{#4bp}{#7}#7}
+   \put(#3,-\fp_eval:n {#2+5.82+\str_if_eq:nnTF {#6}{学位类别}
+      {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{28.5}{0}}{0}
+      +\str_if_eq:eeTF {#6}{所属院系}
+        {\str_if_eq:VnTF \g__suep_degree_type_tl {professional}{1.04}{0}}{0}}){\rule{#4bp}{
+  .48bp}}}
+\cs_new_protected:Npn \__suep_bachelor_cover:
+  {\clearpage\thispagestyle{empty}
+   \AddToHookNext{shipout/foreground}
+     {\group_begin:\dim_set:Nn \unitlength {1bp}
+      \__suep_declaration_box:nnnnn {171.14bp}{134.9bp}{300bp}
+        {\kaiti\bfseries\fontsize{42bp}{50bp}\selectfont}{上海电力大学}
+      \__suep_declaration_box:nnnnn {135.26bp}{218.9bp}{360bp}
+        {\CJKfamily{suepcover}\bfseries\fontsize{36bp}{43bp}\selectfont\__suep_punct_style:n
+   {plain}
+  }{本科毕业设计（论文）}
+      \tl_if_empty:NF \l__suep_logo_file_tl
+        {\put(226.55,-428.3){\includegraphics[width=136.7bp,height=136.7bp,keepaspectratio]{
+  \l__suep_logo_file_tl}}}
+      \__suep_bachelor_cover_field:nnnnn {486.92}{146.06}{216.17}{195.86}{题\hspace{28.08bp}
+  目：}
+      \__suep_bachelor_cover_value:nnnn {486.92}{216.17}{195.86}{title}
+      \__suep_bachelor_cover_field:nnnnn {518.96}{146.06}{216.05}{195.98}{}
+      \__suep_bachelor_cover_value:nnnn {518.96}{216.05}{195.98}{subtitle}
+      \__suep_bachelor_cover_field:nnnnn {551}{146.06}{223.13}{195.98}
+        {学院（部\skip_horizontal:n {-.12bp}）\skip_horizontal:n {-6.92bp}：}
+      \__suep_bachelor_cover_value:nnnn {551}{223.13}{195.98}{institution}
+      \__suep_bachelor_cover_field:nnnnn {582.92}{146.06}{216.05}{195.98}{专\hspace{28.08bp}
+  业：}
+      \__suep_bachelor_cover_value:nnnn {582.92}{216.05}{195.98}{major}
+      \__suep_bachelor_cover_field:nnnnn {614.96}{146.06}{216.05}{195.98}{年\hspace{28.08bp}
+  级：}
+      \__suep_bachelor_cover_value:nnnn {614.96}{216.05}{195.98}{grade}
+      \__suep_bachelor_cover_field:nnnnn {647.03}{146.06}{216.17}{84}{学生姓名：}
+      \__suep_bachelor_cover_value:nnnn {647.03}{216.17}{84}{author}
+      \__suep_bachelor_cover_field:nnnnn {647.03}{300.17}{342.19}{69.84}{学号：}
+      \__suep_bachelor_cover_value:nnnn {647.03}{342.19}{69.84}{studentId}
+      \__suep_bachelor_cover_field:nnnnn {678.95}{146.06}{216.17}{195.86}{指导教师：}
+      \__suep_bachelor_cover_value:nnnn {678.95}{216.17}{195.86}{supervisor}
+      \__suep_declaration_box:nnnnn {216.17bp}{734.99bp}{195.86bp}
+        {\fontsize{14.04bp}{20bp}\selectfont\raggedleft}
+        {\bool_if:NTF \g__suep_cover_blank_bool {年\hspace{28.08bp}月\hspace{28.08bp}日}{
+  \g__suep_date_tl}}
+      \group_end:}
+   \hbox:n {}\__suep_single_side_end:}
+\cs_new_protected:Npn \__suep_bachelor_cover_field:nnnnn #1#2#3#4#5
+  {\__suep_declaration_box:nnnnn {#2bp}{#1bp}{110bp}
+     {\fontsize{14.04bp}{20bp}\selectfont\__suep_punct_style:n {plain}}{#5}
+   \put(#3,-\fp_eval:n {#1+2.51}){\rule{#4bp}{.72bp}}}
+\cs_new_protected:Npn \__suep_bachelor_cover_value:nnnn #1#2#3#4
+  {\bool_if:NF \g__suep_cover_blank_bool
+     {\__suep_declaration_box:nnnnn {#2bp}{#1bp}{#3bp}
+        {\fontsize{14.04bp}{20bp}\selectfont\centering}
+        {\__suep_cover_check_lines:nnn {#4}{#3bp}{\__suep_identity:n {#4}}
+         \__suep_identity:n {#4}}}}
+\NewDocumentCommand \MakeCover {}
+  {\__suep_resolve_logo:
+   \__suep_if_bachelor:TF {\__suep_bachelor_cover:}{\__suep_graduate_cover:n {1}
+  \__suep_graduate_cover:n {2}}}
+%    \end{macrocode}
+%
+% \section{原创性与授权声明}
+% 研究生声明独立排版；本科保留参考行框与标点压缩。盲审时省略整个声明，不改写署名区域。
+%    \begin{macrocode}
+% Fixed statement pages follow reference pages 5--6, independently of body geometry.
+\cs_new_protected:Npn \__suep_declaration_box:nnnnn #1#2#3#4#5
+  {\put(\dim_to_decimal_in_bp:n {#1},-\dim_to_decimal_in_bp:n {#2})
+    {\parbox[t]{\dim_eval:n {#3}}{\setstretch{1}\songti\zihao{-4}
+       \dim_set:Nn \parindent {0bp}\skip_set:Nn \parskip {0pt}#4#5}}}
+\cs_new_protected:Npn \__suep_declaration_date:
+  {\makebox[60bp][l]{日期：}年\hspace{18bp}月\hspace{18bp}日}
+\cs_new_protected:Npn \__suep_graduate_declaration:nn #1#2
+  {\clearpage\thispagestyle{empty}
+   \AddToHookNext{shipout/foreground}
+     {\group_begin:\dim_set:Nn \unitlength {1bp}
+      \str_if_in:nnTF {#1}{原创性声明}
+        {\__suep_declaration_box:nnnnn {0bp}{127.49bp}{\paperwidth}
+           {\heiti\fontsize{16bp}{20bp}\selectfont\centering}{\leavevmode\color[gray]{0.4}#1
+  }
+         \__suep_declaration_box:nnnnn {70.92bp}{192.53bp}{453.48bp}
+           {\fontsize{12bp}{31.12bp}\selectfont}{\noindent\hspace*{24bp}#2}
+         \__suep_declaration_box:nnnnn {301.92bp}{441.53bp}{210bp}{}{学位论文作者签名：}
+         \__suep_declaration_box:nnnnn {304.92bp}{472.61bp}{210bp}{}
+           {\makebox[66bp][l]{日期：}年\hspace{18bp}月\hspace{18bp}日}}
+        {\__suep_declaration_box:nnnnn {0bp}{115.37bp}{\paperwidth}
+           {\heiti\fontsize{16bp}{20bp}\selectfont\centering}{\leavevmode\color[gray]{0.4}#1
+  }
+         \__suep_declaration_box:nnnnn {70.92bp}{157.01bp}{453.48bp}
+           {\fontsize{12bp}{23.36bp}\selectfont}{\noindent\hspace*{24bp}#2}
+         \__suep_declaration_box:nnnnn {186.36bp}{250.37bp}{300bp}{}
+           {{\__suep_graduate_song_bold: 保密}\mbox{\__suep_symbol_font:□}，在\underline{
+  \hspace{18bp}}
+  年解密后适用本授权书。}
+         \__suep_declaration_box:nnnnn {102.36bp}{265.97bp}{100bp}{}{本学位论文属于}
+         \__suep_declaration_box:nnnnn {186.6bp}{281.57bp}{180bp}{}{{
+  \__suep_graduate_song_bold: 不保密
+  }\mbox{\__suep_symbol_font:□}。}
+         \__suep_declaration_box:nnnnn {102.36bp}{304.85bp}{300bp}{\__suep_punct_style:n {
+  plain}}
+           {（请在以上方框内打“{\__suep_symbol_font:√}”）}
+         \__suep_declaration_box:nnnnn {102.36bp}{437.09bp}{210bp}{}{学位论文作者签名：}
+         \__suep_declaration_box:nnnnn {306.36bp}{437.09bp}{210bp}{}{指导教师签名：}
+         \__suep_declaration_box:nnnnn {126.6bp}{483.89bp}{160bp}{}{
+  \__suep_declaration_date:}
+         \__suep_declaration_box:nnnnn {336.6bp}{483.89bp}{160bp}{}{
+  \__suep_declaration_date:}}
+      \group_end:}
+   \hbox:n {}\__suep_single_side_end:}
+\cs_new_protected:Npn \__suep_declaration:nn #1#2
+  {\__suep_if_bachelor:TF
+    {\clearpage\thispagestyle{empty}
+     \AddToHookNext{shipout/foreground}
+       {\group_begin:\dim_set:Nn \unitlength {1bp}
+        \str_if_in:nnTF {#1}{使用授权声明}
+          {\tl_set:Nn \l_tmpa_tl {31.2}}{\tl_set:Nn \l_tmpa_tl {0}}
+        \__suep_declaration_box:nnnnn {0bp}{\fp_eval:n {94.11+\l_tmpa_tl}bp}{\paperwidth}
+          {\heiti\fontsize{18bp}{31.2bp}\selectfont\centering}{#1}
+        \__suep_declaration_box:nnnnn {90.02bp}{\fp_eval:n {186.27+\l_tmpa_tl}bp}{415.28bp}
+          {\fontsize{14.04bp}{31.2bp}\selectfont\dim_set:Nn \parindent {28.08bp}
+           \sys_if_engine_xetex:T {\punctstyle{suepword}
+             \xeCJKsetup{CJKglue={\skip_horizontal:n {-.04bp~plus~.01bp~minus~.01bp}}}}}
+          {\indent #2}
+        \str_if_in:nnTF {#1}{使用授权声明}
+          {\__suep_declaration_box:nnnnn {189.14bp}{560.72bp}{310bp}
+             {\fontsize{14.04bp}{31.2bp}\selectfont}{论文作者签名：\hspace{76.98bp}日期：}
+           \__suep_declaration_box:nnnnn {189.14bp}{623.15bp}{310bp}
+             {\fontsize{14.04bp}{31.2bp}\selectfont}{指导教师签名：\hspace{76.98bp}日期：}}
+          {\__suep_declaration_box:nnnnn {182.18bp}{467.12bp}{310bp}
+             {\fontsize{14.04bp}{31.2bp}\selectfont}{论文作者签名：\hspace{91.08bp}日期：}}
+        \group_end:}
+     \hbox:n {}\__suep_single_side_end:}
+    {\__suep_graduate_declaration:nn {#1}{#2}}}
+% The prescribed undergraduate statements retain Word's line-specific compression.
+\cs_new_protected:Npn \__suep_statement_row:nn #1#2
+  {\group_begin:\sys_if_engine_xetex:T {\punctstyle{suepstatement#1}}
+   #2\group_end:}
+\cs_new_protected:Npn \__suep_statement_period:
+  {\sys_if_engine_xetex:TF
+     {\hbox_to_wd:nn {9.36bp}{\__suep_punct_style:n {plain}。\hss}}{。}}
+\NewDocumentCommand \MakeOriginality {}
+  {\bool_if:NF \g__suep_blind_bool
+    {\__suep_if_bachelor:TF
+      {\__suep_declaration:nn {上海电力大学\par 本科毕业设计（论文）原创性声明}
+        {\__suep_statement_row:nn {11.64}{
+  本人郑重申明：本人所呈交的毕业论文，是在指导老师的指导下}\\
+         \__suep_statement_row:nn {9.36}{
+  独立进行研究所取得的成果。论文中凡引用他人已经发布或未发表的}\\
+         \__suep_statement_row:nn {12.84}{
+  成果、数据、观点等，均已明确注明出处。论文中除已经注明引用的}\\
+         \__suep_statement_row:nn {13.92}{
+  内容外，不包含任何其他个人或集体已经发表或撰写过的研究成果\__suep_statement_period:}\\
+         \__suep_statement_row:nn {9.36}{
+  对本文的研究成果做出重要贡献的个人和集体，均已在论文中以明确}\\
+         的方式标明。\par 本声明的法律责任由本人承担。}}
+      {\__suep_declaration:nn {上海电力大学学位论文原创性声明}
+        {
+  本人郑重声明：所呈交的学位论文，是本人在导师的指导下，独立进行研究工作所取得的成果。
+         除文中已经注明引用的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的作品成果。
+         对本文的研究做出重要贡献的个人和集体，均已在文中以明确方式标明。本人完全意识到本声明的法律结果由本人承担。
+  }}
+     \__suep_if_bachelor:TF
+      {\__suep_declaration:nn {上海电力大学\par 本科毕业设计（论文）使用授权声明}
+        {\__suep_statement_row:nn {9.36}{
+  本人在指导老师的指导下所完成的论文及相关的资料，知识产权}\\
+         \__suep_statement_row:nn {11.64}{
+  归属上海电力大学。本人完全了解上海电力大学有关保存、使用毕业}\\
+         \__suep_statement_row:nn {9.36}{
+  论文的规定，同意学校保存或向国家有关部门或机构送交论文的纸质}\\
+         \__suep_statement_row:nn {11.64}{
+  版或电子版，允许论文被查阅或借阅。本人授权上海电力大学可以将}\\
+         \__suep_statement_row:nn {9.36}{
+  本毕业论文的全部或部分内容编入有关数据库进行检索，可以采用任}\\
+         \__suep_statement_row:nn {11.64}{
+  何复制手段保存或编汇本毕业论文。如果发表相关成果，一定征得指}\\
+         \__suep_statement_row:nn {11.64}{
+  导教师同意，且第一署名单位为上海电力大学。本人毕业后使用毕业}\\
+         \__suep_statement_row:nn {9.36}{
+  论文或与该论文直接相关的学术论文或成果时，第一署名单位仍然为}\\
+         上海电力大学。}}
+      {\__suep_declaration:nn {上海电力大学学位论文版权使用授权书}
+        {本学位论文作者完全了解学校有关保留、使用学位论文的规定，
+         同意学校保留并向国家有关部门或机构送交论文的复印件和电子版，允许论文被查阅和借阅。
+         本人授权上海电力大学可以将本学位论文的全部或部分内容编入有关数据库进行检索，
+         可以采用影印、缩印或扫描等复制手段保存和汇编本学位论文。}}}}
+%    \end{macrocode}
+%
+% \section{摘要、关键词与目录}
+% 中文与英文摘要按学位分别设置字号、间距及目录项；关键词从信息属性表读取，目录命令为博士追加英文目录。
+%    \begin{macrocode}
+\cs_new_protected:Npn \__suep_abstract_begin:n #1
+  {\clearpage\group_begin:\__suep_if_bachelor:TF
+     {\thispagestyle{suepfront}\setstretch{1.625}\zihao{-4}}
+     {\skip_set:Nn \topskip {12pt}
+      \pagestyle{suepabstract}\thispagestyle{suepabstract}\setstretch{1.3541667}\zihao{4}}
+   \str_if_eq:nnTF {#1}{zh}
+     {\markboth{摘要}{}\bool_if:NT \g__suep_abstract_toc_bool
+        {\phantomsection\addcontentsline{toc}{chapter}{摘\quad 要}
+         \__suep_if_doctor:T {\addcontentsline{toe}{suepchapter}{Chinese~Abstract}}}
+      \__suep_if_bachelor:F {\vspace*{15.71bp}\begin{center}\zihao{3}\__suep_word_heiti:n {
+  .45617}
+  \__suep_full_title:\end{center}\vspace{10.01bp}}
+      \vspace*{\__suep_if_bachelor:TF {-1.936bp}{0bp}}
+      \begin{center}\__suep_if_bachelor:TF
+        {\__suep_bachelor_abstract_heiti:\zihao{-3}摘\hspace{7.68bp}要}
+        {\zihao{3}\__suep_word_heiti:n {.45617}摘\quad 要}\end{center}
+      \vspace{\__suep_if_bachelor:TF {-10.074bp}{12.04bp}}\songti
+      \__suep_if_bachelor:F {\setstretch{1}\fontsize{14bp}{22.68bp}\selectfont}
+      \dim_set:Nn \parindent {\__suep_if_bachelor:TF {24bp}{27.96bp}}}
+     {\__suep_latin_char:n {"2019}
+      \markboth{ABSTRACT}{}\bool_if:NT \g__suep_abstract_en_toc_bool
+        {\phantomsection\addcontentsline{toc}{chapter}{ABSTRACT}
+         \__suep_if_doctor:T {\addcontentsline{toe}{suepchapter}{Abstract}}}
+      \__suep_if_bachelor:TF
+        {\vspace*{-14.506bp}\begin{center}\rmfamily\bfseries\zihao{-2}\skip_set:Nn
+  \spaceskip {2.5bp
+  }\__suep_info:n {titleEn}\end{center}
+         \vspace{-17.233bp}\begin{center}\bfseries\zihao{-3}Abstract\end{center}\vspace{
+  .088bp}
+         \setstretch{1}\fontsize{12bp}{25bp}\selectfont\frenchspacing
+         \int_set:Nn \hyphenpenalty {10000}\int_set:Nn \exhyphenpenalty {10000}
+         \dim_set:Nn \emergencystretch {3em}}
+        {\vspace*{26.19bp}\begin{center}\rmfamily\bfseries\zihao{3}
+         \begin{minipage}{\dim_eval:n {\linewidth-5em}}\centering
+         \setstretch{1}\fontsize{15.96bp}{22.92bp}\selectfont
+         \text_uppercase:n {\__suep_info:n {titleEn}}\end{minipage}\end{center}
+         \vspace{137.86bp}\begin{center}\bfseries\zihao{3}ABSTRACT\end{center}\vspace{
+  70.50bp}
+         \setstretch{1}\fontsize{14.04bp}{20.16bp}\selectfont}
+      \rmfamily\dim_set:Nn \parindent {\__suep_if_bachelor:TF {21.6bp}{27.96bp}}}
+  \skip_set:Nn
+  \parskip {0pt}
+   \__suep_if_bachelor:F
+     {\dim_add:Nn \hsize {14.28bp}\dim_set_eq:NN \linewidth \hsize
+      \skip_set:Nn \leftskip {-14.12bp}}
+   \use:c {@afterindenttrue}\use:c {@afterheading}\indent\ignorespaces}
+\cs_new_protected:Npn \__suep_keywords:n #1
+  {\prop_get:NnN \g__suep_info_prop {#1}\l_tmpa_tl\regex_replace_all:nnN {[；;,，]}{,}
+  \l_tmpa_tl
+   \clist_set:NV \l_tmpa_clist \l_tmpa_tl
+   \__suep_if_bachelor:TF {\clist_use:Nn \l_tmpa_clist {；}}{\clist_use:Nn \l_tmpa_clist {，
+  }}}
+\cs_new_protected:Npn \__suep_keywords_en:
+  {\prop_get:NnN \g__suep_info_prop {keywordsEn}\l_tmpa_tl\regex_replace_all:nnN {[；;,，]}{
+  ,}
+  \l_tmpa_tl
+   \clist_set:NV \l_tmpa_clist \l_tmpa_tl
+   \__suep_if_bachelor:TF {\clist_use:Nn \l_tmpa_clist {;~}}
+     {\exp_args:Ne \text_lowercase:n {\clist_use:Nn \l_tmpa_clist {,~}}}}
+\NewDocumentEnvironment {abstract}{}{\__suep_abstract_begin:n {zh}}
+  {\par\vspace{\__suep_if_bachelor:TF {31.2bp}{12bp}}\noindent
+   \__suep_if_bachelor:F {\hspace*{27.96bp}}
+   \__suep_if_bachelor:TF {{\__suep_bachelor_abstract_heiti: 关键词}{\songti ：}}{{\heiti
+  关键词：}}
+   \__suep_keywords:n {keywords}\par\clearpage\group_end:}
+\NewDocumentEnvironment {abstractEn}{}{\__suep_abstract_begin:n {en}}
+  {\par\vspace{\baselineskip}\noindent
+   \__suep_if_bachelor:TF {{\bfseries\zihao{-4}Key~Words:\nobreak\space\space}}
+     {\hspace*{24bp}\textbf{KEY\hspace{2.814bp}WORDS}{\songti ：}\hspace{-1.204bp}}
+   \__suep_keywords_en:\par\clearpage\group_end:}
+\NewDocumentCommand \MakeTOC {}
+  {\group_begin:\__suep_if_bachelor:TF
+     {\ctexset{chapter={beforeskip=9.067bp,afterskip=8.805bp,
+        format=\setstretch{1.625}\songti\bfseries\zihao{-3}\centering}}
+      \__suep_original_chapter*{\contentsname}
+      \dim_set:Nn \hsize {\textwidth-19.589bp}\dim_set_eq:NN \linewidth \hsize}
+     {\__suep_latin_char:n {"00B7}
+      \ctexset{chapter={beforeskip=40.21bp,afterskip=37.4bp}}
+      \__suep_original_chapter*{\contentsname}\markboth{目录}{}
+      \phantomsection\addcontentsline{toc}{chapter}{\contentsname}
+      \__suep_if_doctor:T {\addcontentsline{toe}{suepchapter}{Contents}}
+      \dim_set_eq:NN \hsize \textwidth\dim_set_eq:NN \linewidth \hsize}
+   \use:c {@starttoc}{toc}\clearpage\group_end:
+   \__suep_if_doctor:T
+     {\group_begin:
+      \ctexset{chapter={beforeskip=40.418bp,afterskip=39.14bp,
+        format=\rmfamily\bfseries\zihao{3}\centering}}
+      \__suep_original_chapter*{CONTENTS}\markboth{CONTENTS}{}
+      \phantomsection\addcontentsline{toc}{chapter}{CONTENTS}\addcontentsline{toe}{
+  suepchapter}{
+  Contents~in~English}
+      \use:c {@starttoc}{toe}\group_end:\clearpage}}
+%    \end{macrocode}
+%
+% \section{结论、成果、附录与文献}
+% 盲审环境隐藏身份相关内容。本科附录与研究生附录分别处理；文献格式在导言区确认学位后设置，避免重复请求。
+%    \begin{macrocode}
+\NewDocumentEnvironment {conclusion}{}
+  {\__suep_if_bachelor:TF {\__suep_unnumbered:nn {结论}{Conclusions}}
+     {\ctexset{chapter={beforeskip=62.246bp,afterskip=41.746bp}}
+      \ctexset{section/afterskip=17.868bp}
+      \chapter{结论与展望}[Conclusions~and~Future~Work]}}{}
+\NewDocumentEnvironment {acknowledgements}{+b}
+  {\bool_if:NF \g__suep_blind_bool {\__suep_unnumbered:nn {致谢}{Acknowledgements}#1}}{}
+\NewDocumentEnvironment {publications}{+b}
+  {\__suep_if_bachelor:F {\bool_if:NF \g__suep_blind_bool
+    {\__suep_unnumbered:nn {攻读\__suep_degree_name: 学位期间发表学术论文情况}{Publications}
+  #1}}}{}
+\int_new:N \l__suep_publication_int
+\NewDocumentEnvironment {publicationlist}{}
+  {\__suep_body_font:\int_zero:N \l__suep_publication_int
+   \list{}{\dim_set:Nn \leftmargin {0pt}\dim_set:Nn \rightmargin {0pt}
+     \dim_set:Nn \labelwidth {0pt}\dim_set:Nn \labelsep {0pt}
+     \dim_set:Nn \itemindent {2\ccwd}\dim_set:Nn \listparindent {0pt}
+     \skip_set:Nn \itemsep {0pt}\skip_set:Nn \parsep {0pt}
+     \skip_set:Nn \topsep {0pt}\skip_set:Nn \partopsep {0pt}}
+   \sloppy\cs_set_eq:NN \__suep_publication_item: \item
+   \RenewDocumentCommand \item {}
+     {\__suep_publication_item:\int_incr:N \l__suep_publication_int
+      \mode_leave_vertical:\hbox:n {[\int_use:N \l__suep_publication_int]}\space}}
+  {\endlist\use:c {@endpefalse}}
+\NewDocumentEnvironment {research}{+b}
+  {\__suep_if_doctor:T {\bool_if:NF \g__suep_blind_bool
+    {\__suep_unnumbered:nn {攻读博士学位期间参加的科研工作}{Research~Projects}#1}}}{}
+\NewDocumentEnvironment {symbols}{}{\__suep_unnumbered:nn {主要符号对照表}{Symbols}}{}
+\NewDocumentEnvironment {appendices}{}
+  {\clearpage\bool_gset_true:N \g__suep_main_bool\bool_gset_true:N \g__suep_appendix_bool
+   \use:c {@mainmattertrue}\appendix
+   \__suep_if_bachelor:TF
+     {\__suep_original_chapter*{附录}\ctexset{appendix/number=\arabic{chapter}}
+      \cs_set:Npn \thechapter {\arabic{chapter}}
+      \setstretch{1}\fontsize{10.5bp}{19.5bp}\selectfont}
+     {\ctexset{chapter={name={附录,},number=\Alph{chapter},
+        beforeskip=39.39bp,afterskip=41.19bp,
+        format=\setstretch{1}\fontsize{16bp}{26bp}\selectfont\__suep_word_heiti:n {.45617}
+  \centering
+  }}}}
+  {\clearpage\bool_gset_false:N \g__suep_main_bool\bool_gset_false:N \g__suep_appendix_bool
+  \use:c {
+  @mainmatterfalse}}
+\AddToHook{package/biblatex/after}
+  {\cs_set:Npn \bibfont {\__suep_if_bachelor:TF
+     {\setstretch{1}\fontsize{10.5bp}{19.5bp}\selectfont}{\zihao{-4}}}
+   \cs_set_eq:NN \supercite \cite
+   \ExecuteBibliographyOptions{sorting=none,maxbibnames=3,minbibnames=3}
+   \cs_new_eq:NN \__suep_original_finentrypunct: \finentrypunct
+   \cs_set:Npn \finentrypunct {\__suep_if_bachelor:T {\__suep_original_finentrypunct:}}}
+\AddToHook{package/gbt7714/after}
+  {\cs_set_eq:NN \supercite \cite
+   \cs_set:Npn \bibfont {\setstretch{1}\songti
+     \__suep_if_bachelor:TF {\fontsize{10.5bp}{19.5bp}\selectfont}{\fontsize{12bp}{19.5bp}
+  \selectfont}}
+   \skip_set:Nn \bibsep {0bp}
+   \cs_set_protected:Npn \bibsection {\__suep_unnumbered:nn {参考文献}{References}}
+   \cs_new_eq:Nc \__suep_original_bibsetnum:n {NAT@bibsetnum}
+   \cs_set_protected:cpn {NAT@bibsetnum} #1
+     {\__suep_if_bachelor:TF {\__suep_original_bibsetnum:n {#1}}
+        {\dim_set:Nn \leftmargin {0bp}\dim_set:Nn \labelwidth {1.8em}
+         \dim_set:Nn \labelsep {.4em}\dim_set:Nn \itemindent {2\ccwd+\labelwidth+\labelsep}
+         \skip_set:Nn \itemsep {0bp}\skip_set:Nn \parsep {0bp}}}}
+\cs_new_protected:Npn \__suep_bibliography_style:
+  {\__suep_if_bachelor:TF
+     {\file_if_exist:nTF {gbt7714-2015-numeric.bst}
+        {\bibliographystyle{gbt7714-2015-numeric}}
+        {\bibliographystyle{gbt7714-numerical}}}
+     {\bibliographystyle{suepthesis-graduate}}
+   \citestyle{super}}
+\NewDocumentCommand \SUEPBibliographyStyle {}
+  {\bool_if:NTF \g__suep_profile_locked_bool
+     {\msg_error:nnn {suepthesis}{profile-locked}{SUEPBibliographyStyle}}
+     {\bool_if:NF \g__suep_bibliography_requested_bool
+        {\bool_gset_true:N \g__suep_bibliography_requested_bool
+         \AddToHook{begindocument/before}{\__suep_bibliography_style:}}}}
+\NewDocumentEnvironment {bibprint}{}
+  {\__suep_unnumbered:nn {参考文献}{References}
+   \cs_if_exist:cTF {NAT@parse}
+     {\cs_set_protected:Npn \bibsection {}\skip_set:Nn \bibsep {0bp}}
+     {\skip_set:Nn \bibitemsep {0pt}\skip_set:Nn \bibparsep {0pt}
+   \__suep_if_bachelor:F {\defbibenvironment{bibliography}
+     {\list{}{\dim_set:Nn \leftmargin {0pt}\dim_set:Nn \itemindent {2\ccwd}
+        \dim_set:Nn \labelwidth {0pt}\dim_set:Nn \labelsep {0pt}\skip_set:Nn \itemsep {0pt}
+  \skip_set:Nn \parsep {0pt}}}
+     {\endlist}{\item\printtext[labelnumberwidth]{\printfield{labelnumber}}\space}}}}{}
+%    \end{macrocode}
+%
+% \section{书脊与开始正文时的校验}
+% 书脊先测量长度并检测溢出；正文开始前锁定版式选项，再校验题目、专业、关键词及 PDF 元数据。
+%    \begin{macrocode}
+\NewDocumentCommand \MakeSpine {}
+  {\__suep_if_bachelor:F {\clearpage\group_begin:\thispagestyle{empty}
+     \hbox_set:Nn \l_tmpa_box {\songti\zihao{4}\__suep_full_title:\quad
+       \__suep_identity:n {author}\quad\__suep_identity:n {studentId}\quad 上海电力大学}
+     \dim_compare:nNnT {\box_wd:N \l_tmpa_box}>{23cm}
+       {\msg_fatal:nn {suepthesis}{spine-overflow}}
+     \noindent\rotatebox{-90}{\parbox[c]{23cm}{\centering\songti\zihao{4}\__suep_full_title:
+  \hfill
+       \__suep_identity:n {author}\hfill\__suep_identity:n {studentId}\hfill 上海电力大学}}
+     \par\clearpage\group_end:}}
+\cs_new_protected:Npn \__suep_validate:
+  {\clist_map_inline:nn {title,titleEn,major}
+     {\prop_get:NnN \g__suep_info_prop {##1}\l_tmpa_tl
+      \tl_if_blank:VT \l_tmpa_tl {\msg_error:nnn {suepthesis}{required}{##1}}}
+   \clist_map_inline:nn {keywords,keywordsEn}
+     {\prop_get:NnN \g__suep_info_prop {##1}\l_tmpa_tl
+      \regex_replace_all:nnN {[；;,，]}{,}\l_tmpa_tl\clist_set:NV \l_tmpa_clist \l_tmpa_tl
+      \int_set:Nn \l_tmpa_int {\clist_count:N \l_tmpa_clist}
+      \__suep_if_bachelor:TF
+        {\int_compare:nNnT {\l_tmpa_int}<{3}{\msg_warning:nnnn {suepthesis}{keywords}{3--5}{
+  \int_use:N \l_tmpa_int}}
+         \int_compare:nNnT {\l_tmpa_int}>{5}{\msg_warning:nnnn {suepthesis}{keywords}{3--5}{
+  \int_use:N \l_tmpa_int}}}
+        {\int_compare:nNnT {\l_tmpa_int}<{4}{\msg_warning:nnnn {suepthesis}{keywords}{4--6}{
+  \int_use:N \l_tmpa_int}}
+         \int_compare:nNnT {\l_tmpa_int}>{6}{\msg_warning:nnnn {suepthesis}{keywords}{4--6}{
+  \int_use:N \l_tmpa_int}}}
+      \str_if_eq:nnTF {##1}{keywords}{\int_set_eq:NN \l_tmpb_int \l_tmpa_int}
+        {\int_compare:nNnF {\l_tmpa_int}={\l_tmpb_int}{\msg_warning:nn {suepthesis}{
+  keyword-pair}}}}
+   \hypersetup{pdftitle={\__suep_full_title:},pdfauthor={\__suep_identity:n {author}},
+     pdfsubject={Shanghai~University~of~Electric~Power~Thesis}}}
+\__suep_apply_profile:
+\AddToHook{begindocument/before}{\bool_gset_true:N \g__suep_profile_locked_bool}
+\AddToHook{begindocument}{\__suep_validate:\__suep_body_font:\pagestyle{suepthesis}}
+%</cls>
+%    \end{macrocode}
+%
+% \Finale

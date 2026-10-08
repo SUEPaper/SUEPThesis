@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    name: Validate release
+    uses: ./.github/workflows/validate.yml
+    with:
+      artifact-name: release-${{ github.run_id }}-${{ github.run_attempt }}
+      release-tag: ${{ github.ref_name }}
+
+  publish:
+    name: Publish GitHub Release
+    needs: validate
+    runs-on: windows-2025
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist
+      - name: Verify asset checksums
+        run: |
+          foreach ($line in Get-Content dist/SHA256SUMS.txt) {
+            if ($line -notmatch '^([a-f0-9]{64})  ([A-Za-z0-9._-]+)$') { throw 'Invalid checksum manifest.' }
+            $expected, $name = $Matches[1], $Matches[2]
+            $actual = (Get-FileHash -Algorithm SHA256 -LiteralPath "dist/$name").Hash.ToLowerInvariant()
+            if ($actual -ne $expected) { throw "Checksum mismatch: $name" }
+          }
+      - name: Create release and upload assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          if ($env:RELEASE_TAG -notmatch '^v\d+\.\d+\.\d+(?:-[A-Za-z0-9]+(?:[.-][A-Za-z0-9]+)*)?$') { throw 'Invalid release tag.' }
+          $assets = @(Get-ChildItem -File dist | ForEach-Object FullName)
+          $arguments = @('release', 'create', $env:RELEASE_TAG, '--verify-tag', '--generate-notes', '--title', "SUEPThesis $env:RELEASE_TAG")
+          if ($env:RELEASE_TAG.Contains('-')) { $arguments += @('--prerelease', '--latest=false') }
+          & gh @arguments @assets
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub Release publication failed. Check for an existing release before rerunning.' }

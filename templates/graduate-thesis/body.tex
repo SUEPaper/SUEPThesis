@@ -1,0 +1,65 @@
+\chapter{绪论}[Introduction]
+\section{研究背景与意义}[Background and Motivation]
+电力系统优化需要综合考虑运行成本与设备约束。本文采用数学模型刻画各设备之间的关系。模型设计参考已有建模与计算方法\supercite{knuth,lamport}。
+
+发电设备、负荷和储能共同构成系统的功率平衡关系。优化过程中需要同时考虑设备容量、运行成本以及储能充放电约束。
+\subsection{研究内容}[Research Scope]
+研究包括建模、求解和分析三个方面，通过建立变量与约束之间的联系，分析新能源出力变化对系统运行方式的影响。
+\section{论文组织结构}[Organization of the Thesis]
+第一章介绍研究背景。第二章展示图、表和公式。最后给出结论、参考文献和附录。
+\chapter{模型与结果分析}[Model and Results]
+\section{优化模型}[Optimization Model]
+\subsection{目标函数}[Objective Function]
+设决策向量为 $\symbfit{x}$，目标函数和约束为
+\begin{equation}\label{eq:model}
+  \min_{\symbfit{x}} f(\symbfit{x})
+  \qquad \text{subject to } A\symbfit{x}=\symbfit{b}
+\end{equation}
+式\eqref{eq:model}中，目标函数描述运行成本，等式约束表示系统平衡条件。
+\section{非线性构形与物流范围}[Nonlinear States and Logistics]
+图\ref{fig:system}描述非线性构形之间的状态转移，图中的刚度曲线反映不同构形在载荷变化下的响应。
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\linewidth]{images/nonlinear-state.png}
+  \SUEPCaption{非线性构形状态转移过程示意}{Nonlinear configuration state transition}
+  \label{fig:system}
+\end{figure}
+物流的概念和范围如表\ref{tab:parameters}所示。设备及其原材料在供应商与最终顾客之间流动，规划、实施和控制共同构成这一过程的管理途径。物料流动与存储需要综合考虑效率及成本效益，并适应产品功能、数量、质量和交付时间等需求。
+\begin{table}[htbp]
+  \centering
+  \SUEPCaption{物流的概念和范围}{Conception and scope of Logistics}
+  \label{tab:parameters}
+  \begin{tabular}{@{}>{\centering\arraybackslash}m{0.20\linewidth}@{}>{\centering\arraybackslash}m{0.70\linewidth}@{}}
+    \toprule
+    本质 & 过程 \\
+    \midrule
+    途径或方法 & 规划、实施、控制 \\
+    目标 & 效率、成本效益 \\
+    活动或作业 & 流动与储存 \\
+    处理对象 & 原材料、在制品、产成品、相关信息 \\
+    范围 & 从原点（供应商）到终点（最终顾客） \\
+    目的或目标 & 适应顾客的需求（产品、功能、数量、质量、时间、价格） \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\subsection{状态响应}[State Response]
+系统在时刻 $t$ 的功率平衡满足
+\begin{equation}\label{eq:balance}
+  P_t^{\mathrm{g}}+P_t^{\mathrm{s}}=P_t^{\mathrm{d}}
+\end{equation}
+
+令 $x$ 为状态变量，$a$、$b$、$c$、$d$ 为模型参数。状态响应采用三次项、一次项与反比例项的组合描述：
+\begin{equation}
+  y = ax^3 + bx + \frac{c}{x} + d
+  \label{eq:response}
+\end{equation}
+
+\begin{equationnotes}
+  \item[$y$] 响应量；
+  \item[$a$] 三次项系数；
+  \item[$x$] 非零状态变量；
+  \item[$b$] 一次项系数；
+  \item[$c$] 反比例项系数；
+  \item[$d$] 常数项系数。
+\end{equationnotes}
+式\eqref{eq:response}用于描述不同状态变量取值下的响应变化。

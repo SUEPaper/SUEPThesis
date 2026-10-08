@@ -1,0 +1,41 @@
+% !TeX program = xelatex
+\documentclass[a4paper,oneside,openany,zihao=-4,fontset=fandol]{ctexbook}
+\usepackage[margin=2.5cm,headheight=16pt]{geometry}
+\usepackage{fontspec,booktabs,longtable,tabularx,array,enumitem,fvextra,xcolor,fancyhdr,graphicx}
+\usepackage[unicode,bookmarksnumbered,colorlinks=true,hyperindex=false]{hyperref}
+\setmainfont{TeX Gyre Termes}
+\setmonofont{Latin Modern Mono}
+\usepackage{unicode-math}
+\setmathfont{TeX Gyre Termes Math}
+\setmathfont[range={"002B,"003D}]{TeX Gyre Termes}
+\DeclareMathSizes{12.045}{11.944625}{6.966025}{4.977}
+\definecolor{manualblue}{HTML}{24516B}
+\definecolor{manualgray}{HTML}{657078}
+% Match the MaterialPink link accent used by the fduthesis handbook.
+\definecolor{manualtoc}{HTML}{E91E63}
+% DocInput removes comment markers from prose; verbatim retains them.
+\DefineVerbatimEnvironment{Code}{Verbatim}{gobble=2,fontsize=\small,breaklines=true,samepage=true,frame=lines,rulecolor=\color{manualgray},framesep=3mm}
+\AddToHook{env/Code/before}{\par\addvspace{7pt}\noindent\begin{minipage}{\linewidth}}
+\AddToHook{env/Code/after}{\end{minipage}\par\addvspace{7pt}}
+\linespread{1.15}\raggedbottom
+\setlist{nosep,leftmargin=2em}
+\ctexset{chapter={format=\Large\bfseries\raggedright,beforeskip=12pt,afterskip=24pt},section={format=\large\bfseries}}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small SUEPThesis 使用手册}\fancyhead[R]{\small\nouppercase{\leftmark}}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\hypersetup{hypertexnames=false,pdftitle={SUEPThesis 使用手册},pdfauthor={SUEPThesis contributors}}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlength{\emergencystretch}{2em}
+% doc renders the guarded source instead of executing the thesis class.
+\usepackage{doc}
+\DisableCrossrefs
+\CodelineNumbered
+\setlength{\MacroIndent}{0pt}
+\renewcommand{\MacroFont}{\normalfont\ttfamily\fontsize{8}{10}\selectfont}
+\renewcommand{\AltMacroFont}{\MacroFont}
+\xeCJKDeclareCharClass{CJK}{"25A1}
+\AddToHook{begindocument/end}{\hypersetup{allcolors=black}}
+\AddToHook{cmd/tableofcontents/before}{\hypersetup{linkcolor=manualtoc,linktoc=all}}
+\AddToHook{cmd/tableofcontents/after}{\hypersetup{linkcolor=black}}
+\begin{document}
+\DocInput{suepthesis.dtx}
+\end{document}

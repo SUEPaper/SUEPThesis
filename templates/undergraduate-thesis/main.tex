@@ -1,0 +1,34 @@
+% !TeX program = xelatex
+% !BIB program = bibtex
+\documentclass[type=bachelor]{suepthesis}
+\SUEPSetup{
+  cover = {date = 2026年6月},
+  info = {
+    title = 电力变压器故障诊断方法研究,
+    titleEn = {A Study of Power Transformer Fault Diagnosis Methods},
+    author = 张三,
+    studentId = 20260001,
+    supervisor = 李四教授,
+    institution = 电气工程学院,
+    major = 电气工程及其自动化,
+    grade = 2022级,
+    keywords = {电力变压器,故障诊断,气体分析},
+    keywordsEn = {Power transformer,Fault diagnosis,Gas analysis}
+  }
+}
+\usepackage{gbt7714}
+\SUEPBibliographyStyle
+
+\begin{document}
+\MakeCover
+\MakeOriginality
+\frontmatter
+\input{abstract.tex}
+\MakeTOC
+\mainmatter
+\input{body.tex}
+\backmatter
+\input{chapters/acknowledgements.tex}
+\input{chapters/references.tex}
+\input{chapters/appendix.tex}
+\end{document}

@@ -1,0 +1,15 @@
+# 上海电力大学本科论文示例
+
+从仓库根目录运行 `pwsh ./scripts/build.ps1 -Target bachelor`，或在本目录运行 `latexmk -xelatex main.tex`。输出为 `main.pdf`。首次使用先从根目录运行 `xetex suepthesis.ins`，并将生成的 `suepthesis.cls` 复制到本目录。
+
+填写 `main.tex` 中的姓名、学号、导师、学院、专业、年级、题目和关键词，修改 `abstract.tex` 中的中英文摘要。`body.tex` 按顺序载入 `chapters/` 中的引言、方法与结论；致谢、文献和附录也放在该目录。所有段落自然换行、分页，章节与公式自动编号，目录直接用 `\MakeTOC` 生成。
+
+写章节只需 `\chapter{引言}` 和 `\section{研究背景}`。`\label` 用于需要引用的图表或公式，配合 `\ref`、`\eqref` 使用；它不是目录链接所需的补丁。示例不包含 LaTeX3 实现代码、Word 字距、原稿坐标或手工编号，通用字体、页眉、间距和版式统一由文档类处理。
+
+参考文献使用 `gbt7714`、BibTeX 和 `\SUEPBibliographyStyle`，修改 `references.bib` 并在正文中使用 `\cite`。示例仅提供一条演示文献，正式论文应填写实际引用的完整记录，满足学校要求的数量与类型。
+
+默认字体由文档类检测。无 Windows 字体的环境可使用 `\documentclass[type=bachelor,cjk-font=fandol,font=termes]{suepthesis}`。无需在正文中调用 `fontspec`；独立复制时保留校徽 `images/suep-logo.png`。其他 logo 是可选资源，可通过 `cover/headerImage` 选择。
+
+正文、历史界面截图和附录数据仅用于展示排版。正式写作时替换为自己的研究结果与图表。章、节、目录与编号由文档类自动处理。
+
+学校要求与完整接口见根目录 README.md、resources/README.md 和使用手册。
