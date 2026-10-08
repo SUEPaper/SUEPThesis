@@ -23,14 +23,14 @@ def source_files() -> list[Path]:
     # Explicit directory/extension allowlist: never collect arbitrary workspace files.
     files = [ROOT / name for name in (
         'README.md', 'LICENSE', 'Makefile', '.explcheckrc', '.gitignore',
-        'suepthesis.dtx', 'suepthesis.ins', 'suepthesis.cls',
+        'suepthesis.dtx', 'suepthesis-logo.dtx', 'suepthesis.ins', 'suepthesis.cls', 'sueplogo.sty',
         'suepthesis-graduate.bst', 'suepthesis-doc.tex', 'suepthesis-doc.pdf',
     )]
     extensions = {
         'templates': {'.tex', '.bib', '.bst', '.md', '.png', '.jpg', '.jpeg'},
         'scripts': {'.ps1', '.py', '.sh', '.zsh'},
         '.github/workflows': {'.yml', '.yaml'},
-        'resources': {'.doc', '.docx', '.md'},
+        'resources': {'.doc', '.docx', '.md', '.svg'},
     }
     for directory, allowed in extensions.items():
         files.extend(p for p in (ROOT / directory).rglob('*') if p.is_file()
@@ -38,6 +38,7 @@ def source_files() -> list[Path]:
     # Include the generated class in each copyable thesis project.
     for directory in ('undergraduate-thesis', 'graduate-thesis', 'doctoral-thesis'):
         files.append(ROOT / 'templates' / directory / 'suepthesis.cls')
+        files.append(ROOT / 'templates' / directory / 'sueplogo.sty')
     for path in files:
         if not path.is_file():
             raise FileNotFoundError(f'Required release file missing: {path.relative_to(ROOT)}')

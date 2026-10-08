@@ -6,7 +6,7 @@
 
 专业博士入口为 `main-professional.tex`，使用 `type=doctor,degreeType=professional`，输出 `main-professional.pdf`。可从根目录运行 `pwsh ./scripts/build.ps1 -Target doctor-professional`。两个入口共用摘要、正文和文献；专业学位名称及专业名称应按学院确认的信息填写。
 
-封面和扉页按硕博参考 PDF 的学术型、专业型区域分别排版，`images/suep-logo.png` 为横版校名标识，独立复制项目时请保留。格式解释、批注框和教学箭头不进入论文输出。
+封面和扉页按硕博参考 PDF 的学术型、专业型区域分别排版，默认由 `sueplogo.sty` 绘制横向矢量校标，独立复制项目时请与 `suepthesis.cls` 一起保留。原 `images/suep-logo.png` 可通过 `cover/headerImage` 显式选择。格式解释、批注框和教学箭头不进入论文输出。
 
 修改 main.tex 中的学位和个人信息，abstract.tex 中的摘要，body.tex 中的正文以及 references.bib 中的文献。
 学校要求、格式选择和完整命令见根目录 README.md、resources/README.md 与使用手册。

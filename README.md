@@ -14,7 +14,7 @@ SUEPThesis 是面向上海电力大学本科毕业论文、硕士学位论文和
 - 博士论文支持独立英文目录，以及中英文图题、表题。
 - 使用 `gbt7714` 与 BibTeX 处理参考文献，提供与学校要求配套的研究生文献表样式。
 - 支持盲审信息隐藏、单双面排版和研究生书脊文字页。
-- 提供字体选择、自动检测与回退机制，以及随示例附带的校徽或校名图片。
+- 提供字体选择、自动检测与回退机制，以及由 LaTeX/TikZ 直接绘制的矢量校徽与校标。
 - 本科、硕士和博士公式统一使用 `unicode-math` 与 TeX Gyre Termes Math，正文数学字体和字号一致。
 - 配套使用手册与可编译示例。
 
@@ -58,17 +58,17 @@ macOS 或 Linux 可在仓库根目录运行：
 make all
 ```
 
-构建脚本会提取文档类，并将文档类和研究生文献样式复制到示例目录。论文输出位于对应目录下的 `main.pdf` 或 `main-professional.pdf`；使用手册输出为根目录的 `suepthesis-doc.pdf`。
+构建脚本会提取文档类，并将文档类、矢量标识宏包和研究生文献样式复制到示例目录。论文输出位于对应目录下的 `main.pdf` 或 `main-professional.pdf`；使用手册输出为根目录的 `suepthesis-doc.pdf`。
 
 ### 4. 建立自己的论文项目
 
-将对应示例目录完整复制为自己的论文项目，保留其中的图片和编译配置。若从源码仓库开始，先在仓库根目录运行：
+将对应示例目录完整复制为自己的论文项目，保留其中的宏包、正文插图和编译配置。若从源码仓库开始，先在仓库根目录运行：
 
 ```sh
 xetex -interaction=nonstopmode -halt-on-error suepthesis.ins
 ```
 
-把生成的 `suepthesis.cls` 复制到自己的论文目录；研究生项目还需复制根目录的 `suepthesis-graduate.bst`。随后在含主文件的论文目录中运行：
+把生成的 `suepthesis.cls` 和 `sueplogo.sty` 复制到自己的论文目录；研究生项目还需复制根目录的 `suepthesis-graduate.bst`。随后在含主文件的论文目录中运行：
 
 ```sh
 latexmk -xelatex main.tex
@@ -83,7 +83,9 @@ latexmk -xelatex main.tex
 | 文件或目录 | 用途 |
 | --- | --- |
 | `suepthesis.dtx` | 使用说明、实现说明与文档类源码的统一维护入口 |
-| `suepthesis.ins` | 从 `.dtx` 提取文档类 |
+| `suepthesis-logo.dtx` | 从学校 SVG 轮廓生成的 TikZ 标识宏包源码 |
+| `suepthesis.ins` | 从 `.dtx` 提取文档类和标识宏包 |
+| `sueplogo.sty` | 生成的矢量标识宏包，与文档类一起复制 |
 | `suepthesis.cls` | 生成的文档类，复制到论文项目中使用 |
 | `suepthesis-doc.tex` | 使用手册的排版入口 |
 | `suepthesis-graduate.bst` | 研究生参考文献样式 |
@@ -97,7 +99,7 @@ latexmk -xelatex main.tex
 
 ## 使用示例
 
-下面以学术硕士论文为例。编译时需保留示例中的 `images/suep-logo.png` 和 `suepthesis-graduate.bst`。
+下面以学术硕士论文为例。编译时需保留 `sueplogo.sty` 和 `suepthesis-graduate.bst`。
 
 ```latex
 % !TeX program = xelatex
@@ -147,6 +149,25 @@ latexmk -xelatex main.tex
 `type`、`degreeType` 及其别名 `degree` 是文档类选项，应写在 `\documentclass[...]` 中。`info/degree` 表示封面上显示的学位名称，与学位类型选项不同。本科使用 `institution` 填写学院（部），并可填写 `grade` 和 `subtitle`。
 
 博士论文的章、节和三级标题需提供英文译名，例如 `\chapter{绪论}[Introduction]`；图表统一使用 `\SUEPCaption{中文题目}{英文题目}`。模板据此生成英文目录和双语题注。完整结构与接口请查阅使用手册。
+
+## 矢量校徽与校标
+
+**上海电力大学的校徽、校标、校名书法体的版权归上海电力大学所有。**
+
+参考 fduthesis 的独立 Logo 宏包做法，`sueplogo` 直接使用原始 SVG 的曲线路径，由 TikZ 绘制。默认封面 `cover/headerImage=auto`：本科使用校徽，硕博使用校徽与中英文校名的横向组合，无需 PNG、校名字体、Inkscape 或 shell-escape。
+
+文档类已自动加载宏包，也可在普通 LaTeX 文档中单独加载：
+
+```latex
+\usepackage{sueplogo} % suepthesis 文档类下无需重复加载
+\suepemblem[width=3cm]
+\suepname[width=8cm]
+\suepemblem[width=3cm,color=black]
+```
+
+`width` 控制宽度，保持原比例；`color=original` 保留 SVG 原色，其他 xcolor 颜色用于单色绘制。`SUEPRed` 为学校 VI 图示的校徽红 `#CC0000`（RGB 204,0,0），可通过 `color=SUEPRed` 使用。旧 PNG 或自定义 PDF 仍可通过 `\SUEPSetup{cover={headerImage=images/suep-logo.png}}` 显式指定，空值省略标识。
+
+轮廓原件和来源说明见 [resources/logo/](resources/logo/README.md)，学校参考资料见 [VI 设计规范](https://www.shiep.edu.cn/vi/list.htm)。维护 SVG 后运行 `python scripts/generate-logo.py` 更新 `suepthesis-logo.dtx`，再重新提取宏包；日常论文编译不需要 Python。
 
 ## 盲审、字体与装订
 

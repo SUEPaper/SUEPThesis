@@ -57,6 +57,7 @@
 \tl_new:N \g__suep_date_tl
 \tl_new:N \g__suep_logo_tl
 \tl_new:N \l__suep_logo_file_tl
+\bool_new:N \l__suep_vector_logo_bool
 \tl_new:N \g__suep_cjk_fontset_tl
 \tl_new:N \g__suep_latin_fontset_tl
 \tl_new:N \g__suep_song_font_tl
@@ -101,6 +102,9 @@
 \RequirePackage{geometry,fancyhdr,titletoc,graphicx,booktabs,array,longtable
   }
 \RequirePackage{caption,setspace,xcolor}
+\ExplSyntaxOff
+\RequirePackage{sueplogo}
+\ExplSyntaxOn
 \RequirePackage[unicode,bookmarksnumbered,hidelinks]{hyperref}
 \hypersetup{hypertexnames=false}
 \pdfstringdefDisableCommands{\cs_set:Npn \quad {~}}
@@ -110,7 +114,8 @@
 \msg_new:nnn {suepthesis}{font-selected}{Selected~#1~font:~#2.}
 \msg_new:nnn {suepthesis}{logo-missing}
   {
-  Cover~logo~'#1'~not~found.~Set~cover/headerImage~to~an~existing~PDF/PNG/JPEG~file,~or~
+  Cover~logo~'#1'~not~found.~Use~cover/headerImage=auto~for~the~vector~logo,~
+  an~existing~PDF/PNG/JPEG~file,~or~
   empty~to~omit~it.
   }
 \cs_new_protected:Npn \__suep_first_font:Nn #1#2
@@ -584,24 +589,20 @@
      {\rmfamily\bfseries\fontsize{#2bp}{28bp}\selectfont\centering}{#3}}
 \cs_new_protected:Npn \__suep_resolve_logo:
   {\tl_clear:N \l__suep_logo_file_tl
+   \bool_set_false:N \l__suep_vector_logo_bool
    \tl_if_blank:VF \g__suep_logo_tl
      {\str_if_eq:VnTF \g__suep_logo_tl {auto}
-        {\__suep_if_bachelor:TF
-           {\clist_set:Nn \l_tmpa_clist
-              {images/suep-logo.pdf,images/suep-logo.png,suep-emblem.pdf,suep-emblem.png}}
-           {\clist_set:Nn \l_tmpa_clist
-              {images/suep-logo.pdf,images/suep-logo.png,suep-name.pdf,suep-name.png}}
-         \clist_map_inline:Nn \l_tmpa_clist
-           {\file_if_exist:nT {##1}
-              {\tl_set:Nn \l__suep_logo_file_tl {##1}\clist_map_break:}}}
+        {\bool_set_true:N \l__suep_vector_logo_bool}
         {\file_if_exist:VT \g__suep_logo_tl
-           {\tl_set_eq:NN \l__suep_logo_file_tl \g__suep_logo_tl}}
-      \tl_if_empty:NT \l__suep_logo_file_tl
-        {\msg_fatal:nne {suepthesis}{logo-missing}{\tl_use:N \g__suep_logo_tl}}}}
+           {\tl_set_eq:NN \l__suep_logo_file_tl \g__suep_logo_tl}
+         \tl_if_empty:NT \l__suep_logo_file_tl
+           {\msg_fatal:nne {suepthesis}{logo-missing}{\tl_use:N \g__suep_logo_tl}}}}}
 \cs_new_protected:Npn \__suep_graduate_cover_logo:n #1
-  {\tl_if_empty:NF \l__suep_logo_file_tl
-     {\put(#1,-209.4){\includegraphics[width=154.8bp,height=36.84bp,keepaspectratio]{
-  \l__suep_logo_file_tl}}}}
+  {\bool_if:NTF \l__suep_vector_logo_bool
+     {\put(#1,-209.4){\suepname[width=154.8bp]}}
+     {\tl_if_empty:NF \l__suep_logo_file_tl
+        {\put(#1,-209.4){\includegraphics[width=154.8bp,height=36.84bp,keepaspectratio]{
+  \l__suep_logo_file_tl}}}}}
 \box_new:N \l__suep_cover_title_box
 \dim_new:N \l__suep_cover_title_y_dim
 \cs_new_protected:Npn \__suep_cover_title_content:
@@ -722,9 +723,11 @@
         {\CJKfamily{suepcover}\bfseries\fontsize{36bp}{43bp}\selectfont\__suep_punct_style:n
    {plain}
   }{本科毕业设计（论文）}
-      \tl_if_empty:NF \l__suep_logo_file_tl
-        {\put(226.55,-428.3){\includegraphics[width=136.7bp,height=136.7bp,keepaspectratio]{
-  \l__suep_logo_file_tl}}}
+      \bool_if:NTF \l__suep_vector_logo_bool
+        {\put(226.55,-428.3){\suepemblem[width=136.7bp]}}
+        {\tl_if_empty:NF \l__suep_logo_file_tl
+           {\put(226.55,-428.3){\includegraphics[width=136.7bp,height=136.7bp,keepaspectratio]{
+  \l__suep_logo_file_tl}}}}
       \__suep_bachelor_cover_field:nnnnn {486.92}{146.06}{216.17}{195.86}{题\hspace{28.08bp}
   目：}
       \__suep_bachelor_cover_value:nnnn {486.92}{216.17}{195.86}{title}

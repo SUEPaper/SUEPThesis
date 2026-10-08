@@ -51,7 +51,7 @@
 % 硕士 & \path{templates/graduate-thesis}\\
 % 博士 & \path{templates/doctoral-thesis}\\\bottomrule
 % \end{tabularx}\end{center}
-% 三个目录分别含有主文件、摘要、正文、文献数据库和编译配置。本科目录还有校徽。先原样编译成功，再逐步替换内容，这样可以区分环境问题与内容问题。
+% 三个目录分别含有主文件、摘要、正文、文献数据库和编译配置。文档类配套的 sueplogo 宏包提供矢量校徽与校标。先原样编译成功，再逐步替换内容，这样可以区分环境问题与内容问题。
 %
 % \section{在仓库中编译}
 % Windows PowerShell 从仓库根目录运行：
@@ -63,16 +63,16 @@
 % # 或一次生成三份示例与本手册
 % ./scripts/build.ps1
 % \end{Code}
-% 脚本提取文档类，复制到相应示例目录，再调用 latexmk。论文输出是各示例目录下的 \path{main.pdf}；手册输出是根目录的 \path{suepthesis-doc.pdf}。脚本报错时，先阅读输出中最早出现的错误。
+% 脚本提取文档类与标识宏包，复制到相应示例目录，再调用 latexmk。论文输出是各示例目录下的 \path{main.pdf}；手册输出是根目录的 \path{suepthesis-doc.pdf}。脚本报错时，先阅读输出中最早出现的错误。
 %
 % macOS 或 Linux 可在仓库根目录运行 \texttt{make all}；也可采用下面的手动流程。命令应在其对应目录执行，不要在仓库根目录直接编译示例内部的正文文件。
 %
 % \section{复制为独立论文项目}
-% 先在仓库根目录提取类文件，再把它复制到所选示例目录；将整个示例目录另存为自己的论文项目。学校原始 Word 文档保存在 \path{resources/}，独立论文项目无需携带这些规范原件。
+% 先在仓库根目录提取类文件与标识宏包，再把两者复制到所选示例目录；将整个示例目录另存为自己的论文项目。学校原始 Word 文档保存在 \path{resources/}，独立论文项目无需携带这些规范原件。
 % \begin{Code}
 % # 仓库根目录
 % xetex -interaction=nonstopmode -halt-on-error suepthesis.ins
-% # 复制 suepthesis.cls 到自己的论文目录
+% # 复制 suepthesis.cls 和 sueplogo.sty 到自己的论文目录
 % # 切换到含 main.tex 的论文目录后运行
 % latexmk -xelatex main.tex
 % \end{Code}
@@ -98,13 +98,15 @@
 % \path{abstract.tex} & 中文摘要和英文摘要；关键词在主文件配置。\\
 % \path{body.tex} & 示例正文。真实论文可拆成多个章节文件。\\
 % \path{references.bib} & 文献数据库，每条记录有唯一引用键。\\
-% \path{images/} & 本科校徽及作者自己的插图，可增加文件。\\
+% \path{images/} & 作者自己的插图及可选的自定义标识，可增加文件。\\
 % \path{latexmkrc} & XeLaTeX 自动编译配置，通常无需修改。\\
 % \path{suepthesis.cls} & 生成的文档类，随论文复制使用；不要直接维护。\\
 % \path{suepthesis.dtx} & 使用说明与带注释的类源码；开发时修改此文件。\\
-% \path{suepthesis.ins} & 从 dtx 提取 cls 的 DocStrip 入口。\\\bottomrule
+% \path{suepthesis-logo.dtx} & 标识宏包源码，由 SVG 轮廓生成。\\
+% \path{sueplogo.sty} & 生成的矢量标识宏包，随论文复制使用。\\
+% \path{suepthesis.ins} & 从 dtx 提取 cls 和 sty 的 DocStrip 入口。\\\bottomrule
 % \end{longtable}
-% 编译生成的 aux、bcf、bbl、toc、toe、log 等文件属于中间结果；其中 toe 是博士英文目录。分享可复现项目时，至少保留全部 tex、bib、cls、图片和编译配置。
+% 编译生成的 aux、bcf、bbl、toc、toe、log 等文件属于中间结果；其中 toe 是博士英文目录。分享可复现项目时，至少保留全部 tex、bib、cls、sty、图片和编译配置。
 %
 % \section{按章节拆分正文}
 % \verb|\input| 在当前位置读入另一个文件，不会自行开始新页。章节文件中不再写文档类、导言区和 document 环境。例如：
@@ -230,7 +232,7 @@
 % \begin{Code}
 % \SUEPSetup{
 %   cover = {date = 2026年6月1日,
-%     headerImage = images/suep-logo.png},
+%     headerImage = auto},
 %   info = {
 %     title = 新能源电力系统,
 %     subtitle = 优化方法研究,
@@ -273,8 +275,8 @@
 % \texttt{keywords} & 中文关键词列表。\\
 % \texttt{keywordsEn} & 对应英文关键词列表。\\\bottomrule
 % \end{longtable}
-% 封面日期 \path{cover/date} 默认使用编译当天的年和月。定稿时应显式设置，保证以后重新编译不会改变日期。\path{cover/headerImage} 控制封面标识：本科使用方形校徽，硕博使用横版校名标识；默认路径如前所示，各示例目录已放置对应图片。
-% 本科写作示例默认填写电子封面。若需要保留可手写的封面空栏，设置 \texttt{cover/blankFields=true}。该选项只控制封面，正文页眉和 PDF 标题仍使用 info 中的论文题目。随本科项目提供黑色校徽、红色校徽和横版校名标识；方形校徽使用 \path{logo_red.png} 或 \path{logo_black.png}，横版 \path{suep_logo.png} 不宜拉伸成方形校徽。
+% 封面日期 \path{cover/date} 默认使用编译当天的年和月。定稿时应显式设置，保证以后重新编译不会改变日期。\path{cover/headerImage} 控制封面标识：本科使用方形校徽，硕博使用横版校名标识；默认 auto 调用 sueplogo 宏包绘制矢量标识，也可显式指定图片路径。
+% 本科写作示例默认填写电子封面。若需要保留可手写的封面空栏，设置 \texttt{cover/blankFields=true}。该选项只控制封面，正文页眉和 PDF 标题仍使用 info 中的论文题目。原有黑色、红色校徽和横版 PNG 作为可选资源保留；如需使用，可通过 \path{cover/headerImage} 显式指定。
 %
 % \chapter{论文结构与分页}
 % \section{三个排版阶段}
@@ -755,7 +757,7 @@
 % 西文等宽字族 & Latin Modern Mono & 所有字体组选项均使用此开放字库。\\
 % 本科、硕士与博士数学公式 & TeX Gyre Termes Math & 统一使用 unicode-math；字体与字号一致，加号、等号使用当前西文正文字体。\\\bottomrule
 % \end{longtable}
-% 西文 Times 字体不会随 \texttt{cjk-font=mac} 改成 macOS 中文字体，也不会随 \texttt{cjk-font=fandol} 自动改变；应同时设置 \texttt{font}。本科校徽及研究生图形校名由图片提供，不需要额外安装书法字体。Adobe、方正、思源等字库未纳入当前预设，当前规范与版式校准尚未针对这些字库验证；增加预设时需检查宋、黑、楷、仿宋及封面用字，不能只替换正文宋体。
+% 西文 Times 字体不会随 \texttt{cjk-font=mac} 改成 macOS 中文字体，也不会随 \texttt{cjk-font=fandol} 自动改变；应同时设置 \texttt{font}。本科校徽及研究生图形校名由矢量路径提供，不需要额外安装书法字体。Adobe、方正、思源等字库未纳入当前预设，当前规范与版式校准尚未针对这些字库验证；增加预设时需检查宋、黑、楷、仿宋及封面用字，不能只替换正文宋体。
 %
 % \subsection{选择字体组与缺字库处理}
 % \begin{longtable}{P{.23\textwidth}P{.67\textwidth}}
@@ -782,17 +784,34 @@
 %
 % 统一开放字体能减少不同系统间的排版差异，但 macOS 华文字体、Fandol 与学校示范的中易字体不是同一字形，换页可能改变。正式提交应核对院系要求并在规定字体环境中重编译。仓库不分发商业字体；已有合法授权的字体可安装到本机，也可在导言区用 fontspec/CTeX 接口加载自己的字体文件，同时配置模板使用的命名字族，详见实现部分。
 %
-% \section{校徽与校名图片}
+% \section{校徽与校标矢量绘制}
 % \label{sec:logo}
-% 本科使用圆形校徽，研究生封面使用横向校名图。现有示例分别携带对应的 \path{images/suep-logo.png}，无需安装校名字体。默认 \path{cover/headerImage=auto} 先查找 \path{images/suep-logo.pdf}，再查找 PNG；随后本科查找 \path{suep-emblem.pdf} 或 PNG，研究生查找 \path{suep-name.pdf} 或 PNG。文件也可放在 TeX 搜索路径中。请勿将两种比例的图片混用。
+% \textbf{上海电力大学的校徽、校标、校名书法体的版权归上海电力大学所有。}
+%
+% 本项目提供 \textsf{sueplogo}。轮廓路径来自学校 VI 设计规范：\url{https://www.shiep.edu.cn/vi/list.htm}中提供的上海电力大学设计规范，保留曲线、描边、填充规则与原色；不是位图描摹，也不依赖校名字体。
+%
+% 默认 \path{cover/headerImage=auto} 使用矢量绘制：本科调用 \verb|\suepemblem|，硕博调用 \verb|\suepname|。后者是校徽与中英文校名的横向组合。封面保留原有标识区域与等比例缩放，不再自动查找 PNG。旧图片仍可显式指定；空值表示有意省略：
 % \begin{Code}
+% \SUEPSetup{cover={headerImage=auto}}
 % \SUEPSetup{cover={headerImage=images/official-emblem.pdf}}
-% % 明确省略图片（例如单独测试正文时）
 % \SUEPSetup{cover={headerImage={}}}
 % \end{Code}
-% 指定图片应带扩展名，可以使用 PDF、PNG 或 JPEG；路径相对于主文件，并注意大小写。调用 \verb|\MakeCover| 时若默认或指定图片不存在，模板报错并提示路径，避免静默缺图。空值才表示有意省略。图片按原有封面区域等比例缩放，不改变学校示范的位置。
+% 自定义图片应带扩展名，可以使用 PDF、PNG 或 JPEG；路径相对于主文件，并注意大小写。显式指定文件不存在时，调用 \verb|\MakeCover| 仍会报错。
 %
-% 上海电力大学目前提供的是位图，直接包进 PDF 不会增加矢量细节。本模板先使用已有高分辨率校徽与校名图；拿到官方矢量 PDF 后可通过 \path{cover/headerImage} 指定文件，或替换默认路径下的图片，无需修改类源码。若要另建 TikZ 标识包，需要准确的上海电力大学轮廓资料，并核对视觉标识的使用要求。
+% 文档类自动加载 \textsf{sueplogo}，其他文档也可单独使用该宏包：
+% \begin{Code}
+% \usepackage{sueplogo} % 使用 suepthesis 文档类时无需再次加载
+% \suepemblem[width=3cm]
+% \suepname[width=8cm]
+% \suepemblem[width=3cm,color=black]
+% \suepname[width=8cm,color=SUEPRed]
+% \end{Code}
+% \begin{center}
+% \suepemblem[width=2.5cm]\qquad\suepname[width=9cm]
+% \end{center}
+% \texttt{width} 设置宽度，高度等比例缩放。\texttt{color=original} 为默认值；其他 xcolor 色名或混色表达式替换非白色部分，白色留白保持不变。\texttt{SUEPRed} 采用学校 VI 图示的校徽红 \texttt{CC0000}（RGB 204,0,0）；图示同时标注 CMYK 26,100,100,0，RGB 定义直接采用图示值。\texttt{SUEPEmblemRed} 保留独立校徽 SVG 的原始 \texttt{FF0000}。使用标准校徽红可设置 \texttt{color=SUEPRed}。
+%
+% \path{suepthesis-logo.dtx} 通过 \path{suepthesis.ins} 提取为 \path{sueplogo.sty}，论文项目需同时携带 \path{suepthesis.cls} 与 \path{sueplogo.sty}。正常编译只需要 TeX Live 中的 TikZ，无需 SVG 原件、Python、Inkscape 或 shell-escape。
 %
 % \section{各学位的主要差异}
 % \begin{longtable}{P{.22\textwidth}P{.33\textwidth}P{.35\textwidth}}
@@ -853,7 +872,7 @@
 % \item 查看每张图表、长公式及其引用，确认无问号、重复编号或文字遮挡。
 % \item 检查文献条目的真实性、完整性和数量构成，补齐成果与附录。
 % \item 盲审稿检查身份信息；正式稿完成要求的签名、日期和授权勾选。
-% \item 归档最终 PDF、全部源码、图片、bib、cls 和编译环境信息。
+% \item 归档最终 PDF、全部源码、图片、bib、cls、sty 和编译环境信息。
 % \end{enumerate}
 %
 % \section{开发者如何修改模板}
@@ -951,6 +970,7 @@
 \tl_new:N \g__suep_date_tl
 \tl_new:N \g__suep_logo_tl
 \tl_new:N \l__suep_logo_file_tl
+\bool_new:N \l__suep_vector_logo_bool
 \tl_new:N \g__suep_cjk_fontset_tl
 \tl_new:N \g__suep_latin_fontset_tl
 \tl_new:N \g__suep_song_font_tl
@@ -1000,6 +1020,9 @@
 \RequirePackage{geometry,fancyhdr,titletoc,graphicx,booktabs,array,longtable
   }
 \RequirePackage{caption,setspace,xcolor}
+\ExplSyntaxOff
+\RequirePackage{sueplogo}
+\ExplSyntaxOn
 \RequirePackage[unicode,bookmarksnumbered,hidelinks]{hyperref}
 \hypersetup{hypertexnames=false}
 \pdfstringdefDisableCommands{\cs_set:Npn \quad {~}}
@@ -1014,7 +1037,8 @@
 \msg_new:nnn {suepthesis}{font-selected}{Selected~#1~font:~#2.}
 \msg_new:nnn {suepthesis}{logo-missing}
   {
-  Cover~logo~'#1'~not~found.~Set~cover/headerImage~to~an~existing~PDF/PNG/JPEG~file,~or~
+  Cover~logo~'#1'~not~found.~Use~cover/headerImage=auto~for~the~vector~logo,~
+  an~existing~PDF/PNG/JPEG~file,~or~
   empty~to~omit~it.
   }
 \cs_new_protected:Npn \__suep_first_font:Nn #1#2
@@ -1472,7 +1496,7 @@
 %    \end{macrocode}
 %
 % \section{封面、图片与长字段}
-% 参见第~\ref{sec:logo}~节。四种研究生组合保留参考固定区域；先测量题目及字段，再放入封面。MakeCover 先解析图片，缺图在输出页面前报错。显式空值表示省略；保留等比例缩放。
+% 参见第~\ref{sec:logo}~节。四种研究生组合保留参考固定区域；先测量题目及字段，再放入封面。MakeCover 先解析标识选择，显式指定的图片缺失时在输出页面前报错。显式空值表示省略；保留等比例缩放。
 %    \begin{macrocode}
 \cs_new_protected:Npn \__suep_graduate_cover:n #1
   {\clearpage\thispagestyle{empty}
@@ -1528,24 +1552,20 @@
      {\rmfamily\bfseries\fontsize{#2bp}{28bp}\selectfont\centering}{#3}}
 \cs_new_protected:Npn \__suep_resolve_logo:
   {\tl_clear:N \l__suep_logo_file_tl
+   \bool_set_false:N \l__suep_vector_logo_bool
    \tl_if_blank:VF \g__suep_logo_tl
      {\str_if_eq:VnTF \g__suep_logo_tl {auto}
-        {\__suep_if_bachelor:TF
-           {\clist_set:Nn \l_tmpa_clist
-              {images/suep-logo.pdf,images/suep-logo.png,suep-emblem.pdf,suep-emblem.png}}
-           {\clist_set:Nn \l_tmpa_clist
-              {images/suep-logo.pdf,images/suep-logo.png,suep-name.pdf,suep-name.png}}
-         \clist_map_inline:Nn \l_tmpa_clist
-           {\file_if_exist:nT {##1}
-              {\tl_set:Nn \l__suep_logo_file_tl {##1}\clist_map_break:}}}
+        {\bool_set_true:N \l__suep_vector_logo_bool}
         {\file_if_exist:VT \g__suep_logo_tl
-           {\tl_set_eq:NN \l__suep_logo_file_tl \g__suep_logo_tl}}
-      \tl_if_empty:NT \l__suep_logo_file_tl
-        {\msg_fatal:nne {suepthesis}{logo-missing}{\tl_use:N \g__suep_logo_tl}}}}
+           {\tl_set_eq:NN \l__suep_logo_file_tl \g__suep_logo_tl}
+         \tl_if_empty:NT \l__suep_logo_file_tl
+           {\msg_fatal:nne {suepthesis}{logo-missing}{\tl_use:N \g__suep_logo_tl}}}}}
 \cs_new_protected:Npn \__suep_graduate_cover_logo:n #1
-  {\tl_if_empty:NF \l__suep_logo_file_tl
-     {\put(#1,-209.4){\includegraphics[width=154.8bp,height=36.84bp,keepaspectratio]{
-  \l__suep_logo_file_tl}}}}
+  {\bool_if:NTF \l__suep_vector_logo_bool
+     {\put(#1,-209.4){\suepname[width=154.8bp]}}
+     {\tl_if_empty:NF \l__suep_logo_file_tl
+        {\put(#1,-209.4){\includegraphics[width=154.8bp,height=36.84bp,keepaspectratio]{
+  \l__suep_logo_file_tl}}}}}
 \box_new:N \l__suep_cover_title_box
 \dim_new:N \l__suep_cover_title_y_dim
 \cs_new_protected:Npn \__suep_cover_title_content:
@@ -1666,9 +1686,11 @@
         {\CJKfamily{suepcover}\bfseries\fontsize{36bp}{43bp}\selectfont\__suep_punct_style:n
    {plain}
   }{本科毕业设计（论文）}
-      \tl_if_empty:NF \l__suep_logo_file_tl
-        {\put(226.55,-428.3){\includegraphics[width=136.7bp,height=136.7bp,keepaspectratio]{
-  \l__suep_logo_file_tl}}}
+      \bool_if:NTF \l__suep_vector_logo_bool
+        {\put(226.55,-428.3){\suepemblem[width=136.7bp]}}
+        {\tl_if_empty:NF \l__suep_logo_file_tl
+           {\put(226.55,-428.3){\includegraphics[width=136.7bp,height=136.7bp,keepaspectratio]{
+  \l__suep_logo_file_tl}}}}
       \__suep_bachelor_cover_field:nnnnn {486.92}{146.06}{216.17}{195.86}{题\hspace{28.08bp}
   目：}
       \__suep_bachelor_cover_value:nnnn {486.92}{216.17}{195.86}{title}

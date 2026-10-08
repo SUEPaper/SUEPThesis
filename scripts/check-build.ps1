@@ -57,6 +57,8 @@ try {
     $env:TEXMFCACHE = (Join-Path $repoRoot 'tmp/check-build/cache').Replace('\','/')
     $env:TEXMFVAR = $env:TEXMFCACHE
     New-Item -ItemType Directory -Force $env:TEXMFCACHE | Out-Null
+    & $Python (Join-Path $PSScriptRoot 'check_logo.py')
+    if ($LASTEXITCODE -ne 0) { throw 'Vector logo and isolated cover checks failed.' }
     foreach ($engine in @('xelatex','lualatex')) {
         foreach ($font in @('auto','termes')) {
             foreach ($degree in @('bachelor','master','doctor')) {
@@ -64,6 +66,7 @@ try {
                 $caseDir = Join-Path $repoRoot "tmp/check-build/$name"
                 New-Item -ItemType Directory -Force $caseDir | Out-Null
                 Copy-Item -LiteralPath (Join-Path $repoRoot 'suepthesis.cls') -Destination $caseDir
+                Copy-Item -LiteralPath (Join-Path $repoRoot 'sueplogo.sty') -Destination $caseDir
                 $caseSource = $mathSource.Replace('@OPTIONS@', "type=$degree,font=$font")
                 Set-Content -LiteralPath (Join-Path $caseDir 'main.tex') -Value $caseSource -Encoding utf8
                 Push-Location $caseDir

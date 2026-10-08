@@ -320,3 +320,6 @@ __pycache__/
 
 # Copies made from the canonical root bibliography style by build scripts
 /templates/*/suepthesis-graduate.bst
+
+# Generated from suepthesis-logo.dtx
+sueplogo.sty

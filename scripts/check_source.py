@@ -3,6 +3,8 @@ import argparse
 import ast
 from pathlib import Path
 import re
+import subprocess
+import sys
 
 from check_resources import check_resources
 
@@ -29,6 +31,7 @@ def main() -> None:
         ast.parse(path.read_text(encoding="utf-8-sig"), filename=str(path))
     check_tag(args.tag)
     check_resources()
+    subprocess.run([sys.executable, str(ROOT / 'scripts/generate-logo.py'), '--check'], check=True)
     # Copyable writing examples must not depend on specimen-only formatting.
     forbidden = re.compile(r'\\(?:ExplSyntaxOn|SUEPSample\w*|SUEPReferenceTOC|fontspec|ctexset|setmathfont|linebreak)\b|reference-(?:toc|bib-layout|sample)')
     for path in (ROOT / 'templates').rglob('*.tex'):

@@ -8,7 +8,7 @@
 
 参考文献使用 `gbt7714`、BibTeX 和 `\SUEPBibliographyStyle`，修改 `references.bib` 并在正文中使用 `\cite`。示例仅提供一条演示文献，正式论文应填写实际引用的完整记录，满足学校要求的数量与类型。
 
-默认字体由文档类检测。无 Windows 字体的环境可使用 `\documentclass[type=bachelor,cjk-font=fandol,font=termes]{suepthesis}`。无需在正文中调用 `fontspec`；独立复制时保留校徽 `images/suep-logo.png`。其他 logo 是可选资源，可通过 `cover/headerImage` 选择。
+默认字体由文档类检测。无 Windows 字体的环境可使用 `\documentclass[type=bachelor,cjk-font=fandol,font=termes]{suepthesis}`。无需在正文中调用 `fontspec`；封面默认由 `sueplogo.sty` 绘制矢量校徽，独立复制时与 `suepthesis.cls` 一起保留。原 PNG 是可选资源，可通过 `cover/headerImage` 显式选择。
 
 正文、历史界面截图和附录数据仅用于展示排版。正式写作时替换为自己的研究结果与图表。章、节、目录与编号由文档类自动处理。
 
