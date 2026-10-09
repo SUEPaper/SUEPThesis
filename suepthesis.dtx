@@ -169,7 +169,8 @@
 % \texttt{twoside} & auto、true、false；默认 auto & auto 为本科单面、研究生双面。\\
 % \texttt{blindPeerReview} & true、false；默认 false & 模板级盲审信息隐藏。\\
 % \texttt{cjk-font} & auto、windows、mac、fandol；默认 auto & 中文字体组，只能在文档类选项设置。\\
-% \texttt{font} & auto、times、termes；默认 auto & 西文字体组，只能在文档类选项设置。\\\bottomrule
+% \texttt{font} & auto、times、termes；默认 auto & 西文字体组，只能在文档类选项设置。\\
+% \texttt{font-path} & auto、none 或自定义目录；默认 auto & 项目字体目录；none 禁用项目字体。\\\bottomrule
 % \end{longtable}
 % type 的三个值依次对应本科、硕士和博士。学术型选 academic，专业型选 professional；专业学位名称还需通过 \path{info/degree} 填写。
 %
@@ -732,7 +733,7 @@
 % \chapter{字体、规范与版式核对}
 % \section{跨平台字体选择}
 % \label{sec:fonts}
-% 中文与西文字体组分别选择。字体按实际可用性检测，不通过操作系统名称猜测是否安装了字体。选项必须放在 \verb|\documentclass| 中；加载文档类后不能通过 \verb|\SUEPSetup| 切换。
+% 中文与西文字体组分别选择，默认优先直接读取项目字体，无需安装到系统。模板自动寻找论文目录的 \path{fonts/}，或仓库根目录的 \path{fonts/}（示例目录向上两级）。独立复制论文项目时，可把根目录的字体目录一并复制到论文目录；也可通过 \texttt{font-path} 指定其他目录，或用 \texttt{font-path=none} 禁用项目字体。缺少项目字体时继续检测系统及 TeX Live 字体。选项必须放在 \verb|\documentclass| 中；加载文档类后不能通过 \verb|\SUEPSetup| 切换。
 %
 % \subsection{本项目实际使用的字体}
 % 下表按 SUEPThesis 的实际排版用途列出字体。Windows 列对应目前学校示范的校准字体；macOS 与开放字库列是可编译的替代方案，不代表三者字形相同。
@@ -762,11 +763,11 @@
 % \subsection{选择字体组与缺字库处理}
 % \begin{longtable}{P{.23\textwidth}P{.67\textwidth}}
 % \toprule 选项 & 行为\\\midrule\endhead
-% \texttt{cjk-font=auto} & 默认。每种字族依次检查 Windows 名称、macOS 名称、Fandol 文件。缺少学校示范字体时提示回退。\\
+% \texttt{cjk-font=auto} & 默认。每种字族依次检查项目文件、Windows 名称、macOS 名称、Fandol 文件。缺少学校示范字体时提示回退。\\
 % \texttt{cjk-font=windows} & 要求 SimSun、SimHei、KaiTi、FangSong；缺少任何一种即报错。可用于已合法安装这些字体的任意系统。\\
 % \texttt{cjk-font=mac} & 要求 Songti SC、Heiti SC（或 PingFang SC）、Kaiti SC、STFangsong；兼容相应 PostScript 名称。缺失即报错。\\
 % \texttt{cjk-font=fandol} & 使用 TeX 发行版的 Fandol 宋、黑、楷、仿宋；通过 OTF 文件名加载，不依赖系统字体。\\
-% \texttt{font=auto} & 优先 Times New Roman，缺少时提示并使用 TeX Gyre Termes。\\
+% \texttt{font=auto} & 优先项目中的完整 Times New Roman 四种字形，再检查系统字体；缺少时提示并使用 TeX Gyre Termes。\\
 % \texttt{font=times} & 要求 Times New Roman，缺失即报错。\\
 % \texttt{font=termes} & 使用 TeX Gyre Termes；三类论文的数学字体均使用 TeX Gyre Termes Math。\\\bottomrule
 % \end{longtable}
@@ -778,11 +779,11 @@
 % % 在各系统使用同一套开放字体
 % \documentclass[type=master,cjk-font=fandol,font=termes]{suepthesis}
 % \end{Code}
-% 上述三行是互斥的选择，主文件只保留一行。手册本身固定使用 Fandol 与 TeX Gyre，以便在不含商业字体的环境中编译。日志会记录实际选择的 song、hei、kai、fang、cover、latin 字体，可搜索 \texttt{Selected} 核对。本科封面论文类型优先使用 STFangsong；在 auto/windows 中缺少它会提示并使用当前仿宋。fandol 模式始终使用 Fandol 仿宋。
+% 上述三行是互斥的选择，主文件只保留一行。手册本身固定使用 Fandol 与 TeX Gyre，以便在不含商业字体的环境中编译。开放字体通过发行版中的 OTF 文件名加载，不依赖系统字体缓存。日志会记录实际选择的 song、hei、kai、fang、cover、latin 字体，可搜索 \texttt{Selected} 核对。本科封面论文类型优先使用 STFangsong；在 auto/windows 中缺少它会提示并使用当前仿宋。fandol 模式始终使用 Fandol 仿宋。
 %
 % 字体在文档类加载时初始化，默认优先选择学校示范字体。中文使用 \texttt{cjk-font} 选择字体组，西文使用 \texttt{font} 选择 Times New Roman 或 TeX Gyre Termes；选项值以本手册为准。
 %
-% 统一开放字体能减少不同系统间的排版差异，但 macOS 华文字体、Fandol 与学校示范的中易字体不是同一字形，换页可能改变。正式提交应核对院系要求并在规定字体环境中重编译。仓库不分发商业字体；已有合法授权的字体可安装到本机，也可在导言区用 fontspec/CTeX 接口加载自己的字体文件，同时配置模板使用的命名字族，详见实现部分。
+% 统一开放字体能减少不同系统间的排版差异，但 macOS 华文字体、Fandol 与学校示范的中易字体不是同一字形，换页可能改变。正式提交应核对院系要求并在规定字体环境中重编译。项目字体许可见 \path{fonts/README.md}；直接加载不改变字体许可。也可在导言区用 fontspec/CTeX 接口加载自己的字体文件，同时配置模板使用的命名字族，详见实现部分。
 %
 % \section{校徽与校标矢量绘制}
 % \label{sec:logo}
@@ -971,6 +972,10 @@
 \bool_new:N \l__suep_vector_logo_bool
 \tl_new:N \g__suep_cjk_fontset_tl
 \tl_new:N \g__suep_latin_fontset_tl
+\tl_new:N \g__suep_font_path_tl
+\prop_new:N \g__suep_local_fonts_prop
+\tl_new:N \l__suep_font_file_tl
+\bool_new:N \l__suep_times_files_bool
 \tl_new:N \g__suep_song_font_tl
 \tl_new:N \g__suep_hei_font_tl
 \tl_new:N \g__suep_kai_font_tl
@@ -990,6 +995,8 @@
     font .choices:nn = {auto,times,termes}
       {\tl_gset:NV \g__suep_latin_fontset_tl \l_keys_choice_str},
     font .initial:n = auto,
+    font-path .tl_gset:N = \g__suep_font_path_tl,
+    font-path .initial:n = auto,
     type .choices:nn = {bachelor,master,doctor}
       {\tl_gset:NV \g__suep_type_tl \l_keys_choice_str},
     type .initial:n = master,
@@ -1039,11 +1046,48 @@
   an~existing~PDF/PNG/JPEG~file,~or~
   empty~to~omit~it.
   }
+\msg_new:nnn {suepthesis}{font-file}{Project~font~'#1':~#2.}
+\str_if_eq:VnTF \g__suep_font_path_tl {auto}
+  {\tl_gclear:N \g__suep_font_path_tl
+   \clist_map_inline:nn {fonts,../../fonts}
+     {\file_if_exist:nTF {#1/Chinese/SimSun.ttc}
+        {\tl_gset:Nn \g__suep_font_path_tl {#1}\clist_map_break:}
+        {\file_if_exist:nT {#1/TimesNewRoman/TimesNewRoman.ttf}
+           {\tl_gset:Nn \g__suep_font_path_tl {#1}\clist_map_break:}}}}
+  {\str_if_eq:VnT \g__suep_font_path_tl {none}
+     {\tl_gclear:N \g__suep_font_path_tl}}
+\cs_new_protected:Npn \__suep_bind_local_font:nnnn #1#2#3#4
+  {\tl_set:Ne \l__suep_font_file_tl {\g__suep_font_path_tl/#2/#3}
+   \exp_args:NV \IfFontExistsTF \l__suep_font_file_tl
+     {\defaultfontfeatures[#1]
+        {Path=\g__suep_font_path_tl/#2/,UprightFont=#3,#4}
+      \prop_gput:NnV \g__suep_local_fonts_prop {#1}\l__suep_font_file_tl
+      \msg_info:nnne {suepthesis}{font-file}{#1}{\l__suep_font_file_tl}}
+     {}}
+\tl_if_empty:NF \g__suep_font_path_tl
+  {\__suep_bind_local_font:nnnn {SimSun}{Chinese}{SimSun.ttc}{}
+   \__suep_bind_local_font:nnnn {SimHei}{Chinese}{SimHei.ttf}{}
+   \__suep_bind_local_font:nnnn {KaiTi}{Chinese}{Kaiti.ttf}{}
+   \__suep_bind_local_font:nnnn {FangSong}{Chinese}{FangSong.ttf}{}
+   \__suep_bind_local_font:nnnn {STFangsong}{Chinese}{STFANGSO.TTF}{}
+   \bool_set_true:N \l__suep_times_files_bool
+   \clist_map_inline:nn
+     {TimesNewRoman.ttf,TimesNewRoman-Bold.ttf,TimesNewRoman-Italic.ttf,
+      TimesNewRoman-Bold-Italic.ttf}
+     {\exp_args:Ne \IfFontExistsTF
+        {\g__suep_font_path_tl/TimesNewRoman/#1}
+        {}{\bool_set_false:N \l__suep_times_files_bool}}
+   \bool_if:NT \l__suep_times_files_bool
+     {\__suep_bind_local_font:nnnn {Times~New~Roman}{TimesNewRoman}{TimesNewRoman.ttf}
+        {BoldFont=TimesNewRoman-Bold.ttf,ItalicFont=TimesNewRoman-Italic.ttf,
+         BoldItalicFont=TimesNewRoman-Bold-Italic.ttf}}}
 \cs_new_protected:Npn \__suep_first_font:Nn #1#2
   {\tl_gclear:N #1
    \clist_map_inline:nn {#2}
-     {\IfFontExistsTF{##1}
-        {\tl_gset:Nn #1 {##1}\clist_map_break:}{}}}
+     {\prop_if_in:NnTF \g__suep_local_fonts_prop {##1}
+        {\tl_gset:Nn #1 {##1}\clist_map_break:}
+        {\IfFontExistsTF{##1}
+           {\tl_gset:Nn #1 {##1}\clist_map_break:}{}}}}
 \cs_new_protected:Npn \__suep_select_cjk:Nnnn #1#2#3#4
   {\str_case:Vn \g__suep_cjk_fontset_tl
      {{auto}{\tl_set:Nn \l_tmpa_tl {#2,#3,#4}
@@ -1109,19 +1153,31 @@
 \cs_new_protected:Npn \__suep_bachelor_abstract_heiti:
   {\heiti\sys_if_engine_xetex:T {\addCJKfontfeatures{FakeBold=2.84647}}}
 \str_case:Vn \g__suep_latin_fontset_tl
-  {{auto}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman,TeX~Gyre~Termes}
+  {{auto}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman,texgyretermes-regular.otf}
      \tl_if_eq:NnF \g__suep_latin_font_tl {Times~New~Roman}
        {\msg_warning:nnn {suepthesis}{font}{Times~New~Roman}}}
    {times}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman}}
-   {termes}{\tl_gset:Nn \g__suep_latin_font_tl {TeX~Gyre~Termes}}}
+   {termes}{\__suep_first_font:Nn \g__suep_latin_font_tl {texgyretermes-regular.otf}}}
 \tl_if_empty:NT \g__suep_latin_font_tl
-  {\msg_fatal:nnn {suepthesis}{font-required}{Times~New~Roman}}
-\setmainfont{\g__suep_latin_font_tl}
+  {\str_if_eq:VnTF \g__suep_latin_fontset_tl {times}
+     {\msg_fatal:nnn {suepthesis}{font-required}{Times~New~Roman}}
+     {\msg_fatal:nnn {suepthesis}{font-required}{texgyretermes-regular.otf}}}
+\tl_if_eq:NnTF \g__suep_latin_font_tl {Times~New~Roman}
+  {\setmainfont{Times~New~Roman}}
+  {\setmainfont{texgyretermes-regular.otf}
+     [BoldFont=texgyretermes-bold.otf,ItalicFont=texgyretermes-italic.otf,
+      BoldItalicFont=texgyretermes-bolditalic.otf]}
 \RequirePackage{unicode-math}
-\setmathfont{TeX~Gyre~Termes~Math}
-\setmathfont[range={"002B,"003D}]{\g__suep_latin_font_tl}
+\setmathfont{texgyretermes-math.otf}
+\prop_if_in:NVTF \g__suep_local_fonts_prop \g__suep_latin_font_tl
+  {\setmathfont[Path=\g__suep_font_path_tl/TimesNewRoman/,
+     range={"002B,"003D}]{TimesNewRoman.ttf}}
+  {\setmathfont[range={"002B,"003D}]{\g__suep_latin_font_tl}}
 \DeclareMathSizes{12.045}{11.944625}{6.966025}{4.977}
-\setsansfont{TeX~Gyre~Heros}\setmonofont{Latin~Modern~Mono}
+\setsansfont{texgyreheros-regular.otf}
+  [BoldFont=texgyreheros-bold.otf,ItalicFont=texgyreheros-italic.otf,
+   BoldItalicFont=texgyreheros-bolditalic.otf]
+\setmonofont{lmmono10-regular.otf}[ItalicFont=lmmono10-italic.otf]
 \clist_map_inline:nn {song,hei,kai,fang,cover,latin}
   {\msg_info:nnee {suepthesis}{font-selected}{#1}{\tl_use:c {g__suep_#1_font_tl}}}
 %    \end{macrocode}

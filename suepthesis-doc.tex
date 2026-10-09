@@ -3,11 +3,13 @@
 \usepackage[margin=2.5cm,headheight=16pt]{geometry}
 \usepackage{fontspec,booktabs,longtable,tabularx,array,enumitem,fvextra,xcolor,fancyhdr,graphicx}
 \usepackage[unicode,bookmarksnumbered,colorlinks=true,hyperindex=false]{hyperref}
-\setmainfont{TeX Gyre Termes}
-\setmonofont{Latin Modern Mono}
+\setmainfont{texgyretermes-regular.otf}
+  [BoldFont=texgyretermes-bold.otf,ItalicFont=texgyretermes-italic.otf,
+   BoldItalicFont=texgyretermes-bolditalic.otf]
+\setmonofont{lmmono10-regular.otf}[ItalicFont=lmmono10-italic.otf]
 \usepackage{unicode-math}
-\setmathfont{TeX Gyre Termes Math}
-\setmathfont[range={"002B,"003D}]{TeX Gyre Termes}
+\setmathfont{texgyretermes-math.otf}
+\setmathfont[range={"002B,"003D}]{texgyretermes-regular.otf}
 \DeclareMathSizes{12.045}{11.944625}{6.966025}{4.977}
 \definecolor{manualblue}{HTML}{24516B}
 \definecolor{manualgray}{HTML}{657078}

@@ -18,3 +18,5 @@
 学位标记设置在 `main.tex` 的 `\documentclass[...]`：本科 `type=bachelor`，硕士 `type=master`，博士 `type=doctor`；研究生另设 `degreeType=academic` 或 `professional`。请在正文开始前完成设置。
 
 正文使用自然段落、自动目录、普通公式和浮动图表，不含 LaTeX3 实现、MathType 字距或原稿坐标补丁。通用字体与版式由文档类统一处理。`\label` 仅用于实际交叉引用，目录不需要额外的章节标记。
+
+默认优先读取项目字体，无需安装到系统。独立复制本目录时，可将仓库根目录的 fonts/ 一并复制到论文目录；也可通过文档类选项 font-path 指定其他字体目录。缺少项目字体时自动检测系统或 TeX Live 字体。

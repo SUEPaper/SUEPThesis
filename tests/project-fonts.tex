@@ -1,0 +1,26 @@
+% Permit file-based font probes, but simulate unavailable system font names.
+\RequirePackage{fontspec}
+\ExplSyntaxOn
+\cs_new_eq:NN \suep_test_font_exists:nTF \IfFontExistsTF
+\RenewDocumentCommand \IfFontExistsTF {m m m}
+  {\regex_match:nnTF {\.(otf|ttf|ttc|TTF)\Z} {#1}
+     {\suep_test_font_exists:nTF {#1}{#2}{#3}}{#3}}
+\NewDocumentCommand \SUEPTestFontFile {m}
+  {\exp_args:Nee \tl_if_in:nnF {\fontname\font}{\tl_to_str:n {#1}}
+     {\errmessage{Expected~project~font~file~#1}}}
+\ExplSyntaxOff
+\documentclass[type=bachelor]{suepthesis}
+\SUEPSetup{info={title=项目字体测试,titleEn=Project font test,major=电气工程,
+  keywords={字体,项目,测试},keywordsEn={Fonts,Project,Test}}}
+\begin{document}
+\SUEPTestFontFile{TimesNewRoman/TimesNewRoman.ttf}Text
+{\bfseries\SUEPTestFontFile{TimesNewRoman/TimesNewRoman-Bold.ttf}bold}
+{\itshape\SUEPTestFontFile{TimesNewRoman/TimesNewRoman-Italic.ttf}italic}
+{\bfseries\itshape\SUEPTestFontFile{TimesNewRoman/TimesNewRoman-Bold-Italic.ttf}bold italic}.
+{\fontspec{SimSun}\SUEPTestFontFile{Chinese/SimSun.ttc}宋体}
+{\fontspec{SimHei}\SUEPTestFontFile{Chinese/SimHei.ttf}黑体}
+{\fontspec{KaiTi}\SUEPTestFontFile{Chinese/Kaiti.ttf}楷体}
+{\fontspec{FangSong}\SUEPTestFontFile{Chinese/FangSong.ttf}仿宋}
+{\fontspec{STFangsong}\SUEPTestFontFile{Chinese/STFANGSO.TTF}华文仿宋}。
+$x+y=2$.
+\end{document}

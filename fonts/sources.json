@@ -1,0 +1,80 @@
+[
+  {
+    "file": "fonts/Chinese/FangSong.ttf",
+    "source": "resources/modern-sjtu-thesis/fonts/FangSong.ttf",
+    "sha256": "521c6f7546b4eb64fa4b0cd604bbd36333a20a57e388c8e2ad2ad07b9e593864",
+    "families": [
+      "FangSong"
+    ]
+  },
+  {
+    "file": "fonts/Chinese/Kaiti.ttf",
+    "source": "resources/modern-sjtu-thesis/fonts/Kaiti.ttf",
+    "sha256": "f49873fbe1689f1a37ed0f5765eb7d989d8a3b75210d1f1b66b74b043a1871be",
+    "families": [
+      "KaiTi"
+    ]
+  },
+  {
+    "file": "fonts/Chinese/SimHei.ttf",
+    "source": "resources/modern-sjtu-thesis/fonts/SimHei.ttf",
+    "sha256": "336a838f4a78e150826be608dae69de59d50948c3d2b71760e096ae764154bdc",
+    "families": [
+      "SimHei"
+    ]
+  },
+  {
+    "file": "fonts/Chinese/SimSun.ttc",
+    "source": "resources/modern-sjtu-thesis/fonts/SimSun.ttc",
+    "sha256": "ff7d69bfa6588d3fdedbddbe3a29ac11f0c50236723ee72a9ea49ec3e2553f5d",
+    "families": [
+      "SimSun",
+      "NSimSun"
+    ]
+  },
+  {
+    "file": "fonts/TimesNewRoman/TimesNewRoman-Bold-Italic.ttf",
+    "source": "resources/modern-nju-thesis/fonts/TimesNewRoman/TimesNewRoman-Bold-Italic.ttf",
+    "sha256": "820a978637a430b5cf6efd7cddb7da212ccf55bcdc36b1a60ab8e379c6a8d8fd",
+    "families": [
+      "Times New Roman"
+    ],
+    "style": "Bold Italic"
+  },
+  {
+    "file": "fonts/TimesNewRoman/TimesNewRoman-Bold.ttf",
+    "source": "resources/modern-nju-thesis/fonts/TimesNewRoman/TimesNewRoman-Bold.ttf",
+    "sha256": "eb038e5a1b9d21144af59a4f7501664fca99ac49c46a492c1397a9ef1827d570",
+    "families": [
+      "Times New Roman"
+    ],
+    "style": "Bold"
+  },
+  {
+    "file": "fonts/TimesNewRoman/TimesNewRoman-Italic.ttf",
+    "source": "resources/modern-nju-thesis/fonts/TimesNewRoman/TimesNewRoman-Italic.ttf",
+    "sha256": "fa7876243b5c02656f965f1e0100d429f6652bea3ab9c62c7616a73fcf847cb2",
+    "families": [
+      "Times New Roman"
+    ],
+    "style": "Italic"
+  },
+  {
+    "file": "fonts/TimesNewRoman/TimesNewRoman.ttf",
+    "source": "resources/modern-nju-thesis/fonts/TimesNewRoman/TimesNewRoman.ttf",
+    "sha256": "51966b27ce9d5a3f58bc4890b98bdd08efd9683b9265251ddaf09b8965a849ea",
+    "families": [
+      "Times New Roman"
+    ],
+    "style": "Regular"
+  },
+  {
+    "file": "fonts/Chinese/STFANGSO.TTF",
+    "source": "C:/Windows/Fonts/STFANGSO.TTF",
+    "sha256": "e6326459e8e60e436c7d60e34d273bda3ba4eea2d2a5b309ff8f1b73200f2e38",
+    "families": [
+      "STFangsong"
+    ],
+    "style": "Regular"
+  }
+]

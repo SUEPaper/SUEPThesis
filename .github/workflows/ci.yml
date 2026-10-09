@@ -20,7 +20,7 @@ jobs:
     timeout-minutes: 60
     defaults:
       run:
-        shell: pwsh
+        shell: bash
     steps:
       - uses: actions/checkout@v7
         with:
@@ -34,7 +34,17 @@ jobs:
             collection-langchinese collection-fontsrecommended
             unicode-math tex-gyre-math gbt7714 latexmk
       - name: Build examples and handbook
-        run: ./scripts/build.ps1
+        shell: bash
+        run: make all
+      - name: Check project fonts and fallback without system fonts
+        run: |
+          mkdir -p tmp/font-check
+          xelatex -interaction=nonstopmode -halt-on-error -output-directory=tmp/font-check tests/project-fonts.tex
+          xelatex -interaction=nonstopmode -halt-on-error -output-directory=tmp/font-check tests/font-fallback.tex
+          (
+            cd templates/undergraduate-thesis
+            xelatex -interaction=nonstopmode -halt-on-error -jobname=project-fonts-template -output-directory=../../tmp/font-check ../../tests/project-fonts.tex
+          )
       - name: Upload PDFs
         uses: actions/upload-artifact@v7
         with:

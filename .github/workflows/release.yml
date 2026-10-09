@@ -35,7 +35,8 @@ jobs:
             collection-langchinese collection-fontsrecommended
             unicode-math tex-gyre-math gbt7714 latexmk
       - name: Build examples and handbook
-        run: ./scripts/build.ps1
+        shell: bash
+        run: make all
       - name: Zip user files and example templates
         run: |
           $ErrorActionPreference = 'Stop'
@@ -49,8 +50,8 @@ jobs:
             'suepthesis.dtx', 'suepthesis-logo.dtx', 'suepthesis.ins',
             'suepthesis.cls', 'sueplogo.sty', 'suepthesis-doc.tex', 'suepthesis-doc.pdf'
           )
-          $extensions = @('.tex', '.bib', '.cls', '.sty', '.md', '.png', '.jpg', '.jpeg', '.pdf', '.svg', '.doc', '.docx')
-          $files += Get-ChildItem -LiteralPath templates,resources -Recurse -File |
+          $extensions = @('.tex', '.bib', '.cls', '.sty', '.md', '.png', '.jpg', '.jpeg', '.pdf', '.svg', '.doc', '.docx', '.ttf', '.ttc', '.json')
+          $files += Get-ChildItem -LiteralPath templates,resources,fonts -Recurse -File |
             Where-Object { $_.Extension -in $extensions -or $_.Name -eq 'latexmkrc' } |
             ForEach-Object { [IO.Path]::GetRelativePath($repoPath, $_.FullName) }
           foreach ($file in $files) {

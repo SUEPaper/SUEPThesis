@@ -1,0 +1,24 @@
+% Simulate a runner where only TeX-distributed OTF files are discoverable.
+\RequirePackage{fontspec}
+\ExplSyntaxOn
+\cs_new_eq:NN \suep_test_font_exists:nTF \IfFontExistsTF
+\RenewDocumentCommand \IfFontExistsTF {m m m}
+  {\regex_match:nnTF {\.otf\Z} {#1}
+     {\suep_test_font_exists:nTF {#1}{#2}{#3}}
+     {#3}}
+\ExplSyntaxOff
+\documentclass[type=bachelor,font-path=none]{suepthesis}
+\ExplSyntaxOn
+\clist_map_inline:nn {song,hei,kai,fang,cover,latin}
+  {\exp_args:Nne \regex_match:nnF {\.otf\Z}
+     {\tl_use:c {g__suep_#1_font_tl}}
+     {\errmessage{Expected~OTF~fallback~for~#1}}}
+\ExplSyntaxOff
+\SUEPSetup{info={title=字体回退测试,titleEn=Font fallback test,major=电气工程,
+  keywords={字体,回退,测试},keywordsEn={Fonts,Fallback,Test}}}
+\begin{document}
+中文字体回退测试。
+Text \textbf{Bold} \textit{Italic} \textbf{\textit{Bold italic}}.
+\textsf{Sans \textbf{bold} \textit{italic} \textbf{\textit{bold italic}}}.
+\texttt{Mono \textit{italic}}. $x + y = 2$.
+\end{document}

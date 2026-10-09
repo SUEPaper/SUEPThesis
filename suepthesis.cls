@@ -60,6 +60,10 @@
 \bool_new:N \l__suep_vector_logo_bool
 \tl_new:N \g__suep_cjk_fontset_tl
 \tl_new:N \g__suep_latin_fontset_tl
+\tl_new:N \g__suep_font_path_tl
+\prop_new:N \g__suep_local_fonts_prop
+\tl_new:N \l__suep_font_file_tl
+\bool_new:N \l__suep_times_files_bool
 \tl_new:N \g__suep_song_font_tl
 \tl_new:N \g__suep_hei_font_tl
 \tl_new:N \g__suep_kai_font_tl
@@ -74,6 +78,8 @@
     font .choices:nn = {auto,times,termes}
       {\tl_gset:NV \g__suep_latin_fontset_tl \l_keys_choice_str},
     font .initial:n = auto,
+    font-path .tl_gset:N = \g__suep_font_path_tl,
+    font-path .initial:n = auto,
     type .choices:nn = {bachelor,master,doctor}
       {\tl_gset:NV \g__suep_type_tl \l_keys_choice_str},
     type .initial:n = master,
@@ -118,11 +124,48 @@
   an~existing~PDF/PNG/JPEG~file,~or~
   empty~to~omit~it.
   }
+\msg_new:nnn {suepthesis}{font-file}{Project~font~'#1':~#2.}
+\str_if_eq:VnTF \g__suep_font_path_tl {auto}
+  {\tl_gclear:N \g__suep_font_path_tl
+   \clist_map_inline:nn {fonts,../../fonts}
+     {\file_if_exist:nTF {#1/Chinese/SimSun.ttc}
+        {\tl_gset:Nn \g__suep_font_path_tl {#1}\clist_map_break:}
+        {\file_if_exist:nT {#1/TimesNewRoman/TimesNewRoman.ttf}
+           {\tl_gset:Nn \g__suep_font_path_tl {#1}\clist_map_break:}}}}
+  {\str_if_eq:VnT \g__suep_font_path_tl {none}
+     {\tl_gclear:N \g__suep_font_path_tl}}
+\cs_new_protected:Npn \__suep_bind_local_font:nnnn #1#2#3#4
+  {\tl_set:Ne \l__suep_font_file_tl {\g__suep_font_path_tl/#2/#3}
+   \exp_args:NV \IfFontExistsTF \l__suep_font_file_tl
+     {\defaultfontfeatures[#1]
+        {Path=\g__suep_font_path_tl/#2/,UprightFont=#3,#4}
+      \prop_gput:NnV \g__suep_local_fonts_prop {#1}\l__suep_font_file_tl
+      \msg_info:nnne {suepthesis}{font-file}{#1}{\l__suep_font_file_tl}}
+     {}}
+\tl_if_empty:NF \g__suep_font_path_tl
+  {\__suep_bind_local_font:nnnn {SimSun}{Chinese}{SimSun.ttc}{}
+   \__suep_bind_local_font:nnnn {SimHei}{Chinese}{SimHei.ttf}{}
+   \__suep_bind_local_font:nnnn {KaiTi}{Chinese}{Kaiti.ttf}{}
+   \__suep_bind_local_font:nnnn {FangSong}{Chinese}{FangSong.ttf}{}
+   \__suep_bind_local_font:nnnn {STFangsong}{Chinese}{STFANGSO.TTF}{}
+   \bool_set_true:N \l__suep_times_files_bool
+   \clist_map_inline:nn
+     {TimesNewRoman.ttf,TimesNewRoman-Bold.ttf,TimesNewRoman-Italic.ttf,
+      TimesNewRoman-Bold-Italic.ttf}
+     {\exp_args:Ne \IfFontExistsTF
+        {\g__suep_font_path_tl/TimesNewRoman/#1}
+        {}{\bool_set_false:N \l__suep_times_files_bool}}
+   \bool_if:NT \l__suep_times_files_bool
+     {\__suep_bind_local_font:nnnn {Times~New~Roman}{TimesNewRoman}{TimesNewRoman.ttf}
+        {BoldFont=TimesNewRoman-Bold.ttf,ItalicFont=TimesNewRoman-Italic.ttf,
+         BoldItalicFont=TimesNewRoman-Bold-Italic.ttf}}}
 \cs_new_protected:Npn \__suep_first_font:Nn #1#2
   {\tl_gclear:N #1
    \clist_map_inline:nn {#2}
-     {\IfFontExistsTF{##1}
-        {\tl_gset:Nn #1 {##1}\clist_map_break:}{}}}
+     {\prop_if_in:NnTF \g__suep_local_fonts_prop {##1}
+        {\tl_gset:Nn #1 {##1}\clist_map_break:}
+        {\IfFontExistsTF{##1}
+           {\tl_gset:Nn #1 {##1}\clist_map_break:}{}}}}
 \cs_new_protected:Npn \__suep_select_cjk:Nnnn #1#2#3#4
   {\str_case:Vn \g__suep_cjk_fontset_tl
      {{auto}{\tl_set:Nn \l_tmpa_tl {#2,#3,#4}
@@ -188,19 +231,31 @@
 \cs_new_protected:Npn \__suep_bachelor_abstract_heiti:
   {\heiti\sys_if_engine_xetex:T {\addCJKfontfeatures{FakeBold=2.84647}}}
 \str_case:Vn \g__suep_latin_fontset_tl
-  {{auto}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman,TeX~Gyre~Termes}
+  {{auto}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman,texgyretermes-regular.otf}
      \tl_if_eq:NnF \g__suep_latin_font_tl {Times~New~Roman}
        {\msg_warning:nnn {suepthesis}{font}{Times~New~Roman}}}
    {times}{\__suep_first_font:Nn \g__suep_latin_font_tl {Times~New~Roman}}
-   {termes}{\tl_gset:Nn \g__suep_latin_font_tl {TeX~Gyre~Termes}}}
+   {termes}{\__suep_first_font:Nn \g__suep_latin_font_tl {texgyretermes-regular.otf}}}
 \tl_if_empty:NT \g__suep_latin_font_tl
-  {\msg_fatal:nnn {suepthesis}{font-required}{Times~New~Roman}}
-\setmainfont{\g__suep_latin_font_tl}
+  {\str_if_eq:VnTF \g__suep_latin_fontset_tl {times}
+     {\msg_fatal:nnn {suepthesis}{font-required}{Times~New~Roman}}
+     {\msg_fatal:nnn {suepthesis}{font-required}{texgyretermes-regular.otf}}}
+\tl_if_eq:NnTF \g__suep_latin_font_tl {Times~New~Roman}
+  {\setmainfont{Times~New~Roman}}
+  {\setmainfont{texgyretermes-regular.otf}
+     [BoldFont=texgyretermes-bold.otf,ItalicFont=texgyretermes-italic.otf,
+      BoldItalicFont=texgyretermes-bolditalic.otf]}
 \RequirePackage{unicode-math}
-\setmathfont{TeX~Gyre~Termes~Math}
-\setmathfont[range={"002B,"003D}]{\g__suep_latin_font_tl}
+\setmathfont{texgyretermes-math.otf}
+\prop_if_in:NVTF \g__suep_local_fonts_prop \g__suep_latin_font_tl
+  {\setmathfont[Path=\g__suep_font_path_tl/TimesNewRoman/,
+     range={"002B,"003D}]{TimesNewRoman.ttf}}
+  {\setmathfont[range={"002B,"003D}]{\g__suep_latin_font_tl}}
 \DeclareMathSizes{12.045}{11.944625}{6.966025}{4.977}
-\setsansfont{TeX~Gyre~Heros}\setmonofont{Latin~Modern~Mono}
+\setsansfont{texgyreheros-regular.otf}
+  [BoldFont=texgyreheros-bold.otf,ItalicFont=texgyreheros-italic.otf,
+   BoldItalicFont=texgyreheros-bolditalic.otf]
+\setmonofont{lmmono10-regular.otf}[ItalicFont=lmmono10-italic.otf]
 \clist_map_inline:nn {song,hei,kai,fang,cover,latin}
   {\msg_info:nnee {suepthesis}{font-selected}{#1}{\tl_use:c {g__suep_#1_font_tl}}}
 \sys_if_engine_xetex:T

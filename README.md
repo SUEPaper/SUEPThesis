@@ -95,6 +95,8 @@ latexmk -xelatex main.tex
 - **字体**：默认自动检测；中文可选 `cjk-font=windows|mac|fandol`，西文可选 `font=times|termes`。跨系统协作可使用 `cjk-font=fandol,font=termes`。
 - **单双面与书脊**：本科默认单面，研究生默认双面。设置 `twoside=false` 可切换为单面；研究生在文末调用 `\MakeSpine` 生成书脊文字页。
 
+默认直接读取项目 `fonts/` 中的字体，无需安装到系统；缺失时按字族回退到系统或 TeX Live 字体。独立复制论文项目时，可将根目录的 `fonts/` 一并复制到论文目录；也可通过文档类选项 `font-path=自定义目录` 指定位置，或用 `font-path=none` 禁用项目字体。字体许可见 [fonts/README.md](fonts/README.md)。
+
 ## 矢量校徽与校标
 
 模板通过 `sueplogo` 宏包以 TikZ 绘制学校 SVG 轮廓。默认封面自动使用本科校徽或研究生横向组合标识，也可通过 `cover/headerImage` 指定自定义图片。
