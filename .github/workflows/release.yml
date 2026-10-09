@@ -86,12 +86,27 @@ jobs:
         with:
           name: release-${{ github.run_id }}-${{ github.run_attempt }}
           path: dist
-      - name: Create release with ZIP and handbook
+      - name: Create or update release assets
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          $arguments = @('release', 'create', $env:RELEASE_TAG, '--verify-tag', '--generate-notes', '--title', "SUEPThesis $env:RELEASE_TAG")
-          if ($env:RELEASE_TAG.Contains('-')) { $arguments += @('--prerelease', '--latest=false') }
-          & gh @arguments "dist/SUEPThesis-$env:RELEASE_TAG.zip" dist/suepthesis-doc.pdf
+          $ErrorActionPreference = 'Stop'
+          $PSNativeCommandUseErrorActionPreference = $false
+          $assets = @("dist/SUEPThesis-$env:RELEASE_TAG.zip", 'dist/suepthesis-doc.pdf')
+          foreach ($asset in $assets) {
+            if (-not (Test-Path -LiteralPath $asset -PathType Leaf)) { throw "Release asset not found: $asset" }
+          }
+          $releaseResponse = & gh api --include "repos/$env:GH_REPO/releases/tags/$env:RELEASE_TAG" 2>&1
+          $lookupExitCode = $LASTEXITCODE
+          if ($lookupExitCode -eq 0) {
+            & gh release upload $env:RELEASE_TAG @assets --clobber
+          } elseif (($releaseResponse -join "`n") -match '(?m)^HTTP/\S+\s+404\b') {
+            $arguments = @('release', 'create', $env:RELEASE_TAG, '--verify-tag', '--generate-notes', '--title', "SUEPThesis $env:RELEASE_TAG")
+            if ($env:RELEASE_TAG.Contains('-')) { $arguments += @('--prerelease', '--latest=false') }
+            & gh @arguments @assets
+          } else {
+            $releaseResponse | Write-Output
+            throw 'GitHub Release lookup failed.'
+          }
           if ($LASTEXITCODE -ne 0) { throw 'GitHub Release publication failed.' }
